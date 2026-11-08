@@ -96,8 +96,8 @@
             </div>
             <p id="confirmMessage" class="text-sm text-slate-600 mb-6 leading-relaxed"></p>
             <div class="flex justify-end gap-3">
-                <button id="confirmCancelBtn" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Hủy bỏ</button>
-                <button id="confirmOkBtn" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition">Đồng ý</button>
+                <button id="confirmCancelBtn" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition cursor-pointer">Hủy bỏ</button>
+                <button id="confirmOkBtn" class="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition cursor-pointer">Đồng ý</button>
             </div>
         </div>
     </div>
@@ -122,13 +122,13 @@
                     </div>
 
                     <!-- Nút thêm nhanh trên Mobile -->
-                    <button onclick="openTransactionModal()" class="md:hidden px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow flex items-center gap-1.5">
+                    <button onclick="openTransactionModal()" class="md:hidden px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold shadow flex items-center gap-1.5 cursor-pointer">
                         <i class="fa-solid fa-plus"></i> Ghi Thu/Chi
                     </button>
                 </div>
 
                 <!-- Bộ lọc Kỳ báo cáo & Nút tác vụ nhanh -->
-                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
                     <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
                         <span class="text-xs font-semibold text-slate-500 px-2.5"><i class="fa-regular fa-calendar-days mr-1"></i>Kỳ xem:</span>
                         <select id="globalMonthFilter" onchange="handlePeriodChange()" class="bg-white text-slate-800 text-xs font-bold rounded-lg px-2.5 py-1.5 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -150,13 +150,13 @@
                         </select>
                     </div>
 
-                    <button onclick="openTransactionModal()" class="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-indigo-200 transition cursor-pointer">
+                    <button onclick="openTransactionModal()" class="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md shadow-indigo-200 transition cursor-pointer">
                         <i class="fa-solid fa-circle-plus"></i>
-                        <span>Tạo Bút Toán Thu/Chi</span>
+                        <span>Tạo Bút Toán</span>
                     </button>
 
-                    <!-- Xuất Báo Cáo -->
-                    <div class="flex items-center gap-1.5">
+                    <!-- Xuất Báo Cáo & Sao Lưu / Khôi Phục JSON -->
+                    <div class="flex flex-wrap items-center gap-1.5">
                         <button onclick="exportFullExcelReport()" title="Xuất toàn bộ báo cáo ra file Excel (.xlsx)" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
                             <i class="fa-solid fa-file-excel"></i>
                             <span class="hidden sm:inline">Xuất Excel</span>
@@ -165,6 +165,22 @@
                             <i class="fa-solid fa-file-pdf"></i>
                             <span class="hidden sm:inline">Xuất PDF</span>
                         </button>
+
+                        <!-- Vạch ngăn cách -->
+                        <div class="h-5 w-[1px] bg-slate-200 mx-0.5 hidden sm:block"></div>
+
+                        <!-- Nút Backup dữ liệu ra file JSON -->
+                        <button onclick="backupDataToJson()" title="Sao lưu (Backup) toàn bộ dữ liệu ứng dụng ra file JSON" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                            <i class="fa-solid fa-cloud-arrow-down text-amber-400"></i>
+                            <span>Backup JSON</span>
+                        </button>
+
+                        <!-- Nút Restore dữ liệu từ file JSON -->
+                        <label title="Khôi phục (Restore) dữ liệu ứng dụng từ file JSON đã sao lưu" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Restore JSON</span>
+                            <input type="file" id="restoreJsonInput" accept=".json,application/json" onchange="handleRestoreFromJson(event)" class="hidden">
+                        </label>
                     </div>
                 </div>
             </div>
@@ -1165,6 +1181,7 @@
             <p><strong>FinTrack Pro VN</strong> — Ứng dụng Quản lý Thu Chi, Chi Phí Trích Trước & Tài Sản Cá Nhân</p>
             <div class="flex items-center gap-4">
                 <span><i class="fa-solid fa-database text-emerald-500 mr-1"></i>Tự động lưu trữ trên trình duyệt</span>
+                <button onclick="backupDataToJson()" class="text-slate-700 hover:text-indigo-600 hover:underline font-semibold cursor-pointer">Sao lưu JSON</button>
                 <button onclick="resetDemoData()" class="text-indigo-600 hover:underline font-semibold cursor-pointer">Nạp lại dữ liệu mẫu</button>
             </div>
         </div>
@@ -1389,6 +1406,105 @@
             } catch (e) {
                 console.error('Lỗi lưu localStorage:', e);
             }
+        }
+
+        // =====================================================================
+        // TÍNH NĂNG BACKUP DỮ LIỆU RA FILE JSON & RESTORE TỪ FILE JSON
+        // =====================================================================
+        function backupDataToJson() {
+            try {
+                const now = new Date();
+                const dateStamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+                const backupPayload = {
+                    appName: 'FinTrack Pro VN',
+                    version: '1.0',
+                    exportedAt: now.toISOString(),
+                    data: appState
+                };
+
+                const jsonString = JSON.stringify(backupPayload, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+
+                const downloadLink = document.createElement('a');
+                const fileName = `FinTrack_Pro_Backup_${dateStamp}.json`;
+                downloadLink.href = url;
+                downloadLink.download = fileName;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(url);
+
+                showToast(`Đã sao lưu (Backup) dữ liệu thành công ra file: ${fileName}`, 'success');
+            } catch (error) {
+                console.error('Lỗi khi backup JSON:', error);
+                showToast('Có lỗi xảy ra khi xuất file Backup JSON!', 'error');
+            }
+        }
+
+        function handleRestoreFromJson(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const rawContent = e.target.result;
+                    const parsedJson = JSON.parse(rawContent);
+
+                    // Hỗ trợ cả định dạng bọc trong { data: appState } lẫn định dạng trực tiếp appState
+                    const candidateData = (parsedJson && parsedJson.data && Array.isArray(parsedJson.data.transactions))
+                        ? parsedJson.data
+                        : parsedJson;
+
+                    // Kiểm tra tính hợp lệ của cấu trúc file JSON
+                    if (
+                        !candidateData ||
+                        !Array.isArray(candidateData.transactions) ||
+                        !Array.isArray(candidateData.feeCodes)
+                    ) {
+                        showToast('File JSON không đúng cấu trúc dữ liệu của FinTrack Pro!', 'error');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const txCount = candidateData.transactions.length;
+                    const fcCount = candidateData.feeCodes.length;
+                    const maCount = Array.isArray(candidateData.manualAssets) ? candidateData.manualAssets.length : 0;
+
+                    showConfirmModal(
+                        'Xác nhận Khôi phục (Restore) Dữ liệu JSON',
+                        `File "${file.name}" chứa ${txCount} bút toán thu/chi, ${fcCount} mã phí và ${maCount} khoản tài sản tạo tay. Việc khôi phục sẽ thay thế dữ liệu hiện tại bằng dữ liệu từ file. Bạn có chắc chắn muốn tiếp tục?`,
+                        () => {
+                            const seed = getDefaultSeedData();
+                            appState = {
+                                selectedMonth: Number(candidateData.selectedMonth) || seed.selectedMonth,
+                                selectedYear: Number(candidateData.selectedYear) || seed.selectedYear,
+                                overviewGranularity: candidateData.overviewGranularity || 'MONTH',
+                                initialCashBalance: Number(candidateData.initialCashBalance ?? seed.initialCashBalance),
+                                feeCodes: candidateData.feeCodes,
+                                transactions: candidateData.transactions,
+                                manualAssets: Array.isArray(candidateData.manualAssets) ? candidateData.manualAssets : []
+                            };
+
+                            saveStateToStorage();
+                            initYearDropdown();
+                            document.getElementById('globalMonthFilter').value = appState.selectedMonth;
+                            document.getElementById('globalYearFilter').value = appState.selectedYear;
+                            setOverviewGranularity(appState.overviewGranularity);
+                            refreshAllViews();
+
+                            showToast(`Đã Restore thành công ${txCount} giao dịch và ${fcCount} mã phí từ file JSON!`, 'success');
+                        }
+                    );
+                } catch (err) {
+                    console.error('Lỗi đọc file JSON:', err);
+                    showToast('File không phải là định dạng JSON hợp lệ. Vui lòng kiểm tra lại!', 'error');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file, 'utf-8');
         }
 
         // --- Định dạng Tiền tệ VNĐ & Ngày tháng ---
@@ -2052,7 +2168,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="8" class="py-8 text-center text-slate-400">
-                            Chưa có giao dịch nào trong tháng này. Hãy bấm <strong>"Tạo Bút Toán Thu/Chi"</strong> để bắt đầu!
+                            Chưa có giao dịch nào trong tháng này. Hãy bấm <strong>"Tạo Bút Toán"</strong> để bắt đầu!
                         </td>
                     </tr>
                 `;

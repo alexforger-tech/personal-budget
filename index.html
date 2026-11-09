@@ -648,7 +648,12 @@
                         </h3>
                         <p class="text-xs text-slate-500">Danh sách chi tiết các giao dịch phát sinh trong tháng đang chọn</p>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <label title="Import hàng loạt bút toán từ file Excel (.xlsx, .xls, .csv)" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-xs">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span>Import Excel</span>
+                            <input type="file" accept=".xlsx,.xls,.csv" onchange="handleImportTransactionsExcel(event)" class="hidden">
+                        </label>
                         <button onclick="switchTab('transactions')" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer">
                             Xem toàn bộ sổ giao dịch <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
@@ -930,13 +935,38 @@
                 <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
                     <div>
                         <h2 class="text-lg font-extrabold text-slate-900">Sổ Nhật Ký Thu Chi & Đầu Tư Toàn Hệ Thống</h2>
-                        <p class="text-xs text-slate-500">Tìm kiếm, lọc đa chiều và chỉnh sửa tất cả các bút toán thu nhập, chi phí thực chi, chi phí trích trước, đầu tư</p>
+                        <p class="text-xs text-slate-500">Tìm kiếm, lọc đa chiều, thêm mới hoặc import hàng loạt các bút toán thu nhập, chi phí thực chi, chi phí trích trước, đầu tư từ Excel</p>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="openTransactionModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition cursor-pointer">
-                            <i class="fa-solid fa-plus mr-1"></i> Thêm Bút Toán Mới
+                        <button type="button" onclick="downloadTransactionTemplateExcel()" title="Tải file Excel mẫu chuẩn để nhập bút toán hàng loạt" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-indigo-700 border border-indigo-200 text-xs font-bold shadow-xs transition cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i>
+                            <span id="btnDownloadTxTemplateText">Tải Mẫu Excel Bút Toán</span>
+                        </button>
+
+                        <label title="Chọn file Excel (.xlsx, .xls, .csv) để import bút toán hàng loạt" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span id="btnImportTxExcelText">Import Bút Toán Excel</span>
+                            <input type="file" id="excelTxInput" accept=".xlsx,.xls,.csv" onchange="handleImportTransactionsExcel(event)" class="hidden">
+                        </label>
+
+                        <button onclick="openTransactionModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i>
+                            <span id="btnAddNewTxLabel">Thêm Bút Toán Mới</span>
                         </button>
                     </div>
+                </div>
+
+                <!-- Hướng dẫn nhanh cấu trúc cột Import Excel -->
+                <div class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-200/80 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                    <div class="flex items-start sm:items-center gap-2.5 text-slate-700">
+                        <i class="fa-solid fa-circle-info text-indigo-600 text-sm mt-0.5 sm:mt-0"></i>
+                        <span>
+                            <strong>Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code>Ngay</code> (VD: 15/11/2026), <code>DienGiai</code>, <code>MaPhi</code>, <code>SoLuong</code>, <code>DonGia_VND</code> (hoặc <code>ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong>Mã phí</strong> để điền sẵn <em>Loại</em>, <em>Heading 1</em> và <em>Heading 2</em>!
+                        </span>
+                    </div>
+                    <button type="button" onclick="downloadTransactionTemplateExcel()" class="text-indigo-700 hover:underline font-extrabold shrink-0 self-end sm:self-center cursor-pointer">
+                        Tải file mẫu (.xlsx) &rarr;
+                    </button>
                 </div>
 
                 <!-- Bộ lọc nâng cao -->
@@ -1513,6 +1543,8 @@
                 txJournalTitle: 'Sổ Nhật Ký Thu Chi & Đầu Tư Toàn Hệ Thống',
                 txJournalSub: 'Tìm kiếm, lọc đa chiều và chỉnh sửa tất cả các bút toán thu nhập, chi phí thực chi, chi phí trích trước, đầu tư',
                 btnAddNewTx: 'Thêm Bút Toán Mới',
+                btnDownloadTxTemplate: 'Tải Mẫu Excel Bút Toán',
+                btnImportTxExcel: 'Import Bút Toán Excel',
                 feeMappingFormTitle: 'Tạo / Cập Nhật Mã Phí Trực Tiếp',
                 feeImportTitle: 'Import Mapping Mã Phí Từ Excel',
                 feeTableTitle: 'Bảng Mapping Danh Mục Mã Phí Hiện Tại',
@@ -1635,6 +1667,8 @@
                 txJournalTitle: 'System-wide Cashflow & Investment Journal',
                 txJournalSub: 'Search, multi-filter, and edit all income, actual expense, accrued expense, and investment entries',
                 btnAddNewTx: 'Add New Entry',
+                btnDownloadTxTemplate: 'Download Excel Template',
+                btnImportTxExcel: 'Import Excel Entries',
                 feeMappingFormTitle: 'Create / Update Fee Code Directly',
                 feeImportTitle: 'Import Fee Code Mapping from Excel',
                 feeTableTitle: 'Current Fee Code Mapping Catalog',
@@ -1929,6 +1963,9 @@
             setTxt('navTabAssetsText', t('tabAssets'));
             setTxt('navTabTransactionsText', t('tabTransactions'));
             setTxt('navTabFeeCodesText', t('tabFeeCodes'));
+            setTxt('btnDownloadTxTemplateText', t('btnDownloadTxTemplate'));
+            setTxt('btnImportTxExcelText', t('btnImportTxExcel'));
+            setTxt('btnAddNewTxLabel', t('btnAddNewTx'));
 
             const monthSelect = document.getElementById('globalMonthFilter');
             if (monthSelect) {
@@ -3857,6 +3894,341 @@
                 } catch (err) {
                     console.error(err);
                     showToast('Không thể đọc file Excel. Vui lòng kiểm tra đúng định dạng mẫu!', 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // =====================================================================
+        // TẢI FILE EXCEL MẪU & IMPORT HÀNG LOẠT BÚT TOÁN THU/CHI/ĐẦU TƯ TỪ EXCEL
+        // =====================================================================
+        function downloadTransactionTemplateExcel() {
+            try {
+                const sampleTxRows = [
+                    {
+                        'Ngay': '05/11/2026',
+                        'DienGiai': 'Nhận lương chính tháng 11/2026',
+                        'Loai': 'Thu nhập',
+                        'PhanLoaiChiTiet': 'Thu nhập',
+                        'SoLuong': 1,
+                        'DonGia_VND': 35000000,
+                        'ThanhTien_VND': 35000000,
+                        'MaPhi': 'TN-LUONG',
+                        'Heading1_MaPhi': 'Thu nhập chính',
+                        'Heading2_MaPhi': 'Tiền lương & Phụ cấp'
+                    },
+                    {
+                        'Ngay': '10/11/2026',
+                        'DienGiai': 'Thanh toán tiền điện, nước, Internet tháng 11',
+                        'Loai': 'Chi phí',
+                        'PhanLoaiChiTiet': 'Chi phí thực chi',
+                        'SoLuong': 1,
+                        'DonGia_VND': 2500000,
+                        'ThanhTien_VND': 2500000,
+                        'MaPhi': 'CP-NHA',
+                        'Heading1_MaPhi': 'Chi phí sinh hoạt',
+                        'Heading2_MaPhi': 'Thuê nhà, Điện, Nước, Net'
+                    },
+                    {
+                        'Ngay': '15/11/2026',
+                        'DienGiai': 'Trích trước quỹ mua sắm thiết bị làm việc',
+                        'Loai': 'Chi phí',
+                        'PhanLoaiChiTiet': 'Chi phí trích trước',
+                        'SoLuong': 1,
+                        'DonGia_VND': 5000000,
+                        'ThanhTien_VND': 5000000,
+                        'MaPhi': 'CP-LAPTOP',
+                        'Heading1_MaPhi': 'Mua sắm thiết bị lớn',
+                        'Heading2_MaPhi': 'Máy tính & Công nghệ'
+                    },
+                    {
+                        'Ngay': '20/11/2026',
+                        'DienGiai': 'Chuyển tiền tích sản chứng chỉ quỹ ETF',
+                        'Loai': 'Đầu tư',
+                        'PhanLoaiChiTiet': 'Đầu tư (Tiền ra)',
+                        'SoLuong': 1,
+                        'DonGia_VND': 10000000,
+                        'ThanhTien_VND': 10000000,
+                        'MaPhi': 'DT-CHUNGKHOAN',
+                        'Heading1_MaPhi': 'Đầu tư & Tích lũy',
+                        'Heading2_MaPhi': 'Tài khoản chứng khoán'
+                    },
+                    {
+                        'Ngay': '25/11/2026',
+                        'DienGiai': 'Cổ tức / Lãi đầu tư thu hồi về tài khoản tiền mặt',
+                        'Loai': 'Đầu tư',
+                        'PhanLoaiChiTiet': 'Đầu tư (Tiền vào)',
+                        'SoLuong': 1,
+                        'DonGia_VND': 1500000,
+                        'ThanhTien_VND': 1500000,
+                        'MaPhi': 'DT-CHUNGKHOAN',
+                        'Heading1_MaPhi': 'Đầu tư & Tích lũy',
+                        'Heading2_MaPhi': 'Tài khoản chứng khoán'
+                    }
+                ];
+
+                const wb = XLSX.utils.book_new();
+                const wsTx = XLSX.utils.json_to_sheet(sampleTxRows);
+                XLSX.utils.book_append_sheet(wb, wsTx, 'Import_But_Toan');
+
+                // Kèm thêm Sheet Danh mục Mã phí hiện có để người dùng tiện tra cứu khi nhập Excel
+                const fcRefRows = appState.feeCodes.map(fc => ({
+                    'MaPhi': fc.code,
+                    'LoaiMacDinh': fc.type === 'INCOME' ? 'Thu nhập' : (fc.type === 'INVEST' ? 'Đầu tư' : 'Chi phí'),
+                    'Heading1_MaPhi': fc.heading1,
+                    'Heading2_MaPhi': fc.heading2,
+                    'MoTa': fc.desc || ''
+                }));
+                const wsFc = XLSX.utils.json_to_sheet(fcRefRows);
+                XLSX.utils.book_append_sheet(wb, wsFc, 'Tra_Cuu_Ma_Phi');
+
+                XLSX.writeFile(wb, 'Template_Import_But_Toan_FinTrack.xlsx');
+                showToast('Đã tải xuống file Excel mẫu nhập Bút toán (kèm sheet Tra cứu Mã phí)!', 'info');
+            } catch (err) {
+                console.error(err);
+                showToast('Không thể tạo file Excel mẫu!', 'error');
+            }
+        }
+
+        // Chuyển đổi linh hoạt mọi định dạng ngày từ Excel sang chuẩn YYYY-MM-DD
+        function normalizeExcelDateToISO(rawVal) {
+            if (rawVal === null || rawVal === undefined || rawVal === '') return null;
+
+            // 1. Nếu là đối tượng Date
+            if (rawVal instanceof Date && !isNaN(rawVal)) {
+                const y = rawVal.getFullYear();
+                const m = String(rawVal.getMonth() + 1).padStart(2, '0');
+                const d = String(rawVal.getDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            // 2. Nếu là số Serial Date của Excel (VD: 46341)
+            if (typeof rawVal === 'number' && rawVal > 20000 && rawVal < 90000) {
+                const utcDays = Math.floor(rawVal - 25569);
+                const dateObj = new Date(utcDays * 86400 * 1000);
+                if (!isNaN(dateObj)) {
+                    const y = dateObj.getUTCFullYear();
+                    const m = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+                    const d = String(dateObj.getUTCDate()).padStart(2, '0');
+                    return `${y}-${m}-${d}`;
+                }
+            }
+
+            // 3. Nếu là chuỗi ký tự
+            const str = String(rawVal).trim();
+
+            // Khớp chuẩn YYYY-MM-DD hoặc YYYY/MM/DD
+            const isoMatch = str.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+            if (isoMatch) {
+                const y = isoMatch[1];
+                const m = isoMatch[2].padStart(2, '0');
+                const d = isoMatch[3].padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+
+            // Khớp chuẩn DD/MM/YYYY hoặc DD-MM-YYYY
+            const vnMatch = str.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/);
+            if (vnMatch) {
+                const d = vnMatch[1].padStart(2, '0');
+                const m = vnMatch[2].padStart(2, '0');
+                const y = vnMatch[3];
+                return `${y}-${m}-${d}`;
+            }
+
+            return null;
+        }
+
+        // Lấy giá trị cột không phân biệt chữ hoa/thường hay dấu cách
+        function getRowField(rowObj, candidateKeys) {
+            for (const key of candidateKeys) {
+                if (rowObj[key] !== undefined && rowObj[key] !== null && String(rowObj[key]).trim() !== '') {
+                    return rowObj[key];
+                }
+            }
+            // Quét gần đúng theo tên cột đã bỏ dấu tiếng Việt
+            const rowEntries = Object.entries(rowObj);
+            for (const key of candidateKeys) {
+                const normTarget = removeVietnameseTones(key).replace(/[^a-z0-9]/g, '');
+                for (const [actualKey, val] of rowEntries) {
+                    const normActual = removeVietnameseTones(actualKey).replace(/[^a-z0-9]/g, '');
+                    if (normActual === normTarget && val !== undefined && val !== null && String(val).trim() !== '') {
+                        return val;
+                    }
+                }
+            }
+            return '';
+        }
+
+        function handleImportTransactionsExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+
+                    // Ưu tiên chọn sheet 'So_Giao_Dich_Thu_Chi' hoặc 'Import_But_Toan', nếu không có thì lấy sheet đầu tiên
+                    let targetSheetName = workbook.SheetNames[0];
+                    const preferredSheets = ['Import_But_Toan', 'So_Giao_Dich_Thu_Chi', 'Giao_Dich', 'But_Toan'];
+                    for (const sName of preferredSheets) {
+                        if (workbook.SheetNames.includes(sName)) {
+                            targetSheetName = sName;
+                            break;
+                        }
+                    }
+
+                    const worksheet = workbook.Sheets[targetSheetName];
+                    const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+                    if (!rows || rows.length === 0) {
+                        showToast('File Excel trống hoặc không có dữ liệu bút toán!', 'warning');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    const importedTxs = [];
+                    let newFeeCodesAdded = 0;
+
+                    rows.forEach((r, idx) => {
+                        const rawDate = getRowField(r, ['Ngay', 'Ngày', 'Ngày thu/chi', 'Date', 'NgayThuChi']);
+                        const isoDate = normalizeExcelDateToISO(rawDate);
+                        const description = String(getRowField(r, ['DienGiai', 'Diễn giải', 'Description', 'NoiDung', 'Nội dung']) || '').trim();
+
+                        // Nếu dòng không có ngày hợp lệ hoặc không có diễn giải thì bỏ qua (có thể là dòng tiêu đề phụ/tổng cộng)
+                        if (!isoDate || !description) return;
+
+                        const rawQty = getRowField(r, ['SoLuong', 'Số lượng', 'SL', 'Quantity', 'Qty']);
+                        const quantity = parseFormattedNumber(rawQty) > 0 ? parseFormattedNumber(rawQty) : 1;
+
+                        const rawUnitPrice = getRowField(r, ['DonGia_VND', 'DonGia', 'Đơn giá', 'Đơn giá (VNĐ)', 'UnitPrice']);
+                        const rawTotal = getRowField(r, ['ThanhTien_VND', 'ThanhTien', 'Thành tiền', 'Tổng tiền (VNĐ)', 'Số tiền (VNĐ)', 'SoTien', 'Amount', 'Total']);
+
+                        let unitPrice = parseFormattedNumber(rawUnitPrice);
+                        let amount = parseFormattedNumber(rawTotal);
+
+                        if (amount <= 0 && unitPrice > 0) {
+                            amount = Number((quantity * unitPrice).toFixed(2));
+                        } else if (unitPrice <= 0 && amount > 0) {
+                            unitPrice = Number((amount / quantity).toFixed(2));
+                        }
+
+                        if (amount <= 0) return;
+
+                        // Tra cứu Mã phí trong danh mục trước để hỗ trợ tự động điền Loại, Heading 1, Heading 2
+                        let feeCode = String(getRowField(r, ['MaPhi', 'Mã phí', 'FeeCode', 'Code']) || '').trim().toUpperCase();
+                        const matchedFeeObj = appState.feeCodes.find(fc => fc.code.toUpperCase() === feeCode);
+
+                        const rawType = removeVietnameseTones(String(getRowField(r, ['Loai', 'Loại', 'Loại giao dịch', 'Type']) || ''));
+                        const rawSubType = removeVietnameseTones(String(getRowField(r, ['PhanLoaiChiTiet', 'Phân loại chi tiết', 'TinhChat', 'Tính chất', 'SubType']) || ''));
+
+                        let type = matchedFeeObj ? matchedFeeObj.type : 'EXPENSE';
+                        if (rawType.includes('thu') || rawType.includes('income')) {
+                            type = 'INCOME';
+                        } else if (rawType.includes('dau tu') || rawType.includes('invest')) {
+                            type = 'INVEST';
+                        } else if (rawType.includes('chi') || rawType.includes('expense')) {
+                            type = 'EXPENSE';
+                        }
+
+                        let expenseKind = null;
+                        let investDirection = null;
+
+                        if (type === 'EXPENSE') {
+                            if (rawSubType.includes('trich truoc') || rawSubType.includes('accrued') || rawType.includes('trich truoc')) {
+                                expenseKind = 'ACCRUED';
+                            } else {
+                                expenseKind = 'ACTUAL';
+                            }
+                        } else if (type === 'INVEST') {
+                            if (rawSubType.includes('tien vao') || rawSubType.includes('thu hoi') || rawSubType.includes('in') || rawType.includes('tien vao')) {
+                                investDirection = 'IN';
+                            } else {
+                                investDirection = 'OUT';
+                            }
+                        }
+
+                        let heading1 = String(getRowField(r, ['Heading1_MaPhi', 'Heading1', 'Heading 1', 'Heading 1 mã phí']) || '').trim();
+                        let heading2 = String(getRowField(r, ['Heading2_MaPhi', 'Heading2', 'Heading 2', 'Heading 2 mã phí']) || '').trim();
+
+                        if (matchedFeeObj) {
+                            if (!heading1) heading1 = matchedFeeObj.heading1;
+                            if (!heading2) heading2 = matchedFeeObj.heading2;
+                        } else {
+                            if (!feeCode) {
+                                feeCode = type === 'INCOME' ? 'TN-KHAC' : (type === 'INVEST' ? 'DT-KHAC' : 'CP-KHAC');
+                            }
+                            if (!heading1) {
+                                heading1 = type === 'INCOME' ? 'Thu nhập khác' : (type === 'INVEST' ? 'Đầu tư & Tích lũy' : 'Chi phí sinh hoạt');
+                            }
+                            if (!heading2) {
+                                heading2 = 'Phát sinh chung';
+                            }
+
+                            // Tự động lưu mã phí mới vào danh mục nếu chưa tồn tại
+                            const alreadyExists = appState.feeCodes.some(fc => fc.code.toUpperCase() === feeCode);
+                            if (!alreadyExists) {
+                                appState.feeCodes.push({
+                                    code: feeCode,
+                                    type,
+                                    heading1,
+                                    heading2,
+                                    desc: 'Tự động thêm khi Import Excel bút toán'
+                                });
+                                newFeeCodesAdded++;
+                            }
+                        }
+
+                        importedTxs.push({
+                            id: `TX-IMP-${Date.now()}-${idx}`,
+                            date: isoDate,
+                            description,
+                            type,
+                            expenseKind,
+                            investDirection,
+                            investTarget: null,
+                            quantity,
+                            unitPrice,
+                            amount,
+                            feeCode,
+                            heading1,
+                            heading2
+                        });
+                    });
+
+                    if (importedTxs.length === 0) {
+                        showToast('Không tìm thấy dòng bút toán hợp lệ nào! Vui lòng kiểm tra cột Ngay, DienGiai và DonGia_VND / ThanhTien_VND.', 'warning');
+                        event.target.value = '';
+                        return;
+                    }
+
+                    // Cộng dồn danh sách bút toán import vào hệ thống
+                    appState.transactions.push(...importedTxs);
+
+                    // Tự động chuyển kỳ xem tới tháng/năm của bút toán mới nhất trong file vừa import
+                    const latestTx = [...importedTxs].sort((a, b) => b.date.localeCompare(a.date))[0];
+                    if (latestTx && latestTx.date) {
+                        const [y, m] = latestTx.date.split('-').map(Number);
+                        if (!isNaN(y) && !isNaN(m)) {
+                            appState.selectedYear = y;
+                            appState.selectedMonth = m;
+                        }
+                    }
+
+                    saveStateToStorage();
+                    initYearDropdown();
+                    document.getElementById('globalMonthFilter').value = appState.selectedMonth;
+                    document.getElementById('globalYearFilter').value = appState.selectedYear;
+                    refreshAllViews();
+
+                    const extraFeeMsg = newFeeCodesAdded > 0 ? ` (Tự động thêm ${newFeeCodesAdded} mã phí mới)` : '';
+                    showToast(`Đã import thành công ${importedTxs.length} bút toán từ file Excel${extraFeeMsg}!`, 'success');
+                } catch (err) {
+                    console.error('Lỗi khi import bút toán từ Excel:', err);
+                    showToast('Không thể đọc file Excel. Vui lòng tải File Mẫu để kiểm tra cấu trúc cột!', 'error');
+                } finally {
+                    event.target.value = '';
                 }
             };
             reader.readAsArrayBuffer(file);

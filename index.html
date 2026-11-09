@@ -412,7 +412,7 @@
                     </div>
                     <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Bức Tranh Dòng Tiền Hàng Tháng</h2>
                     <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                        Theo dõi sát sao Thu nhập, Chi phí thực chi, Chi phí trích trước (để dành cho mục tiêu tương lai) và các bút toán chuyển tiền sang Đầu tư / Tiết kiệm.
+                        Theo dõi sát sao Thu nhập, Chi phí thực chi, Chi phí trích trước và các bút toán Đầu tư (tự động trừ vào Tiền mặt khả dụng, không tự động cộng sang danh mục Tài sản).
                     </p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
@@ -473,7 +473,7 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Đầu tư (Tiền chuyển sang TK Chứng khoán / Tiết kiệm / Quỹ KC) -->
+                <!-- Card 3: Đầu tư (Trừ tiền mặt hiện có) -->
                 <div class="glass-card rounded-2xl p-5 shadow-xs hover:shadow-md transition relative overflow-hidden">
                     <div class="flex items-start justify-between">
                         <div>
@@ -486,11 +486,11 @@
                     </div>
                     <div class="mt-2 flex flex-col gap-1 text-[11px] text-slate-600 bg-slate-50 p-2 rounded-lg">
                         <div class="flex justify-between">
-                            <span>• Tiền ra (Nạp ĐT/TK):</span>
+                            <span>• Tiền ra (Trừ tiền mặt):</span>
                             <strong id="kpiInvestOutSub" class="text-indigo-600">0 ₫</strong>
                         </div>
                         <div class="flex justify-between">
-                            <span>• Tiền vào (Rút/Lãi ĐT):</span>
+                            <span>• Tiền vào (Thu hồi/Lãi):</span>
                             <strong id="kpiInvestInSub" class="text-emerald-600">0 ₫</strong>
                         </div>
                     </div>
@@ -691,7 +691,7 @@
                         </span>
                         <h2 class="text-2xl sm:text-3xl font-extrabold">Tổng Tài Sản Quản Lý: <span id="assetTotalGross" class="text-amber-300">0 ₫</span></h2>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Tự động đồng bộ thời gian thực từ dòng tiền Thu/Chi hàng ngày, các bút toán chuyển tiền Đầu tư (Tiết kiệm, Chứng khoán, Quỹ khẩn cấp) và các khoản Chi phí trích trước chưa thực chi.
+                            Mục <strong>Tiền mặt & Ngân hàng (CASA)</strong> tự động cộng/trừ theo các bút toán Thu nhập, Chi phí và Đầu tư. Riêng giá trị <strong>Sổ tiết kiệm</strong> & <strong>Đầu tư tài chính</strong> do bạn chủ động tự nhập và cập nhật tay.
                         </p>
                         <div class="pt-2 flex flex-wrap gap-3 text-xs">
                             <div class="bg-white/10 px-3.5 py-2 rounded-xl border border-white/10">
@@ -711,7 +711,7 @@
                 </div>
             </div>
 
-            <!-- 4 TRỤ CỘT TÀI SẢN THEO ĐÚNG YÊU CẦU TRONG FILE WORD -->
+            <!-- 4 TRỤ CỘT TÀI SẢN -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Trụ cột 1: Tiền mặt & TK Ngân hàng không kỳ hạn -->
                 <div class="glass-card rounded-2xl p-5 border-l-4 border-l-emerald-500 shadow-xs">
@@ -721,11 +721,11 @@
                     </div>
                     <p id="cardCasaBalance" class="text-xl font-extrabold text-slate-900 mt-2">0 ₫</p>
                     <p class="text-[11px] text-emerald-700 font-medium mt-1">
-                        <i class="fa-solid fa-rotate mr-1"></i>Biến đổi trực tiếp theo thu chi hàng ngày
+                        <i class="fa-solid fa-rotate mr-1"></i>Tự động tính từ Thu/Chi & Đầu tư
                     </p>
                 </div>
 
-                <!-- Trụ cột 2: Tiết kiệm gửi ngân hàng -->
+                <!-- Trụ cột 2: Tiết kiệm gửi ngân hàng (Tự nhập tay 100%) -->
                 <div class="glass-card rounded-2xl p-5 border-l-4 border-l-blue-500 shadow-xs">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold uppercase text-slate-500">2. Tiết Kiệm Gửi Ngân Hàng</span>
@@ -733,11 +733,11 @@
                     </div>
                     <p id="cardSavingsBalance" class="text-xl font-extrabold text-slate-900 mt-2">0 ₫</p>
                     <p class="text-[11px] text-blue-700 font-medium mt-1">
-                        <i class="fa-solid fa-link mr-1"></i>Tạo tay + Link từ bút toán Đầu tư
+                        <i class="fa-solid fa-keyboard mr-1"></i>Giá trị tự nhập & cập nhật tay
                     </p>
                 </div>
 
-                <!-- Trụ cột 3: Đầu tư thị trường tài chính -->
+                <!-- Trụ cột 3: Đầu tư thị trường tài chính (Tự nhập tay 100%) -->
                 <div class="glass-card rounded-2xl p-5 border-l-4 border-l-violet-500 shadow-xs">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold uppercase text-slate-500">3. Đầu Tư TT Tài Chính</span>
@@ -745,7 +745,7 @@
                     </div>
                     <p id="cardMarketInvestBalance" class="text-xl font-extrabold text-slate-900 mt-2">0 ₫</p>
                     <p class="text-[11px] text-violet-700 font-medium mt-1">
-                        <i class="fa-solid fa-link mr-1"></i>Tạo tay + Link từ bút toán Đầu tư
+                        <i class="fa-solid fa-keyboard mr-1"></i>Giá trị tự nhập & cập nhật tay
                     </p>
                 </div>
 
@@ -795,7 +795,7 @@
                         <p id="casaFormulaAccruedExp" class="text-sm font-extrabold text-amber-700 mt-1">0 ₫</p>
                     </div>
                     <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-200">
-                        <p class="text-indigo-700 font-medium">(-/+) Chuyển Đầu tư ròng</p>
+                        <p class="text-indigo-700 font-medium">(-/+) Bút toán Đầu tư ròng</p>
                         <p id="casaFormulaNetInvest" class="text-sm font-extrabold text-indigo-700 mt-1">0 ₫</p>
                     </div>
                     <div class="p-3 rounded-xl bg-emerald-600 text-white shadow-xs">
@@ -805,7 +805,7 @@
                 </div>
             </div>
 
-            <!-- CHI TIẾT MỤC 2 & 3: TIẾT KIỆM NGÂN HÀNG & ĐẦU TƯ THỊ TRƯỜNG TÀI CHÍNH -->
+            <!-- CHI TIẾT MỤC 2 & 3: TIẾT KIỆM NGÂN HÀNG & ĐẦU TƯ THỊ TRƯỜNG TÀI CHÍNH (NHẬP TAY 100%) -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Mục 2: Các khoản tiết kiệm gửi ngân hàng -->
                 <div class="glass-card rounded-2xl p-5 shadow-xs flex flex-col justify-between">
@@ -816,10 +816,10 @@
                                     <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold">2</span>
                                     <span>Các Khoản Tiết Kiệm Gửi Ngân Hàng & Quỹ KC</span>
                                 </h3>
-                                <p class="text-xs text-slate-500">Gồm các khoản Tạo tay & Link tự động từ bút toán Đầu tư</p>
+                                <p class="text-xs text-slate-500">Tự nhập tay và cập nhật giá trị độc lập (Không tự link từ bút toán Đầu tư)</p>
                             </div>
                             <button onclick="openAssetModal('SAVING')" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition self-start cursor-pointer">
-                                <i class="fa-solid fa-plus mr-1"></i> Tạo sổ tiết kiệm tay
+                                <i class="fa-solid fa-plus mr-1"></i> Nhập khoản tiết kiệm
                             </button>
                         </div>
 
@@ -827,11 +827,10 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="bg-slate-50 text-slate-600 border-y border-slate-200">
-                                        <th class="py-2 px-2.5 font-bold">Ngày</th>
-                                        <th class="py-2 px-2.5 font-bold">Tên sổ / Ngân hàng</th>
-                                        <th class="py-2 px-2.5 font-bold">Nguồn</th>
-                                        <th class="py-2 px-2.5 font-bold text-right">Số tiền (VNĐ)</th>
-                                        <th class="py-2 px-2.5 font-bold text-center no-print">Xóa</th>
+                                        <th class="py-2 px-2.5 font-bold">Ngày cập nhật</th>
+                                        <th class="py-2 px-2.5 font-bold">Tên sổ / Ngân hàng / Ghi chú</th>
+                                        <th class="py-2 px-2.5 font-bold text-right">Giá trị (VNĐ)</th>
+                                        <th class="py-2 px-2.5 font-bold text-center no-print">Sửa / Xóa</th>
                                     </tr>
                                 </thead>
                                 <tbody id="savingsAssetTableBody" class="divide-y divide-slate-100">
@@ -855,10 +854,10 @@
                                     <span class="w-6 h-6 rounded-full bg-violet-600 text-white text-xs flex items-center justify-center font-bold">3</span>
                                     <span>Các Khoản Đầu Tư Thị Trường Tài Chính</span>
                                 </h3>
-                                <p class="text-xs text-slate-500">Chứng khoán, Quỹ ETF, Vàng, Crypto... (Tạo tay + Link từ bút toán Đầu tư)</p>
+                                <p class="text-xs text-slate-500">Chứng khoán, ETF, Vàng, Crypto... (Tự nhập & cập nhật giá trị thị trường)</p>
                             </div>
                             <button onclick="openAssetModal('MARKET')" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold transition self-start cursor-pointer">
-                                <i class="fa-solid fa-plus mr-1"></i> Tạo khoản đầu tư tay
+                                <i class="fa-solid fa-plus mr-1"></i> Nhập khoản đầu tư
                             </button>
                         </div>
 
@@ -866,11 +865,10 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="bg-slate-50 text-slate-600 border-y border-slate-200">
-                                        <th class="py-2 px-2.5 font-bold">Ngày</th>
-                                        <th class="py-2 px-2.5 font-bold">Danh mục / Tài khoản</th>
-                                        <th class="py-2 px-2.5 font-bold">Nguồn</th>
+                                        <th class="py-2 px-2.5 font-bold">Ngày cập nhật</th>
+                                        <th class="py-2 px-2.5 font-bold">Danh mục / Tài khoản / Ghi chú</th>
                                         <th class="py-2 px-2.5 font-bold text-right">Giá trị (VNĐ)</th>
-                                        <th class="py-2 px-2.5 font-bold text-center no-print">Xóa</th>
+                                        <th class="py-2 px-2.5 font-bold text-center no-print">Sửa / Xóa</th>
                                     </tr>
                                 </thead>
                                 <tbody id="marketAssetTableBody" class="divide-y divide-slate-100">
@@ -957,7 +955,7 @@
                             <option value="INCOME">Thu nhập</option>
                             <option value="EXPENSE_ACTUAL">Chi phí - Thực chi</option>
                             <option value="EXPENSE_ACCRUED">Chi phí - Trích trước</option>
-                            <option value="INVEST">Đầu tư (Tiết kiệm/CK/Quỹ KC)</option>
+                            <option value="INVEST">Đầu tư</option>
                         </select>
                     </div>
                     <div>
@@ -1106,7 +1104,7 @@
     </main>
 
     <!-- =============================================================== -->
-    <!-- MODAL 1: TẠO / SỬA BÚT TOÁN THU CHI (ĐẦY ĐỦ CÁC TRƯỜNG YÊU CẦU) -->
+    <!-- MODAL 1: TẠO / SỬA BÚT TOÁN THU CHI                              -->
     <!-- =============================================================== -->
     <div id="transactionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 my-8">
@@ -1117,7 +1115,7 @@
                     </div>
                     <div>
                         <h3 id="txModalTitle" class="text-base sm:text-lg font-extrabold text-slate-900">Tạo Bút Toán Thu / Chi / Đầu Tư</h3>
-                        <p class="text-xs text-slate-500">Tự động ánh xạ Mã phí và đồng bộ sang Dashboard Tài Sản Cá Nhân</p>
+                        <p class="text-xs text-slate-500">Tự động ánh xạ Mã phí và cập nhật số dư Tiền mặt khả dụng (CASA)</p>
                     </div>
                 </div>
                 <button onclick="closeTransactionModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center cursor-pointer">
@@ -1175,43 +1173,33 @@
                             <input type="radio" name="expenseKind" value="ACCRUED" class="mt-0.5 accent-amber-600">
                             <div>
                                 <p class="text-xs font-bold text-amber-900">Chi phí trích trước</p>
-                                <p class="text-[11px] text-slate-500">Trích 1 khoản tiền để dành chi trong tương lai (VD: mua Laptop) &rarr; Link sang Tài sản</p>
+                                <p class="text-[11px] text-slate-500">Trích 1 khoản tiền để dành chi trong tương lai (VD: mua Laptop) &rarr; Giữ tại Quỹ trích trước</p>
                             </div>
                         </label>
                     </div>
                 </div>
 
-                <!-- KHỐI ĐẶC BIỆT 2: Nếu chọn "Đầu tư" -> Chọn kênh đầu tư & chiều dòng tiền -->
+                <!-- KHỐI ĐẶC BIỆT 2: Nếu chọn "Đầu tư" -> Chỉ chọn chiều dòng tiền (Không tự link sang Tài sản) -->
                 <div id="investSubTypeBox" class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-3 hidden">
                     <div class="flex items-start gap-2 text-xs text-indigo-900">
                         <i class="fa-solid fa-circle-info text-indigo-600 mt-0.5"></i>
                         <p class="leading-relaxed">
-                            <strong>Lưu ý nghiệp vụ Đầu tư:</strong> Giao dịch Đầu tư nếu là <strong>Tiền ra</strong> tức là rút tiền mặt/ngân hàng để bỏ vào Tài khoản chứng khoán, Gửi tiết kiệm ngân hàng hoặc Quỹ khẩn cấp (Tự động link sang Dashboard Tài Sản Cá Nhân).
+                            <strong>Lưu ý nghiệp vụ Đầu tư:</strong> Bút toán Đầu tư sẽ trực tiếp <strong>trừ (hoặc cộng) số dư Tiền mặt hiện có (CASA)</strong> để phản ánh dòng tiền. Giá trị các danh mục Tiết kiệm & Đầu tư tại tab Tài sản cá nhân sẽ do bạn tự nhập tay độc lập.
                         </p>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-bold text-indigo-950 mb-1">Chiều giao dịch đầu tư</label>
-                            <select id="txInvestDirection" class="w-full px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-900">
-                                <option value="OUT">Tiền ra (Rút tiền mặt nạp vào TK Đầu tư / Tiết kiệm)</option>
-                                <option value="IN">Tiền vào (Rút gốc / Lãi đầu tư về lại Tiền mặt)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-indigo-950 mb-1">Kênh tài sản nhận liên kết (Link Tài Sản)</label>
-                            <select id="txInvestTarget" class="w-full px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-900">
-                                <option value="SAVING_BANK">Gửi tiết kiệm ngân hàng (Link mục Tiết kiệm)</option>
-                                <option value="MARKET_SEC">Tài khoản chứng khoán / TT Tài chính (Link mục ĐT Tài chính)</option>
-                                <option value="EMERGENCY_FUND">Quỹ khẩn cấp (Link mục Tiết kiệm & Quỹ KC)</option>
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-indigo-950 mb-1">Chiều dòng tiền Đầu tư</label>
+                        <select id="txInvestDirection" class="w-full px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-900">
+                            <option value="OUT">Tiền ra (Trừ số dư Tiền mặt hiện có để mang đi Đầu tư / Tích lũy)</option>
+                            <option value="IN">Tiền vào (Thu hồi vốn gốc / Lãi đầu tư cộng về lại Tiền mặt)</option>
+                        </select>
                     </div>
                 </div>
 
                 <!-- Hàng 2: Diễn giải (Gõ tự do) -->
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">3. Diễn giải (Gõ tự do) <span class="text-rose-500">*</span></label>
-                    <input type="text" id="txDescription" required placeholder="VD: Nhận lương tháng 11, Trích trước mua Macbook Pro, Nạp tiền vào TK chứng khoán SSI..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="text" id="txDescription" required placeholder="VD: Nhận lương tháng 11, Trích trước mua Macbook Pro, Chuyển tiền đầu tư chứng khoán..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
                 <!-- Hàng 3: Số lượng, Đơn giá / Số tiền & Tổng Thành Tiền -->
@@ -1311,20 +1299,21 @@
     </div>
 
     <!-- =============================================================== -->
-    <!-- MODAL 2: TẠO TAY SỔ TIẾT KIỆM HOẶC KHOẢN ĐẦU TƯ TÀI CHÍNH       -->
+    <!-- MODAL 2: TỰ NHẬP / CẬP NHẬT SỔ TIẾT KIỆM HOẶC KHOẢN ĐẦU TƯ       -->
     <!-- =============================================================== -->
     <div id="manualAssetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
             <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-                <h3 id="manualAssetModalTitle" class="text-base font-extrabold text-slate-900">Thêm Khoản Tài Sản (Tạo Tay)</h3>
+                <h3 id="manualAssetModalTitle" class="text-base font-extrabold text-slate-900">Nhập Khoản Tài Sản Cá Nhân</h3>
                 <button onclick="closeAssetModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center cursor-pointer">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <form onsubmit="handleSaveManualAsset(event)" class="mt-4 space-y-3 text-xs">
+                <input type="hidden" id="manualAssetEditId" value="">
                 <input type="hidden" id="manualAssetCategory" value="SAVING">
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Ngày ghi nhận <span class="text-rose-500">*</span></label>
+                    <label class="block font-bold text-slate-700 mb-1">Ngày ghi nhận / cập nhật <span class="text-rose-500">*</span></label>
                     <input type="date" id="manualAssetDate" required class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold">
                 </div>
                 <div>
@@ -1336,12 +1325,12 @@
                     <input type="text" inputmode="decimal" id="manualAssetAmount" required placeholder="VD: 50,000,000" oninput="handleDecimalInputFormat(this)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-bold">
                 </div>
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Ghi chú (Lãi suất, kỳ hạn...)</label>
-                    <input type="text" id="manualAssetNote" placeholder="VD: Lãi suất 5.5%/năm, có sẵn từ trước..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                    <label class="block font-bold text-slate-700 mb-1">Ghi chú (Lãi suất, kỳ hạn, số lượng CP...)</label>
+                    <input type="text" id="manualAssetNote" placeholder="VD: Lãi suất 5.5%/năm, hoặc Giá thị trường hiện tại..." class="w-full px-3 py-2 rounded-xl border border-slate-300">
                 </div>
                 <div class="p-2.5 rounded-xl bg-blue-50 text-blue-800 text-[11px]">
                     <i class="fa-solid fa-circle-info mr-1"></i>
-                    Khoản tạo tay này dùng để khai báo các tài sản bạn đã sở hữu sẵn (không làm trừ Tiền mặt hàng ngày). Nếu bạn trích tiền mặt tháng này để đi gửi tiết kiệm/đầu tư, hãy tạo <strong>Bút toán loại Đầu tư</strong> để hệ thống tự động trừ tiền mặt và link sang đây.
+                    Giá trị Tài sản cá nhân tại đây được <strong>quản lý độc lập bằng tay</strong> (không làm thay đổi số dư Tiền mặt CASA). Bạn có thể bấm nút <strong>Sửa</strong> bất cứ lúc nào để cập nhật lại số dư sổ tiết kiệm hoặc giá trị thị trường của danh mục đầu tư.
                 </div>
                 <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
                     <button type="button" onclick="closeAssetModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-bold cursor-pointer">Hủy</button>
@@ -1357,7 +1346,7 @@
     <div id="initialCashModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
             <h3 class="text-base font-extrabold text-slate-900 mb-1">Cài Đặt Số Dư Tiền Mặt & TK Ngân Hàng Đầu Kỳ</h3>
-            <p class="text-xs text-slate-500 mb-4">Số dư gốc ban đầu trước khi cộng/trừ các giao dịch thu chi hàng ngày</p>
+            <p class="text-xs text-slate-500 mb-4">Số dư gốc ban đầu trước khi cộng/trừ các giao dịch thu chi & đầu tư hàng ngày</p>
             <form onsubmit="handleSaveInitialCash(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Số dư Tiền mặt + TK Ngân hàng không kỳ hạn ban đầu (VNĐ)</label>
@@ -1405,7 +1394,7 @@
             theme: 'light',               // 'light' | 'blue-dark'
             feeCodes: [],
             transactions: [],
-            manualAssets: [] // Các khoản Tiết kiệm / Đầu tư tạo tay
+            manualAssets: [] // Các khoản Tiết kiệm / Đầu tư tự nhập tay 100%
         };
 
         // --- Từ điển Đa ngôn ngữ (VI / EN) ---
@@ -1426,7 +1415,7 @@
                 quarterPrefix: 'Quý',
                 bannerOverviewPrefix: 'Tổng quan Thu Chi Tháng',
                 bannerTitle: 'Bức Tranh Dòng Tiền Hàng Tháng',
-                bannerDesc: 'Theo dõi sát sao Thu nhập, Chi phí thực chi, Chi phí trích trước (để dành cho mục tiêu tương lai) và các bút toán chuyển tiền sang Đầu tư / Tiết kiệm.',
+                bannerDesc: 'Theo dõi sát sao Thu nhập, Chi phí thực chi, Chi phí trích trước và các bút toán Đầu tư (tự động trừ vào Tiền mặt khả dụng, không tự động cộng sang danh mục Tài sản).',
                 bannerCasaLabel: 'Tiền mặt & Ngân hàng khả dụng (CASA)',
                 bannerNetWorthLabel: 'Tổng Tài Sản Ròng (Net Worth)',
                 kpiIncomeTitle: 'Tổng Thu Nhập Tháng',
@@ -1436,8 +1425,8 @@
                 vsPrevMonth: 'So với tháng trước:',
                 actualSub: '• Thực chi (Đã chi):',
                 accruedSub: '• Trích trước (Để dành):',
-                investOutSub: '• Tiền ra (Nạp ĐT/TK):',
-                investInSub: '• Tiền vào (Rút/Lãi ĐT):',
+                investOutSub: '• Tiền ra (Trừ tiền mặt):',
+                investInSub: '• Tiền vào (Thu hồi/Lãi):',
                 netCashflowFormula: '= Thu nhập - (Chi thực chi + Chi trích trước) - Đầu tư ròng',
                 savingRateLabel: 'Tỷ lệ Tiết kiệm & ĐT:',
                 ofIncome: 'thu nhập',
@@ -1482,15 +1471,15 @@
                 emptyMonthTx: 'Chưa có giao dịch nào trong tháng này. Hãy bấm "Tạo Bút Toán" để bắt đầu!',
                 assetBadgeHeader: 'Bảng Cân Đối Tài Sản Cá Nhân',
                 assetTotalManagedLabel: 'Tổng Tài Sản Quản Lý:',
-                assetHeaderDesc: 'Tự động đồng bộ thời gian thực từ dòng tiền Thu/Chi hàng ngày, các bút toán chuyển tiền Đầu tư (Tiết kiệm, Chứng khoán, Quỹ khẩn cấp) và các khoản Chi phí trích trước chưa thực chi.',
+                assetHeaderDesc: 'Mục Tiền mặt & Ngân hàng (CASA) tự động cộng/trừ theo các bút toán Thu nhập, Chi phí và Đầu tư. Riêng giá trị Sổ tiết kiệm & Đầu tư tài chính do bạn chủ động tự nhập và cập nhật tay.',
                 assetNetWorthRealLabel: 'Tài sản ròng thực tế (Trừ quỹ trích trước):',
                 btnSetInitialCash: 'Cài đặt Số dư Tiền mặt Đầu kỳ',
                 pillar1Title: '1. Tiền Mặt & TK Không Kỳ Hạn',
-                pillar1Sub: 'Biến đổi trực tiếp theo thu chi hàng ngày',
+                pillar1Sub: 'Tự động tính từ Thu/Chi & Đầu tư',
                 pillar2Title: '2. Tiết Kiệm Gửi Ngân Hàng',
-                pillar2Sub: 'Tạo tay + Link từ bút toán Đầu tư',
+                pillar2Sub: 'Giá trị tự nhập & cập nhật tay',
                 pillar3Title: '3. Đầu Tư TT Tài Chính',
-                pillar3Sub: 'Tạo tay + Link từ bút toán Đầu tư',
+                pillar3Sub: 'Giá trị tự nhập & cập nhật tay',
                 pillar4Title: '4. Quỹ Chi Phí Trích Trước',
                 pillar4Sub: 'Link trực tiếp từ bút toán Chi phí trích trước',
                 casaDetailTitle: 'Chi Tiết Biến Động Tiền Mặt & Tài Khoản Ngân Hàng Không Kỳ Hạn',
@@ -1500,32 +1489,27 @@
                 fIncome: '(+) Tổng Thu nhập',
                 fActualExp: '(-) Chi phí thực chi',
                 fAccruedExp: '(-) Trích trước (Tách quỹ)',
-                fNetInvest: '(-/+) Chuyển Đầu tư ròng',
+                fNetInvest: '(-/+) Bút toán Đầu tư ròng',
                 fFinalCasa: '(=) Tiền mặt khả dụng',
                 savingBoxTitle: 'Các Khoản Tiết Kiệm Gửi Ngân Hàng & Quỹ KC',
-                savingBoxSub: 'Gồm các khoản Tạo tay & Link tự động từ bút toán Đầu tư',
-                btnAddManualSaving: 'Tạo sổ tiết kiệm tay',
+                savingBoxSub: 'Tự nhập tay và cập nhật giá trị độc lập (Không tự link từ bút toán Đầu tư)',
+                btnAddManualSaving: 'Nhập khoản tiết kiệm',
                 marketBoxTitle: 'Các Khoản Đầu Tư Thị Trường Tài Chính',
-                marketBoxSub: 'Chứng khoán, Quỹ ETF, Vàng, Crypto... (Tạo tay + Link từ bút toán Đầu tư)',
-                btnAddManualMarket: 'Tạo khoản đầu tư tay',
+                marketBoxSub: 'Chứng khoán, ETF, Vàng, Crypto... (Tự nhập & cập nhật giá trị thị trường)',
+                btnAddManualMarket: 'Nhập khoản đầu tư',
                 accruedBoxTitle: 'Các Khoản Chi Phí Trích Trước Chưa Thực Chi (Link Trực Tiếp Từ Bút Toán Chi Phí)',
                 accruedBoxSub: 'Đây là các khoản tiền bạn đã trích ra để dành cho mục tiêu tương lai (VD: mua Laptop, đóng học phí, du lịch...). Khi thực sự chi tiền, bấm "Chuyển sang Thực chi" để hoàn tất.',
                 btnAddAccruedQuick: '+ Trích trước khoản mới',
                 btnConvertActual: 'Chuyển sang Thực chi',
                 statusAccruedPending: 'Đang trích trước (Chưa thực chi)',
-                sourceManual: 'Tạo tay',
-                sourceLinkOut: 'Link từ ĐT (Tiền ra)',
-                sourceLinkIn: 'Link từ ĐT (Rút về)',
+                sourceManual: 'Tự nhập tay',
                 badgeIncome: 'Thu nhập',
                 badgeExpense: 'Chi phí',
                 badgeInvest: 'Đầu tư',
                 badgeExpActual: 'Chi thực chi',
                 badgeExpAccrued: 'Chi trích trước',
-                dirIn: 'Tiền vào',
-                dirOut: 'Tiền ra',
-                targetSaving: 'TK Ngân hàng',
-                targetMarket: 'TK Chứng khoán',
-                targetEmergency: 'Quỹ khẩn cấp',
+                dirIn: 'Đầu tư (Tiền vào)',
+                dirOut: 'Đầu tư (Tiền ra)',
                 txJournalTitle: 'Sổ Nhật Ký Thu Chi & Đầu Tư Toàn Hệ Thống',
                 txJournalSub: 'Tìm kiếm, lọc đa chiều và chỉnh sửa tất cả các bút toán thu nhập, chi phí thực chi, chi phí trích trước, đầu tư',
                 btnAddNewTx: 'Thêm Bút Toán Mới',
@@ -1553,7 +1537,7 @@
                 quarterPrefix: 'Q',
                 bannerOverviewPrefix: 'Cashflow Overview - Month',
                 bannerTitle: 'Monthly Cashflow Panorama',
-                bannerDesc: 'Closely track Income, Actual Expenses, Accrued Expenses (reserved for future goals), and transfers to Investments / Savings.',
+                bannerDesc: 'Closely track Income, Actual Expenses, Accrued Expenses, and Investment entries (automatically deducted from Available Cash, while Asset values are managed manually).',
                 bannerCasaLabel: 'Available Cash & Bank (CASA)',
                 bannerNetWorthLabel: 'Total Net Worth',
                 kpiIncomeTitle: 'Monthly Total Income',
@@ -1563,8 +1547,8 @@
                 vsPrevMonth: 'Vs previous month:',
                 actualSub: '• Actual (Spent):',
                 accruedSub: '• Accrued (Reserved):',
-                investOutSub: '• Outflow (Deposit):',
-                investInSub: '• Inflow (Withdraw/Yield):',
+                investOutSub: '• Outflow (Deduct Cash):',
+                investInSub: '• Inflow (Return/Yield):',
                 netCashflowFormula: '= Income - (Actual + Accrued Expense) - Net Investment',
                 savingRateLabel: 'Saving & Invest Rate:',
                 ofIncome: 'of income',
@@ -1609,15 +1593,15 @@
                 emptyMonthTx: 'No transactions in this month yet. Click "New Entry" to start!',
                 assetBadgeHeader: 'Personal Balance Sheet',
                 assetTotalManagedLabel: 'Total Assets Under Management:',
-                assetHeaderDesc: 'Real-time synchronization from daily Income/Expense cashflow, Investment transfers (Savings, Securities, Emergency Fund), and unpaid Accrued Expenses.',
+                assetHeaderDesc: 'Cash & Bank (CASA) automatically adjusts with Income, Expense, and Investment entries. Bank Savings & Financial Market Investments are entered and updated manually.',
                 assetNetWorthRealLabel: 'Real Net Worth (Excl. accrued reserve):',
                 btnSetInitialCash: 'Set Initial Cash Balance',
                 pillar1Title: '1. Cash & Non-Term Bank (CASA)',
-                pillar1Sub: 'Directly fluctuates with daily cashflow',
+                pillar1Sub: 'Auto-calculated from Cashflow & Invest',
                 pillar2Title: '2. Bank Term Savings',
-                pillar2Sub: 'Manual entry + Linked from Investment entries',
+                pillar2Sub: 'Manually entered & updated',
                 pillar3Title: '3. Financial Market Investments',
-                pillar3Sub: 'Manual entry + Linked from Investment entries',
+                pillar3Sub: 'Manually entered & updated',
                 pillar4Title: '4. Accrued Expense Reserve',
                 pillar4Sub: 'Directly linked from Accrued Expense entries',
                 casaDetailTitle: 'Cash & Non-Term Bank Account (CASA) Movement Breakdown',
@@ -1630,29 +1614,24 @@
                 fNetInvest: '(-/+) Net Investment Out',
                 fFinalCasa: '(=) Available Cash',
                 savingBoxTitle: 'Bank Savings & Emergency Fund',
-                savingBoxSub: 'Includes Manual entries & Auto-linked Investment entries',
-                btnAddManualSaving: 'Add Manual Saving',
+                savingBoxSub: 'Manually entered & updated independently',
+                btnAddManualSaving: 'Add Saving Entry',
                 marketBoxTitle: 'Financial Market Investments',
-                marketBoxSub: 'Stocks, ETFs, Gold, Crypto... (Manual + Linked from Investments)',
-                btnAddManualMarket: 'Add Manual Investment',
+                marketBoxSub: 'Stocks, ETFs, Gold, Crypto... (Manually entered & updated)',
+                btnAddManualMarket: 'Add Investment Entry',
                 accruedBoxTitle: 'Unpaid Accrued Expenses (Linked Directly from Expense Entries)',
                 accruedBoxSub: 'Funds set aside for future goals (e.g., buying a Laptop, tuition, travel...). When actually spent, click "Convert to Actual" to finalize.',
                 btnAddAccruedQuick: '+ New Accrued Expense',
                 btnConvertActual: 'Convert to Actual',
                 statusAccruedPending: 'Accrued (Unspent)',
-                sourceManual: 'Manual',
-                sourceLinkOut: 'Linked Invest (Out)',
-                sourceLinkIn: 'Linked Invest (In)',
+                sourceManual: 'Manual Entry',
                 badgeIncome: 'Income',
                 badgeExpense: 'Expense',
                 badgeInvest: 'Investment',
                 badgeExpActual: 'Actual Expense',
                 badgeExpAccrued: 'Accrued Expense',
-                dirIn: 'Inflow',
-                dirOut: 'Outflow',
-                targetSaving: 'Bank Saving',
-                targetMarket: 'Securities Acc',
-                targetEmergency: 'Emergency Fund',
+                dirIn: 'Invest (Inflow)',
+                dirOut: 'Invest (Outflow)',
                 txJournalTitle: 'System-wide Cashflow & Investment Journal',
                 txJournalSub: 'Search, multi-filter, and edit all income, actual expense, accrued expense, and investment entries',
                 btnAddNewTx: 'Add New Entry',
@@ -1703,25 +1682,25 @@
                 // Dữ liệu Tháng 09/2026
                 {
                     id: 'TX-0901', date: '2026-09-05', description: 'Nhận lương tháng 09/2026',
-                    type: 'INCOME', expenseKind: null, investDirection: null, investTarget: null,
+                    type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 32000000, amount: 32000000,
                     feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
                 },
                 {
                     id: 'TX-0902', date: '2026-09-10', description: 'Tiền thuê nhà, điện nước, Internet tháng 09',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6500000, amount: 6500000,
                     feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
                 },
                 {
                     id: 'TX-0903', date: '2026-09-18', description: 'Ăn uống & siêu thị cả tháng 09',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 5200000, amount: 5200000,
                     feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
                 },
                 {
                     id: 'TX-0904', date: '2026-09-25', description: 'Nạp tiền vào TK Chứng khoán SSI mua ETF',
-                    type: 'INVEST', expenseKind: null, investDirection: 'OUT', investTarget: 'MARKET_SEC',
+                    type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 8000000, amount: 8000000,
                     feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán'
                 },
@@ -1729,37 +1708,37 @@
                 // Dữ liệu Tháng 10/2026 (Tháng trước để đối chiếu so sánh)
                 {
                     id: 'TX-1001', date: '2026-10-05', description: 'Nhận lương chính tháng 10/2026',
-                    type: 'INCOME', expenseKind: null, investDirection: null, investTarget: null,
+                    type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 32000000, amount: 32000000,
                     feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
                 },
                 {
                     id: 'TX-1002', date: '2026-10-12', description: 'Thù lao dự án thiết kế Dashboard Freelance',
-                    type: 'INCOME', expenseKind: null, investDirection: null, investTarget: null,
+                    type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 6000000, amount: 6000000,
                     feeCode: 'TN-FREELANCE', heading1: 'Thu nhập phụ', heading2: 'Tư vấn & Freelance'
                 },
                 {
                     id: 'TX-1003', date: '2026-10-08', description: 'Thanh toán tiền nhà, điện nước tháng 10',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6800000, amount: 6800000,
                     feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
                 },
                 {
                     id: 'TX-1004', date: '2026-10-15', description: 'Chi phí ăn uống, đi chợ tháng 10',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 5800000, amount: 5800000,
                     feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
                 },
                 {
                     id: 'TX-1005', date: '2026-10-20', description: 'Trích trước tiền mua Laptop làm việc (Đợt 1)',
-                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 1, unitPrice: 5000000, amount: 5000000,
                     feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ'
                 },
                 {
                     id: 'TX-1006', date: '2026-10-25', description: 'Gửi tiết kiệm online Techcombank kỳ hạn 6 tháng',
-                    type: 'INVEST', expenseKind: null, investDirection: 'OUT', investTarget: 'SAVING_BANK',
+                    type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 10000000, amount: 10000000,
                     feeCode: 'DT-TKBANK', heading1: 'Đầu tư & Tích lũy', heading2: 'Gửi tiết kiệm ngân hàng'
                 },
@@ -1767,70 +1746,76 @@
                 // Dữ liệu Tháng 11/2026 (Tháng hiện tại)
                 {
                     id: 'TX-1101', date: '2026-11-05', description: 'Nhận lương tháng 11/2026',
-                    type: 'INCOME', expenseKind: null, investDirection: null, investTarget: null,
+                    type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 35000000, amount: 35000000,
                     feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
                 },
                 {
                     id: 'TX-1102', date: '2026-11-06', description: 'Thưởng hoàn thành vượt KPI Quý',
-                    type: 'INCOME', expenseKind: null, investDirection: null, investTarget: null,
+                    type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 8000000, amount: 8000000,
                     feeCode: 'TN-THUONG', heading1: 'Thu nhập chính', heading2: 'Thưởng hiệu quả / KPI'
                 },
                 {
                     id: 'TX-1103', date: '2026-11-06', description: 'Tiền thuê nhà, phí quản lý & Internet tháng 11',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6700000, amount: 6700000,
                     feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
                 },
                 {
                     id: 'TX-1104', date: '2026-11-07', description: 'Đi siêu thị Co.opmart & ăn uống tuần đầu',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 3400000, amount: 3400000,
                     feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
                 },
                 {
                     id: 'TX-1105', date: '2026-11-07', description: 'Đổ xăng & bảo dưỡng xe định kỳ',
-                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 850000, amount: 850000,
                     feeCode: 'CP-XANG', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab'
                 },
                 {
                     id: 'TX-1106', date: '2026-11-08', description: 'Trích trước tiền mua Laptop Macbook Pro (Đợt 2)',
-                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 1, unitPrice: 7000000, amount: 7000000,
                     feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ'
                 },
                 {
                     id: 'TX-1107', date: '2026-11-08', description: 'Trích trước quỹ du lịch Đà Lạt cuối năm',
-                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null, investTarget: null,
+                    type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 2, unitPrice: 2000000, amount: 4000000,
                     feeCode: 'CP-DULICH', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng'
                 },
                 {
                     id: 'TX-1108', date: '2026-11-08', description: 'Chuyển tiền vào TK Chứng khoán VPS tích sản cổ phiếu',
-                    type: 'INVEST', expenseKind: null, investDirection: 'OUT', investTarget: 'MARKET_SEC',
+                    type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 10000000, amount: 10000000,
                     feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán'
                 },
                 {
                     id: 'TX-1109', date: '2026-11-08', description: 'Bỏ thêm vào Quỹ dự phòng khẩn cấp',
-                    type: 'INVEST', expenseKind: null, investDirection: 'OUT', investTarget: 'EMERGENCY_FUND',
+                    type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 5000000, amount: 5000000,
                     feeCode: 'DT-QUYKC', heading1: 'Đầu tư & Tích lũy', heading2: 'Quỹ dự phòng khẩn cấp'
                 }
             ];
 
+            // Danh mục tài sản cá nhân do người dùng tự nhập tay 100% (Trừ phần tiền mặt CASA)
             const defaultManualAssets = [
                 {
                     id: 'MA-01', category: 'SAVING', date: '2026-05-15',
-                    name: 'Sổ Tiết Kiệm Vietcombank Kỳ Hạn 12 Tháng (5.2%/năm)',
-                    amount: 80000000, note: 'Sổ gốc tích lũy từ năm trước'
+                    name: 'Sổ Tiết Kiệm Vietcombank Kỳ Hạn 12 Tháng',
+                    amount: 80000000, note: 'Lãi suất 5.2%/năm - Sổ gốc tích lũy'
                 },
                 {
-                    id: 'MA-02', category: 'MARKET', date: '2026-03-10',
+                    id: 'MA-02', category: 'SAVING', date: '2026-11-08',
+                    name: 'Sổ Tiết Kiệm Online Techcombank & Quỹ Khẩn Cấp',
+                    amount: 15000000, note: 'Tự nhập tay số dư thực tế tại ngân hàng'
+                },
+                {
+                    id: 'MA-03', category: 'MARKET', date: '2026-11-08',
                     name: 'Danh mục Chứng chỉ quỹ ETF E1VFVN30 & Cổ phiếu FPT',
-                    amount: 65000000, note: 'Tạo tay số dư danh mục ban đầu'
+                    amount: 83000000, note: 'Tự cập nhật theo giá thị trường hiện tại'
                 }
             ];
 
@@ -1901,7 +1886,6 @@
             const isDark = appState.theme === 'blue-dark';
             document.body.classList.toggle('theme-blue-dark', isDark);
 
-            // Thiết lập màu chữ mặc định cho Chart.js để nổi bật trên nền Blue Dark
             if (window.Chart) {
                 Chart.defaults.color = isDark ? '#cbd5e1' : '#475569';
                 Chart.defaults.borderColor = isDark ? 'rgba(148, 163, 184, 0.15)' : 'rgba(226, 232, 240, 0.8)';
@@ -1930,7 +1914,6 @@
             const langTextEl = document.getElementById('langToggleText');
             if (langTextEl) langTextEl.textContent = isEn ? 'EN' : 'VI';
 
-            // Cập nhật các nhãn trên Header & Tabs
             const setTxt = (id, val) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = val;
@@ -1947,7 +1930,6 @@
             setTxt('navTabTransactionsText', t('tabTransactions'));
             setTxt('navTabFeeCodesText', t('tabFeeCodes'));
 
-            // Cập nhật danh sách 12 Tháng trên bộ lọc kỳ
             const monthSelect = document.getElementById('globalMonthFilter');
             if (monthSelect) {
                 const currentM = monthSelect.value;
@@ -1955,14 +1937,13 @@
                 monthSelect.innerHTML = Array.from({ length: 12 }, (_, idx) => {
                     const mNum = idx + 1;
                     const label = isEn
-                        ? `${ monthNamesEn[idx] } (${ String(mNum).padStart(2, '0') })`
-                        : `Tháng ${ String(mNum).padStart(2, '0') }`;
+                        ? `${monthNamesEn[idx]} (${String(mNum).padStart(2, '0')})`
+                        : `Tháng ${String(mNum).padStart(2, '0')}`;
                     return `<option value="${mNum}">${label}</option>`;
                 }).join('');
                 monthSelect.value = currentM;
             }
 
-            // Cập nhật các lựa chọn của Pie Breakdown
             const pieSelect = document.getElementById('pieBreakdownMode');
             if (pieSelect) {
                 const curVal = pieSelect.value;
@@ -1973,15 +1954,12 @@
                 pieSelect.value = curVal;
             }
 
-            // Nút Granularity
             setTxt('gran-btn-MONTH', t('granMonth'));
             setTxt('gran-btn-QUARTER', t('granQuarter'));
             setTxt('gran-btn-YEAR', t('granYear'));
 
-            // Cập nhật lại nút Theme theo ngôn ngữ hiện tại
             applyThemeUI();
 
-            // Dịch tự động các nhãn tĩnh trong DOM thông qua bộ ánh xạ selector
             const domPairs = [
                 ['#tab-dashboard-cashflow > div:first-child h2', 'bannerTitle'],
                 ['#tab-dashboard-cashflow > div:first-child p.text-slate-300', 'bannerDesc'],
@@ -2067,7 +2045,7 @@
                 const dateStamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
                 const backupPayload = {
                     appName: 'FinTrack Pro VN',
-                    version: '1.0',
+                    version: '1.1',
                     exportedAt: now.toISOString(),
                     data: appState
                 };
@@ -2102,12 +2080,10 @@
                     const rawContent = e.target.result;
                     const parsedJson = JSON.parse(rawContent);
 
-                    // Hỗ trợ cả định dạng bọc trong { data: appState } lẫn định dạng trực tiếp appState
                     const candidateData = (parsedJson && parsedJson.data && Array.isArray(parsedJson.data.transactions))
                         ? parsedJson.data
                         : parsedJson;
 
-                    // Kiểm tra tính hợp lệ của cấu trúc file JSON
                     if (
                         !candidateData ||
                         !Array.isArray(candidateData.transactions) ||
@@ -2124,7 +2100,7 @@
 
                     showConfirmModal(
                         'Xác nhận Khôi phục (Restore) Dữ liệu JSON',
-                        `File "${file.name}" chứa ${txCount} bút toán thu/chi, ${fcCount} mã phí và ${maCount} khoản tài sản tạo tay. Việc khôi phục sẽ thay thế dữ liệu hiện tại bằng dữ liệu từ file. Bạn có chắc chắn muốn tiếp tục?`,
+                        `File "${file.name}" chứa ${txCount} bút toán thu/chi, ${fcCount} mã phí và ${maCount} khoản tài sản nhập tay. Việc khôi phục sẽ thay thế dữ liệu hiện tại bằng dữ liệu từ file. Bạn có chắc chắn muốn tiếp tục?`,
                         () => {
                             const seed = getDefaultSeedData();
                             appState = {
@@ -2132,12 +2108,16 @@
                                 selectedYear: Number(candidateData.selectedYear) || seed.selectedYear,
                                 overviewGranularity: candidateData.overviewGranularity || 'MONTH',
                                 initialCashBalance: Number(candidateData.initialCashBalance ?? seed.initialCashBalance),
+                                language: candidateData.language || 'vi',
+                                theme: candidateData.theme || 'light',
                                 feeCodes: candidateData.feeCodes,
                                 transactions: candidateData.transactions,
                                 manualAssets: Array.isArray(candidateData.manualAssets) ? candidateData.manualAssets : []
                             };
 
                             saveStateToStorage();
+                            applyThemeUI();
+                            applyLanguageStaticUI();
                             initYearDropdown();
                             document.getElementById('globalMonthFilter').value = appState.selectedMonth;
                             document.getElementById('globalYearFilter').value = appState.selectedYear;
@@ -2157,7 +2137,7 @@
             reader.readAsText(file, 'utf-8');
         }
 
-        // --- Định dạng Số & Tiền tệ VNĐ (Dùng dấu , cho hàng nghìn và dấu . cho thập phân) ---
+        // --- Định dạng Số & Tiền tệ VNĐ ---
         function formatNumberStandard(num, maxDecimals = 2) {
             const n = Number(num);
             if (isNaN(n)) return '0';
@@ -2169,7 +2149,6 @@
 
         function formatVND(num) {
             const n = Number(num) || 0;
-            // Chuẩn en-US dùng dấu , ngăn cách hàng nghìn và dấu . ngăn cách số thập phân
             const hasDecimal = Math.abs(n % 1) > 0.0001;
             const formatted = new Intl.NumberFormat('en-US', {
                 minimumFractionDigits: 0,
@@ -2178,7 +2157,6 @@
             return formatted + ' ₫';
         }
 
-        // Giải mã chuỗi số có chứa dấu phẩy hàng nghìn (VD: "1,250,000.5" -> 1250000.5)
         function parseFormattedNumber(val) {
             if (val === null || val === undefined || val === '') return 0;
             if (typeof val === 'number') return val;
@@ -2187,14 +2165,11 @@
             return isNaN(parsed) ? 0 : parsed;
         }
 
-        // Tự động định dạng dấu , hàng nghìn và giữ dấu . thập phân khi người dùng gõ vào ô input
         function handleDecimalInputFormat(inputEl) {
             if (!inputEl) return;
             let raw = inputEl.value;
-            // Chỉ giữ lại chữ số, dấu chấm thập phân và dấu trừ
             raw = raw.replace(/[^0-9.-]/g, '');
 
-            // Đảm bảo chỉ có tối đa 1 dấu chấm thập phân
             const parts = raw.split('.');
             const intPartRaw = parts[0] || '';
             const decPartRaw = parts.length > 1 ? '.' + parts.slice(1).join('') : '';
@@ -2218,7 +2193,6 @@
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
-        // --- Bỏ dấu Tiếng Việt phục vụ tìm kiếm thông minh ---
         function removeVietnameseTones(str) {
             if (!str) return '';
             return String(str)
@@ -2328,6 +2302,7 @@
 
         // =====================================================================
         // TÍNH TOÁN NGHIỆP VỤ TÀI SẢN & DÒNG TIỀN
+        // (ĐÃ BỎ LINK BÚT TOÁN ĐẦU TƯ SANG TÀI SẢN CÁ NHÂN THEO YÊU CẦU)
         // =====================================================================
         function computePersonalAssetsSummary() {
             let totalIncome = 0;
@@ -2336,9 +2311,6 @@
             let totalInvestOut = 0;
             let totalInvestIn = 0;
 
-            // Các bút toán Đầu tư link trực tiếp sang Tiết kiệm hoặc Chứng khoán
-            const linkedSavingsTx = [];
-            const linkedMarketTx = [];
             const accruedExpenseTx = [];
 
             appState.transactions.forEach(tx => {
@@ -2353,39 +2325,19 @@
                         totalExpenseActual += amt;
                     }
                 } else if (tx.type === 'INVEST') {
+                    // Các bút toán đầu tư VẪN trừ/cộng vào số tiền hiện có (CASA),
+                    // nhưng KHÔNG tự động link sang bảng Tiết kiệm hay Đầu tư thị trường tài chính.
                     const isOut = tx.investDirection !== 'IN';
                     if (isOut) {
                         totalInvestOut += amt;
                     } else {
                         totalInvestIn += amt;
                     }
-
-                    // Phân bổ sang mục Tiết kiệm / Đầu tư thị trường tài chính
-                    if (tx.investTarget === 'MARKET_SEC') {
-                        linkedMarketTx.push({
-                            id: tx.id,
-                            date: tx.date,
-                            name: tx.description,
-                            source: isOut ? t('sourceLinkOut') : t('sourceLinkIn'),
-                            amount: isOut ? amt : -amt,
-                            isLinked: true
-                        });
-                    } else {
-                        // SAVING_BANK hoặc EMERGENCY_FUND
-                        linkedSavingsTx.push({
-                            id: tx.id,
-                            date: tx.date,
-                            name: `${tx.description} (${tx.investTarget === 'EMERGENCY_FUND' ? t('targetEmergency') : t('targetSaving')})`,
-                            source: isOut ? t('sourceLinkOut') : t('sourceLinkIn'),
-                            amount: isOut ? amt : -amt,
-                            isLinked: true
-                        });
-                    }
                 }
             });
 
             // 1. Tiền mặt & TK Ngân hàng không kỳ hạn (CASA):
-            // Biến đổi trực tiếp theo thu chi hàng ngày
+            // Tự động tính từ: Số dư đầu kỳ + Thu nhập - Chi thực chi - Chi trích trước - Đầu tư ròng
             const netInvestOut = totalInvestOut - totalInvestIn;
             const casaBalance = (Number(appState.initialCashBalance) || 0)
                 + totalIncome
@@ -2393,24 +2345,20 @@
                 - totalExpenseAccrued
                 - netInvestOut;
 
-            // 2. Các khoản tiết kiệm gửi ngân hàng (Tạo tay + Link từ bút toán Đầu tư)
+            // 2. Các khoản tiết kiệm gửi ngân hàng (Tự nhập tay 100%)
             const manualSavings = appState.manualAssets.filter(a => a.category === 'SAVING');
-            const totalManualSavings = manualSavings.reduce((s, a) => s + (Number(a.amount) || 0), 0);
-            const totalLinkedSavings = linkedSavingsTx.reduce((s, a) => s + a.amount, 0);
-            const totalSavingsBalance = totalManualSavings + totalLinkedSavings;
+            const totalSavingsBalance = manualSavings.reduce((s, a) => s + (Number(a.amount) || 0), 0);
 
-            // 3. Các khoản đầu tư thị trường tài chính (Tạo tay + Link từ bút toán Đầu tư)
+            // 3. Các khoản đầu tư thị trường tài chính (Tự nhập tay 100%)
             const manualMarket = appState.manualAssets.filter(a => a.category === 'MARKET');
-            const totalManualMarket = manualMarket.reduce((s, a) => s + (Number(a.amount) || 0), 0);
-            const totalLinkedMarket = linkedMarketTx.reduce((s, a) => s + a.amount, 0);
-            const totalMarketBalance = totalManualMarket + totalLinkedMarket;
+            const totalMarketBalance = manualMarket.reduce((s, a) => s + (Number(a.amount) || 0), 0);
 
-            // 4. Các khoản chi phí trích trước chưa thực chi (Link trực tiếp từ bút toán chi phí)
+            // 4. Các khoản chi phí trích trước chưa thực chi
             const totalAccruedBalance = totalExpenseAccrued;
 
-            // Tổng tài sản đang nắm giữ (Bao gồm cả quỹ trích trước đang giữ)
+            // Tổng tài sản đang quản lý
             const grossAssets = casaBalance + totalSavingsBalance + totalMarketBalance + totalAccruedBalance;
-            // Tài sản ròng thực tế (Không tính phần đã cam kết chi trích trước)
+            // Tài sản ròng thực tế (Trừ phần quỹ trích trước đã cam kết chi)
             const netWorthWithoutAccrued = casaBalance + totalSavingsBalance + totalMarketBalance;
 
             return {
@@ -2426,9 +2374,7 @@
                 grossAssets,
                 netWorthWithoutAccrued,
                 manualSavings,
-                linkedSavingsTx,
                 manualMarket,
-                linkedMarketTx,
                 accruedExpenseTx
             };
         }
@@ -2483,7 +2429,6 @@
             const y = appState.selectedYear;
             const curr = getMonthMetrics(m, y);
 
-            // Tính tháng liền kề trước đó
             let prevM = m - 1;
             let prevY = y;
             if (prevM < 1) {
@@ -2494,14 +2439,12 @@
 
             const assets = computePersonalAssetsSummary();
 
-            // Cập nhật Banner
             const mStr = String(m).padStart(2, '0');
             const prevMStr = String(prevM).padStart(2, '0');
             document.getElementById('currentMonthLabelBanner').textContent = `${t('bannerOverviewPrefix')} ${mStr}/${y}`;
             document.getElementById('bannerAvailableCash').textContent = formatVND(assets.casaBalance);
             document.getElementById('bannerNetWorth').textContent = formatVND(assets.grossAssets);
 
-            // Cập nhật 4 KPI Cards
             document.getElementById('kpiMonthIncome').textContent = formatVND(curr.income);
             document.getElementById('kpiMonthExpenseTotal').textContent = formatVND(curr.expenseTotal);
             document.getElementById('kpiExpenseActual').textContent = formatVND(curr.expenseActual);
@@ -2514,29 +2457,22 @@
             netEl.textContent = formatVND(curr.netCashflow);
             netEl.className = `text-xl sm:text-2xl font-extrabold mt-1.5 ${curr.netCashflow >= 0 ? 'text-slate-900' : 'text-rose-600'}`;
 
-            // Tỷ lệ tiết kiệm & đầu tư / Thu nhập
             const savingRate = curr.income > 0 ? Math.round(((curr.investNetOut + curr.expenseAccrued + Math.max(0, curr.netCashflow)) / curr.income) * 100) : 0;
             document.getElementById('kpiSavingRateBadge').textContent = `${savingRate}% ${t('ofIncome')}`;
 
-            // Badges % so với tháng trước
             renderDiffBadge('kpiIncomeDiffBadge', curr.income, prev.income, true);
             renderDiffBadge('kpiExpenseDiffBadge', curr.expenseTotal, prev.expenseTotal, false);
             renderDiffBadge('kpiInvestDiffBadge', curr.investOut, prev.investOut, true);
 
-            // Render Bảng & Biểu đồ So sánh Tháng này vs Tháng trước
             const mPrefix = appState.language === 'en' ? 'M' : 'T';
             document.getElementById('comparisonSubtitle').textContent = `${t('compSubPrefix')} ${mStr}/${y} ${t('compSubMid')} ${prevMStr}/${prevY}`;
             document.getElementById('thPrevMonthName').textContent = `${mPrefix}${prevMStr}/${prevY}`;
             document.getElementById('thCurrMonthName').textContent = `${mPrefix}${mStr}/${y}`;
             renderComparisonChartAndTable(curr, prev, `${mPrefix}${mStr}/${y}`, `${mPrefix}${prevMStr}/${prevY}`);
 
-            // Render Biểu đồ tròn theo Heading 1 / Heading 2
             renderHeadingPieChart(curr.txs);
-
-            // Render Biểu đồ & Bảng Tổng quan theo Tháng / Quý / Năm
             renderPeriodOverviewSection(y);
 
-            // Render Danh sách các khoản thu chi trong tháng
             document.getElementById('monthTxListTitle').textContent = `${t('monthTxTitlePrefix')} ${mStr}/${y} (${curr.txs.length} ${t('monthTxCountSuffix')})`;
             renderMonthTransactionsQuickTable(curr.txs);
         }
@@ -2771,7 +2707,6 @@
                     });
                 }
             } else {
-                // Theo Năm
                 const yearsSet = new Set([selectedYear - 1, selectedYear, selectedYear + 1]);
                 appState.transactions.forEach(tx => {
                     const y = parseInt(tx.date.substring(0, 4), 10);
@@ -2800,7 +2735,6 @@
                 });
             }
 
-            // Vẽ biểu đồ Tổng quan
             const ctx = document.getElementById('chartPeriodOverview').getContext('2d');
             if (chartPeriodOverviewInstance) chartPeriodOverviewInstance.destroy();
             chartPeriodOverviewInstance = new Chart(ctx, {
@@ -2854,7 +2788,6 @@
                 }
             });
 
-            // Bảng tổng hợp
             const tbody = document.getElementById('periodOverviewTableBody');
             const activeBuckets = buckets.filter(b => b.income > 0 || b.expenseActual > 0 || b.expenseAccrued > 0 || b.investOut > 0);
             const displayBuckets = activeBuckets.length > 0 ? activeBuckets : buckets;
@@ -2911,19 +2844,16 @@
         }
 
         // =====================================================================
-        // RENDER TAB 2: DASHBOARD TÀI SẢN CÁ NHÂN
+        // RENDER TAB 2: DASHBOARD TÀI SẢN CÁ NHÂN (NHẬP TAY TRỪ TIỀN MẶT)
         // =====================================================================
         function renderAssetDashboard() {
             const summary = computePersonalAssetsSummary();
 
-            // Badge số khoản trích trước trên thanh tab
             document.getElementById('badgeAccruedCount').textContent = summary.accruedExpenseTx.length;
 
-            // Header Tài sản
             document.getElementById('assetTotalGross').textContent = formatVND(summary.grossAssets);
             document.getElementById('assetNetWorthAfterAccrued').textContent = formatVND(summary.netWorthWithoutAccrued);
 
-            // 4 Cards Tài sản
             document.getElementById('cardCasaBalance').textContent = formatVND(summary.casaBalance);
             document.getElementById('cardSavingsBalance').textContent = formatVND(summary.totalSavingsBalance);
             document.getElementById('cardMarketInvestBalance').textContent = formatVND(summary.totalMarketBalance);
@@ -2945,8 +2875,8 @@
                 data: {
                     labels: [
                         'Tiền mặt & TK Không kỳ hạn',
-                        'Tiết kiệm ngân hàng & Quỹ KC',
-                        'Đầu tư TT Tài chính',
+                        'Tiết kiệm ngân hàng & Quỹ KC (Nhập tay)',
+                        'Đầu tư TT Tài chính (Nhập tay)',
                         'Quỹ Chi phí trích trước'
                     ],
                     datasets: [{
@@ -2978,73 +2908,53 @@
                 }
             });
 
-            // Bảng 2: Các khoản tiết kiệm gửi ngân hàng (Tạo tay + Link từ bút toán Đầu tư)
-            const savingsRows = [
-                ...summary.manualSavings.map(a => ({
-                    id: a.id, date: a.date, name: a.name, source: t('sourceManual'), amount: Number(a.amount), isLinked: false
-                })),
-                ...summary.linkedSavingsTx
-            ].sort((a, b) => b.date.localeCompare(a.date));
-
+            // Bảng 2: Các khoản tiết kiệm gửi ngân hàng (Tự nhập tay 100%)
+            const savingsRows = [...summary.manualSavings].sort((a, b) => b.date.localeCompare(a.date));
             const savingsTbody = document.getElementById('savingsAssetTableBody');
             if (savingsRows.length === 0) {
-                savingsTbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">Chưa có sổ tiết kiệm nào.</td></tr>`;
+                savingsTbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">Chưa có khoản tiết kiệm nào. Hãy bấm <strong>"Nhập khoản tiết kiệm"</strong> để thêm!</td></tr>`;
             } else {
                 savingsTbody.innerHTML = savingsRows.map(r => `
                     <tr class="hover:bg-slate-50">
                         <td class="py-2 px-2.5 text-slate-600 whitespace-nowrap">${formatDateVN(r.date)}</td>
-                        <td class="py-2 px-2.5 font-bold text-slate-800">${escapeHtml(r.name)}</td>
                         <td class="py-2 px-2.5">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.isLinked ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-100 text-slate-700'}">
-                                ${r.source}
-                            </span>
+                            <p class="font-bold text-slate-800">${escapeHtml(r.name)}</p>
+                            ${r.note ? `<p class="text-[11px] text-slate-500 mt-0.5">${escapeHtml(r.note)}</p>` : ''}
                         </td>
                         <td class="py-2 px-2.5 text-right font-extrabold text-blue-600 whitespace-nowrap">${formatVND(r.amount)}</td>
-                        <td class="py-2 px-2.5 text-center no-print">
-                            ${r.isLinked
-                                ? `<button onclick="editTransaction('${r.id}')" title="Sửa bút toán gốc" class="text-indigo-600 hover:underline text-[11px] font-bold cursor-pointer">Bút toán</button>`
-                                : `<button onclick="deleteManualAsset('${r.id}')" class="text-rose-500 hover:text-rose-700 cursor-pointer"><i class="fa-solid fa-trash"></i></button>`
-                            }
+                        <td class="py-2 px-2.5 text-center whitespace-nowrap no-print">
+                            <button onclick="editManualAsset('${r.id}')" title="Sửa / Cập nhật giá trị" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteManualAsset('${r.id}')" title="Xóa" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
             }
             document.getElementById('totalSavingsFooter').textContent = formatVND(summary.totalSavingsBalance);
 
-            // Bảng 3: Các khoản đầu tư thị trường tài chính (Tạo tay + Link từ bút toán Đầu tư)
-            const marketRows = [
-                ...summary.manualMarket.map(a => ({
-                    id: a.id, date: a.date, name: a.name, source: t('sourceManual'), amount: Number(a.amount), isLinked: false
-                })),
-                ...summary.linkedMarketTx
-            ].sort((a, b) => b.date.localeCompare(a.date));
-
+            // Bảng 3: Các khoản đầu tư thị trường tài chính (Tự nhập tay 100%)
+            const marketRows = [...summary.manualMarket].sort((a, b) => b.date.localeCompare(a.date));
             const marketTbody = document.getElementById('marketAssetTableBody');
             if (marketRows.length === 0) {
-                marketTbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center text-slate-400">Chưa có khoản đầu tư tài chính nào.</td></tr>`;
+                marketTbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400">Chưa có khoản đầu tư tài chính nào. Hãy bấm <strong>"Nhập khoản đầu tư"</strong> để thêm!</td></tr>`;
             } else {
                 marketTbody.innerHTML = marketRows.map(r => `
                     <tr class="hover:bg-slate-50">
                         <td class="py-2 px-2.5 text-slate-600 whitespace-nowrap">${formatDateVN(r.date)}</td>
-                        <td class="py-2 px-2.5 font-bold text-slate-800">${escapeHtml(r.name)}</td>
                         <td class="py-2 px-2.5">
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${r.isLinked ? 'bg-violet-50 text-violet-700 border border-violet-200' : 'bg-slate-100 text-slate-700'}">
-                                ${r.source}
-                            </span>
+                            <p class="font-bold text-slate-800">${escapeHtml(r.name)}</p>
+                            ${r.note ? `<p class="text-[11px] text-slate-500 mt-0.5">${escapeHtml(r.note)}</p>` : ''}
                         </td>
                         <td class="py-2 px-2.5 text-right font-extrabold text-violet-600 whitespace-nowrap">${formatVND(r.amount)}</td>
-                        <td class="py-2 px-2.5 text-center no-print">
-                            ${r.isLinked
-                                ? `<button onclick="editTransaction('${r.id}')" title="Sửa bút toán gốc" class="text-indigo-600 hover:underline text-[11px] font-bold cursor-pointer">Bút toán</button>`
-                                : `<button onclick="deleteManualAsset('${r.id}')" class="text-rose-500 hover:text-rose-700 cursor-pointer"><i class="fa-solid fa-trash"></i></button>`
-                            }
+                        <td class="py-2 px-2.5 text-center whitespace-nowrap no-print">
+                            <button onclick="editManualAsset('${r.id}')" title="Sửa / Cập nhật giá trị thị trường" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteManualAsset('${r.id}')" title="Xóa" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `).join('');
             }
             document.getElementById('totalMarketFooter').textContent = formatVND(summary.totalMarketBalance);
 
-            // Bảng 4: Các khoản chi phí trích trước chưa thực chi (Link trực tiếp từ bút toán chi phí)
+            // Bảng 4: Các khoản chi phí trích trước chưa thực chi
             const accruedTbody = document.getElementById('accruedExpensesAssetTableBody');
             const accruedSorted = [...summary.accruedExpenseTx].sort((a, b) => b.date.localeCompare(a.date));
             if (accruedSorted.length === 0) {
@@ -3186,14 +3096,8 @@
                 return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">${t('badgeExpActual')}</span>`;
             }
             if (tx.type === 'INVEST') {
-                const targetMap = {
-                    SAVING_BANK: t('targetSaving'),
-                    MARKET_SEC: t('targetMarket'),
-                    EMERGENCY_FUND: t('targetEmergency')
-                };
-                const tName = targetMap[tx.investTarget] || t('badgeInvest');
                 const dir = tx.investDirection === 'IN' ? t('dirIn') : t('dirOut');
-                return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800">${dir} &rarr; ${tName}</span>`;
+                return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800"><i class="fa-solid fa-seedling mr-1"></i>${dir}</span>`;
             }
             return '';
         }
@@ -3212,7 +3116,6 @@
             document.getElementById('txEditId').value = '';
             document.getElementById('txModalTitle').textContent = 'Tạo Bút Toán Thu / Chi / Đầu Tư Mới';
 
-            // Mặc định ngày trong tháng đang chọn
             const today = new Date();
             const defaultDay = String(Math.min(today.getDate(), 28)).padStart(2, '0');
             const iso = `${appState.selectedYear}-${String(appState.selectedMonth).padStart(2, '0')}-${defaultDay}`;
@@ -3250,7 +3153,6 @@
             closeFeeCodeSuggestions();
         }
 
-        // Đồng bộ chọn lịch & gõ trực tiếp DD/MM/YYYY
         function syncDateFromPicker() {
             const val = document.getElementById('txDatePicker').value;
             if (val) {
@@ -3287,14 +3189,12 @@
                 }
             });
 
-            // Ẩn/hiện khối Chi phí (Thực chi / Trích trước) và Đầu tư
             document.getElementById('expenseSubTypeBox').classList.toggle('hidden', type !== 'EXPENSE');
             document.getElementById('investSubTypeBox').classList.toggle('hidden', type !== 'INVEST');
 
             populateModalFeeCodeDropdown(type);
         }
 
-        // --- Khởi tạo giá trị mặc định và danh sách gợi ý Mã phí theo Loại giao dịch ---
         function populateModalFeeCodeDropdown(preferredType, selectedCode = null) {
             const sortedCodes = [...appState.feeCodes].sort((a, b) => {
                 if (a.type === preferredType && b.type !== preferredType) return -1;
@@ -3326,11 +3226,9 @@
             }
         }
 
-        // --- Mở danh sách gợi ý Mã phí ---
         function openFeeCodeSuggestions(showAllIfMatched = false) {
             const inputVal = (document.getElementById('txFeeCodeInput')?.value || '').trim();
             const isExactMatch = appState.feeCodes.some(fc => fc.code.toUpperCase() === inputVal.toUpperCase());
-            // Nếu đang focus vào ô đã có sẵn mã phí hợp lệ, hiển thị toàn bộ danh sách để người dùng dễ xem/đổi
             const query = (showAllIfMatched && isExactMatch) ? '' : inputVal;
             renderFeeCodeSuggestions(query);
             document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
@@ -3366,12 +3264,10 @@
             inputEl.focus();
         }
 
-        // --- Khi người dùng gõ tay trực tiếp vào ô Mã phí ---
         function handleFeeCodeInputTyping() {
             const inputEl = document.getElementById('txFeeCodeInput');
             const rawQuery = inputEl.value.trim();
 
-            // Tự động điền ngay Heading 1 & Heading 2 nếu mã gõ tay khớp chính xác với 1 mã trong danh mục
             const exact = appState.feeCodes.find(fc => fc.code.toUpperCase() === rawQuery.toUpperCase());
             if (exact) {
                 document.getElementById('txHeading1').value = exact.heading1;
@@ -3382,7 +3278,6 @@
             document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
         }
 
-        // --- Render danh sách gợi ý Mã phí thông minh (Tìm theo Code, Heading 1, Heading 2, Mô tả, Không dấu) ---
         function renderFeeCodeSuggestions(queryText = '') {
             const preferredType = document.getElementById('txType')?.value || 'EXPENSE';
             const listEl = document.getElementById('feeCodeSuggestionsList');
@@ -3390,14 +3285,12 @@
 
             const qNorm = removeVietnameseTones(queryText.trim());
 
-            // Sắp xếp ưu tiên mã phí thuộc Loại giao dịch đang chọn (Thu nhập / Chi phí / Đầu tư) lên đầu
             const sorted = [...appState.feeCodes].sort((a, b) => {
                 if (a.type === preferredType && b.type !== preferredType) return -1;
                 if (a.type !== preferredType && b.type === preferredType) return 1;
                 return a.code.localeCompare(b.code);
             });
 
-            // Lọc theo từ khóa gõ tay (hỗ trợ cả có dấu và không dấu)
             currentFilteredFeeCodes = sorted.filter(fc => {
                 if (!qNorm) return true;
                 const haystack = removeVietnameseTones(`${fc.code} ${fc.heading1} ${fc.heading2} ${fc.desc || ''}`);
@@ -3460,7 +3353,6 @@
             listEl.innerHTML = headerHint + itemsHtml;
         }
 
-        // --- Hỗ trợ phím mũi tên Lên/Xuống, Enter và Escape khi gõ tìm Mã phí ---
         function handleFeeCodeKeyDown(e) {
             const listEl = document.getElementById('feeCodeSuggestionsList');
             const isHidden = listEl.classList.contains('hidden');
@@ -3512,7 +3404,6 @@
             });
         }
 
-        // --- Chọn 1 Mã phí từ danh sách gợi ý ---
         function selectFeeCodeSuggestion(code) {
             const found = appState.feeCodes.find(fc => fc.code === code);
             const inputEl = document.getElementById('txFeeCodeInput');
@@ -3526,7 +3417,6 @@
             closeFeeCodeSuggestions();
         }
 
-        // --- Nếu gõ một mã phí chưa có trong hệ thống và bấm nút Tạo mới ngay trong gợi ý ---
         function prefillQuickAddFeeCodeFromInput(codeStr) {
             closeFeeCodeSuggestions();
             const quickBox = document.getElementById('quickAddFeeCodeBox');
@@ -3598,7 +3488,6 @@
                 return;
             }
 
-            // Nếu người dùng gõ tay một Mã phí hoàn toàn mới kèm Heading 1 & Heading 2, tự động lưu luôn vào danh mục Mã phí để lần sau gợi ý
             const existsInCatalog = appState.feeCodes.some(fc => fc.code.toUpperCase() === feeCode);
             if (!existsInCatalog) {
                 appState.feeCodes.push({
@@ -3612,13 +3501,11 @@
 
             let expenseKind = null;
             let investDirection = null;
-            let investTarget = null;
 
             if (type === 'EXPENSE') {
                 expenseKind = document.querySelector('input[name="expenseKind"]:checked')?.value || 'ACTUAL';
             } else if (type === 'INVEST') {
                 investDirection = document.getElementById('txInvestDirection').value;
-                investTarget = document.getElementById('txInvestTarget').value;
             }
 
             const txObj = {
@@ -3628,7 +3515,7 @@
                 type,
                 expenseKind,
                 investDirection,
-                investTarget,
+                investTarget: null,
                 quantity,
                 unitPrice,
                 amount,
@@ -3643,10 +3530,9 @@
                 showToast('Đã cập nhật bút toán thành công!', 'success');
             } else {
                 appState.transactions.push(txObj);
-                showToast('Đã thêm bút toán mới và đồng bộ vào Dashboard!', 'success');
+                showToast('Đã lưu bút toán mới và cập nhật số dư Tiền mặt!', 'success');
             }
 
-            // Chuyển kỳ xem tới đúng tháng/năm của giao dịch vừa tạo để người dùng thấy ngay
             const [y, m] = date.split('-').map(Number);
             appState.selectedYear = y;
             appState.selectedMonth = m;
@@ -3684,7 +3570,6 @@
                 if (radio) radio.checked = true;
             } else if (tx.type === 'INVEST') {
                 document.getElementById('txInvestDirection').value = tx.investDirection || 'OUT';
-                document.getElementById('txInvestTarget').value = tx.investTarget || 'SAVING_BANK';
             }
 
             const modal = document.getElementById('transactionModal');
@@ -3697,7 +3582,7 @@
             if (!tx) return;
             showConfirmModal(
                 'Xóa bút toán thu/chi',
-                `Bạn có chắc chắn muốn xóa giao dịch "${tx.description}" (${formatVND(tx.amount)}) không? Số dư Tiền mặt và Tài sản liên kết sẽ được cập nhật lại ngay lập tức.`,
+                `Bạn có chắc chắn muốn xóa giao dịch "${tx.description}" (${formatVND(tx.amount)}) không? Số dư Tiền mặt khả dụng sẽ được tính lại ngay lập tức.`,
                 () => {
                     appState.transactions = appState.transactions.filter(t => t.id !== id);
                     saveStateToStorage();
@@ -3708,16 +3593,35 @@
         }
 
         // =====================================================================
-        // QUẢN LÝ TÀI SẢN TẠO TAY & SỐ DƯ ĐẦU KỲ
+        // QUẢN LÝ TÀI SẢN CÁ NHÂN TỰ NHẬP TAY (THÊM MỚI & CHỈNH SỬA GIÁ TRỊ)
         // =====================================================================
         function openAssetModal(category) {
+            document.getElementById('manualAssetEditId').value = '';
             document.getElementById('manualAssetCategory').value = category;
             document.getElementById('manualAssetModalTitle').textContent =
-                category === 'SAVING' ? 'Tạo Tay Sổ Tiết Kiệm Ngân Hàng / Quỹ KC' : 'Tạo Tay Khoản Đầu Tư Thị Trường Tài Chính';
+                category === 'SAVING' ? 'Nhập Sổ Tiết Kiệm Ngân Hàng / Quỹ KC' : 'Nhập Khoản Đầu Tư Thị Trường Tài Chính';
             document.getElementById('manualAssetDate').value = new Date().toISOString().substring(0, 10);
             document.getElementById('manualAssetName').value = '';
             document.getElementById('manualAssetAmount').value = '';
             document.getElementById('manualAssetNote').value = '';
+
+            const modal = document.getElementById('manualAssetModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function editManualAsset(id) {
+            const asset = appState.manualAssets.find(a => a.id === id);
+            if (!asset) return;
+
+            document.getElementById('manualAssetEditId').value = asset.id;
+            document.getElementById('manualAssetCategory').value = asset.category;
+            document.getElementById('manualAssetModalTitle').textContent =
+                asset.category === 'SAVING' ? 'Cập Nhật Khoản Tiết Kiệm Ngân Hàng' : 'Cập Nhật Giá Trị Danh Mục Đầu Tư';
+            document.getElementById('manualAssetDate').value = asset.date || new Date().toISOString().substring(0, 10);
+            document.getElementById('manualAssetName').value = asset.name || '';
+            document.getElementById('manualAssetAmount').value = formatNumberStandard(asset.amount || 0, 2);
+            document.getElementById('manualAssetNote').value = asset.note || '';
 
             const modal = document.getElementById('manualAssetModal');
             modal.classList.remove('hidden');
@@ -3732,6 +3636,7 @@
 
         function handleSaveManualAsset(e) {
             e.preventDefault();
+            const editId = document.getElementById('manualAssetEditId').value;
             const category = document.getElementById('manualAssetCategory').value;
             const date = document.getElementById('manualAssetDate').value;
             const name = document.getElementById('manualAssetName').value.trim();
@@ -3743,25 +3648,33 @@
                 return;
             }
 
-            appState.manualAssets.push({
-                id: 'MA-' + Date.now(),
-                category,
-                date,
-                name: note ? `${name} (${note})` : name,
-                amount,
-                note
-            });
+            if (editId) {
+                const idx = appState.manualAssets.findIndex(a => a.id === editId);
+                if (idx >= 0) {
+                    appState.manualAssets[idx] = { id: editId, category, date, name, amount, note };
+                }
+                showToast('Đã cập nhật giá trị khoản tài sản thành công!', 'success');
+            } else {
+                appState.manualAssets.push({
+                    id: 'MA-' + Date.now(),
+                    category,
+                    date,
+                    name,
+                    amount,
+                    note
+                });
+                showToast('Đã thêm khoản tài sản mới thành công!', 'success');
+            }
 
             saveStateToStorage();
             closeAssetModal();
             refreshAllViews();
-            showToast('Đã thêm khoản tài sản tạo tay thành công!', 'success');
         }
 
         function deleteManualAsset(id) {
             showConfirmModal(
-                'Xóa khoản tài sản tạo tay',
-                'Bạn có chắc muốn xóa khoản tài sản tạo tay này khỏi danh mục không?',
+                'Xóa khoản tài sản',
+                'Bạn có chắc muốn xóa khoản tài sản này khỏi danh mục không?',
                 () => {
                     appState.manualAssets = appState.manualAssets.filter(a => a.id !== id);
                     saveStateToStorage();
@@ -3885,7 +3798,6 @@
             );
         }
 
-        // --- Tải File Excel Mẫu cho Mapping Mã Phí ---
         function downloadFeeCodeTemplateExcel() {
             const sampleRows = appState.feeCodes.map(fc => ({
                 'MaPhi': fc.code,
@@ -3902,7 +3814,6 @@
             showToast('Đã tải xuống file Excel mẫu Mapping Mã Phí!', 'info');
         }
 
-        // --- Import Mapping Mã Phí từ File Excel ---
         function handleImportFeeCodesExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -3962,7 +3873,6 @@
                 const curr = getMonthMetrics(m, y);
                 const assets = computePersonalAssetsSummary();
 
-                // Sheet 1: Tổng quan Thu Chi & Tài sản
                 const overviewData = [
                     { 'ChiTieu': `BÁO CÁO TÀI CHÍNH THÁNG ${m}/${y}`, 'GiaTri_VND': '' },
                     { 'ChiTieu': '1. Tổng Thu nhập trong tháng', 'GiaTri_VND': curr.income },
@@ -3972,22 +3882,21 @@
                     { 'ChiTieu': '5. Thặng dư dòng tiền tháng', 'GiaTri_VND': curr.netCashflow },
                     { 'ChiTieu': '--- TỔNG HỢP TÀI SẢN CÁ NHÂN ---', 'GiaTri_VND': '' },
                     { 'ChiTieu': 'A. Tiền mặt & TK Ngân hàng không kỳ hạn (CASA)', 'GiaTri_VND': assets.casaBalance },
-                    { 'ChiTieu': 'B. Các khoản tiết kiệm gửi ngân hàng & Quỹ KC', 'GiaTri_VND': assets.totalSavingsBalance },
-                    { 'ChiTieu': 'C. Các khoản đầu tư thị trường tài chính', 'GiaTri_VND': assets.totalMarketBalance },
+                    { 'ChiTieu': 'B. Các khoản tiết kiệm gửi ngân hàng & Quỹ KC (Nhập tay)', 'GiaTri_VND': assets.totalSavingsBalance },
+                    { 'ChiTieu': 'C. Các khoản đầu tư thị trường tài chính (Nhập tay)', 'GiaTri_VND': assets.totalMarketBalance },
                     { 'ChiTieu': 'D. Các khoản chi phí trích trước chưa thực chi', 'GiaTri_VND': assets.totalAccruedBalance },
                     { 'ChiTieu': 'TỔNG TÀI SẢN QUẢN LÝ', 'GiaTri_VND': assets.grossAssets }
                 ];
                 const wsOverview = XLSX.utils.json_to_sheet(overviewData);
                 XLSX.utils.book_append_sheet(wb, wsOverview, 'Tong_Quan');
 
-                // Sheet 2: Chi tiết toàn bộ giao dịch Thu/Chi
                 const txRows = appState.transactions.map(tx => ({
                     'Ngay': formatDateVN(tx.date),
                     'DienGiai': tx.description,
                     'Loai': tx.type === 'INCOME' ? 'Thu nhập' : (tx.type === 'EXPENSE' ? 'Chi phí' : 'Đầu tư'),
                     'PhanLoaiChiTiet': tx.type === 'EXPENSE'
                         ? (tx.expenseKind === 'ACCRUED' ? 'Chi phí trích trước' : 'Chi phí thực chi')
-                        : (tx.type === 'INVEST' ? `${tx.investDirection === 'IN' ? 'Tiền vào' : 'Tiền ra'} - ${tx.investTarget}` : 'Thu nhập'),
+                        : (tx.type === 'INVEST' ? (tx.investDirection === 'IN' ? 'Đầu tư (Tiền vào)' : 'Đầu tư (Tiền ra)') : 'Thu nhập'),
                     'SoLuong': tx.quantity || 1,
                     'DonGia_VND': tx.unitPrice || tx.amount,
                     'ThanhTien_VND': tx.amount,
@@ -3998,7 +3907,16 @@
                 const wsTx = XLSX.utils.json_to_sheet(txRows);
                 XLSX.utils.book_append_sheet(wb, wsTx, 'So_Giao_Dich_Thu_Chi');
 
-                // Sheet 3: Chi phí trích trước chưa thực chi
+                const manualAssetRows = appState.manualAssets.map(a => ({
+                    'NgayCapNhat': formatDateVN(a.date),
+                    'NhomTaiSan': a.category === 'SAVING' ? 'Tiết kiệm ngân hàng & Quỹ KC' : 'Đầu tư TT Tài chính',
+                    'TenKhoanMuc': a.name,
+                    'GiaTri_VND': a.amount,
+                    'GhiChu': a.note || ''
+                }));
+                const wsAssets = XLSX.utils.json_to_sheet(manualAssetRows);
+                XLSX.utils.book_append_sheet(wb, wsAssets, 'Tai_San_Nhap_Tay');
+
                 const accruedRows = assets.accruedExpenseTx.map(tx => ({
                     'NgayTrich': formatDateVN(tx.date),
                     'KhoanMucTrichTruoc': tx.description,
@@ -4012,7 +3930,6 @@
                 const wsAccrued = XLSX.utils.json_to_sheet(accruedRows);
                 XLSX.utils.book_append_sheet(wb, wsAccrued, 'Chi_Phi_Trich_Truoc');
 
-                // Sheet 4: Danh mục Mapping Mã phí
                 const fcRows = appState.feeCodes.map(fc => ({
                     'MaPhi': fc.code,
                     'Loai': fc.type,

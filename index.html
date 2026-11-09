@@ -226,7 +226,7 @@
         </div>
 
         <!-- =============================================================== -->
-        <!-- TAB 1: DASHBOARD THEO DÕI THU CHI                              -->
+        <!-- TAB 1: DASHBOARD THEO DÕI THU CHI                               -->
         <!-- =============================================================== -->
         <section id="tab-dashboard-cashflow" class="space-y-6">
 
@@ -1057,10 +1057,13 @@
                     </div>
                 </div>
 
-                <!-- Hàng 4: Mã Phí & Mapping Heading 1, Heading 2 -->
+                <!-- Hàng 4: Mã Phí (Có gõ tay tìm kiếm gợi ý thông minh) & Mapping Heading 1, Heading 2 -->
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <label class="block text-xs font-bold text-slate-700">5. Mã phí & Phân nhóm Heading 1 / Heading 2 <span class="text-rose-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-700">
+                            5. Mã phí & Phân nhóm Heading 1 / Heading 2 <span class="text-rose-500">*</span>
+                            <span class="font-normal text-indigo-600 ml-1">(Gõ mã phí hoặc tên nhóm để gợi ý nhanh)</span>
+                        </label>
                         <button type="button" onclick="toggleQuickAddFeeCode()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer">
                             <i class="fa-solid fa-plus mr-1"></i>Tạo nhanh mã phí mới
                         </button>
@@ -1080,19 +1083,44 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Chọn Mã phí</label>
-                            <select id="txFeeCodeSelect" onchange="handleFeeCodeSelectionChange()" required class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                <!-- Render bằng JS -->
-                            </select>
+                        <!-- Ô Gõ Tay & Gợi Ý Mã Phí (Autocomplete Combobox) -->
+                        <div class="relative" id="feeCodeAutocompleteWrapper">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Gõ hoặc Chọn Mã phí</label>
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="txFeeCodeInput"
+                                    autocomplete="off"
+                                    required
+                                    placeholder="Gõ mã phí, ăn uống, lương..."
+                                    onfocus="openFeeCodeSuggestions(true)"
+                                    oninput="handleFeeCodeInputTyping()"
+                                    onkeydown="handleFeeCodeKeyDown(event)"
+                                    class="w-full pl-3 pr-14 py-2 rounded-xl bg-white border border-slate-300 text-xs font-bold text-indigo-900 uppercase placeholder:normal-case placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                >
+                                <div class="absolute inset-y-0 right-1.5 flex items-center gap-0.5">
+                                    <button type="button" id="clearFeeCodeBtn" onclick="clearFeeCodeInput(event)" title="Xóa để gõ tìm mã khác" class="w-6 h-6 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-100 flex items-center justify-center transition cursor-pointer">
+                                        <i class="fa-solid fa-xmark text-xs"></i>
+                                    </button>
+                                    <button type="button" onclick="toggleFeeCodeDropdownBtn(event)" title="Xem danh sách mã phí" class="w-6 h-6 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-100 flex items-center justify-center transition cursor-pointer">
+                                        <i class="fa-solid fa-chevron-down text-[11px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Danh sách gợi ý mã phí xổ xuống -->
+                            <div id="feeCodeSuggestionsList" class="hidden absolute left-0 right-0 sm:w-96 mt-1.5 bg-white rounded-2xl shadow-2xl border border-slate-200 max-h-64 overflow-y-auto z-50 divide-y divide-slate-100">
+                                <!-- Được render động khi gõ hoặc click -->
+                            </div>
                         </div>
+
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Heading 1 mã phí</label>
-                            <input type="text" id="txHeading1" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700">
+                            <input type="text" id="txHeading1" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Heading 2 mã phí</label>
-                            <input type="text" id="txHeading2" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700">
+                            <input type="text" id="txHeading2" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                 </div>
@@ -1211,6 +1239,10 @@
         let chartPeriodOverviewInstance = null;
         let chartAssetAllocationInstance = null;
 
+        // --- Trạng thái phục vụ gợi ý Mã phí (Autocomplete) ---
+        let currentFilteredFeeCodes = [];
+        let feeCodeActiveHighlightIndex = -1;
+
         // --- Dữ liệu mẫu chuẩn nghiệp vụ Việt Nam ---
         function getDefaultSeedData() {
             const defaultFeeCodes = [
@@ -1220,7 +1252,7 @@
                 { code: 'CP-AN', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', desc: 'Thực phẩm, ăn sáng, ăn trưa, cà phê' },
                 { code: 'CP-NHA', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', desc: 'Hóa đơn cố định hàng tháng' },
                 { code: 'CP-XANG', type: 'EXPENSE', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab', desc: 'Di chuyển hàng ngày' },
-                { code: 'CP- YTE', type: 'EXPENSE', heading1: 'Sức khỏe & Bảo hiểm', heading2: 'Khám bệnh, Thuốc, Gym', desc: 'Chăm sóc sức khỏe' },
+                { code: 'CP-YTE', type: 'EXPENSE', heading1: 'Sức khỏe & Bảo hiểm', heading2: 'Khám bệnh, Thuốc, Gym', desc: 'Chăm sóc sức khỏe' },
                 { code: 'CP-LAPTOP', type: 'EXPENSE', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ', desc: 'Thường dùng cho chi phí trích trước mua Laptop/PC' },
                 { code: 'CP-DULICH', type: 'EXPENSE', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng', desc: 'Trích trước hoặc thực chi đi du lịch' },
                 { code: 'CP-HOC', type: 'EXPENSE', heading1: 'Phát triển bản thân', heading2: 'Khóa học & Sách vở', desc: 'Đào tạo, chứng chỉ chuyên môn' },
@@ -1382,6 +1414,14 @@
             document.getElementById('globalMonthFilter').value = appState.selectedMonth;
             document.getElementById('globalYearFilter').value = appState.selectedYear;
             refreshAllViews();
+
+            // Đóng danh sách gợi ý Mã phí khi click ra ngoài vùng Autocomplete
+            document.addEventListener('click', function (e) {
+                const wrapper = document.getElementById('feeCodeAutocompleteWrapper');
+                if (wrapper && !wrapper.contains(e.target)) {
+                    closeFeeCodeSuggestions();
+                }
+            });
         };
 
         function loadStateFromStorage() {
@@ -1518,6 +1558,17 @@
             const parts = isoDate.split('-');
             if (parts.length !== 3) return isoDate;
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // --- Bỏ dấu Tiếng Việt phục vụ tìm kiếm thông minh ---
+        function removeVietnameseTones(str) {
+            if (!str) return '';
+            return String(str)
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D')
+                .toLowerCase();
         }
 
         // --- Hệ thống Thông báo Toast & Confirm Modal ---
@@ -2495,7 +2546,7 @@
         }
 
         // =====================================================================
-        // MODAL TẠO / SỬA GIAO DỊCH THU CHI
+        // MODAL TẠO / SỬA GIAO DỊCH THU CHI & GỢI Ý MÃ PHÍ THÔNG MINH
         // =====================================================================
         function openTransactionModal() {
             document.getElementById('txEditId').value = '';
@@ -2515,6 +2566,7 @@
 
             selectTxType('EXPENSE');
             document.querySelector('input[name="expenseKind"][value="ACTUAL"]').checked = true;
+            closeFeeCodeSuggestions();
 
             const modal = document.getElementById('transactionModal');
             modal.classList.remove('hidden');
@@ -2535,6 +2587,7 @@
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.getElementById('quickAddFeeCodeBox').classList.add('hidden');
+            closeFeeCodeSuggestions();
         }
 
         // Đồng bộ chọn lịch & gõ trực tiếp DD/MM/YYYY
@@ -2581,32 +2634,245 @@
             populateModalFeeCodeDropdown(type);
         }
 
+        // --- Khởi tạo giá trị mặc định và danh sách gợi ý Mã phí theo Loại giao dịch ---
         function populateModalFeeCodeDropdown(preferredType, selectedCode = null) {
-            const select = document.getElementById('txFeeCodeSelect');
-            // Ưu tiên hiển thị các mã phí cùng loại lên đầu
             const sortedCodes = [...appState.feeCodes].sort((a, b) => {
                 if (a.type === preferredType && b.type !== preferredType) return -1;
                 if (a.type !== preferredType && b.type === preferredType) return 1;
                 return a.code.localeCompare(b.code);
             });
 
-            select.innerHTML = sortedCodes.map(fc => `
-                <option value="${escapeHtml(fc.code)}">${escapeHtml(fc.code)} — ${escapeHtml(fc.heading2)} (${escapeHtml(fc.heading1)})</option>
-            `).join('');
+            const inputEl = document.getElementById('txFeeCodeInput');
+            if (!inputEl) return;
 
-            if (selectedCode && sortedCodes.some(c => c.code === selectedCode)) {
-                select.value = selectedCode;
+            let chosen = null;
+            if (selectedCode) {
+                chosen = sortedCodes.find(c => c.code.toUpperCase() === selectedCode.toUpperCase());
             }
-            handleFeeCodeSelectionChange();
+            if (!chosen && !selectedCode && sortedCodes.length > 0) {
+                chosen = sortedCodes[0];
+            }
+
+            if (chosen) {
+                inputEl.value = chosen.code;
+                document.getElementById('txHeading1').value = chosen.heading1;
+                document.getElementById('txHeading2').value = chosen.heading2;
+            } else if (selectedCode) {
+                inputEl.value = selectedCode;
+            } else {
+                inputEl.value = '';
+                document.getElementById('txHeading1').value = '';
+                document.getElementById('txHeading2').value = '';
+            }
         }
 
-        function handleFeeCodeSelectionChange() {
-            const code = document.getElementById('txFeeCodeSelect').value;
+        // --- Mở danh sách gợi ý Mã phí ---
+        function openFeeCodeSuggestions(showAllIfMatched = false) {
+            const inputVal = (document.getElementById('txFeeCodeInput')?.value || '').trim();
+            const isExactMatch = appState.feeCodes.some(fc => fc.code.toUpperCase() === inputVal.toUpperCase());
+            // Nếu đang focus vào ô đã có sẵn mã phí hợp lệ, hiển thị toàn bộ danh sách để người dùng dễ xem/đổi
+            const query = (showAllIfMatched && isExactMatch) ? '' : inputVal;
+            renderFeeCodeSuggestions(query);
+            document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
+        }
+
+        function closeFeeCodeSuggestions() {
+            const listEl = document.getElementById('feeCodeSuggestionsList');
+            if (listEl) listEl.classList.add('hidden');
+            feeCodeActiveHighlightIndex = -1;
+        }
+
+        function toggleFeeCodeDropdownBtn(e) {
+            e.stopPropagation();
+            const listEl = document.getElementById('feeCodeSuggestionsList');
+            const inputEl = document.getElementById('txFeeCodeInput');
+            if (listEl.classList.contains('hidden')) {
+                renderFeeCodeSuggestions('');
+                listEl.classList.remove('hidden');
+                inputEl.focus();
+            } else {
+                closeFeeCodeSuggestions();
+            }
+        }
+
+        function clearFeeCodeInput(e) {
+            e.stopPropagation();
+            const inputEl = document.getElementById('txFeeCodeInput');
+            inputEl.value = '';
+            document.getElementById('txHeading1').value = '';
+            document.getElementById('txHeading2').value = '';
+            renderFeeCodeSuggestions('');
+            document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
+            inputEl.focus();
+        }
+
+        // --- Khi người dùng gõ tay trực tiếp vào ô Mã phí ---
+        function handleFeeCodeInputTyping() {
+            const inputEl = document.getElementById('txFeeCodeInput');
+            const rawQuery = inputEl.value.trim();
+
+            // Tự động điền ngay Heading 1 & Heading 2 nếu mã gõ tay khớp chính xác với 1 mã trong danh mục
+            const exact = appState.feeCodes.find(fc => fc.code.toUpperCase() === rawQuery.toUpperCase());
+            if (exact) {
+                document.getElementById('txHeading1').value = exact.heading1;
+                document.getElementById('txHeading2').value = exact.heading2;
+            }
+
+            renderFeeCodeSuggestions(rawQuery);
+            document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
+        }
+
+        // --- Render danh sách gợi ý Mã phí thông minh (Tìm theo Code, Heading 1, Heading 2, Mô tả, Không dấu) ---
+        function renderFeeCodeSuggestions(queryText = '') {
+            const preferredType = document.getElementById('txType')?.value || 'EXPENSE';
+            const listEl = document.getElementById('feeCodeSuggestionsList');
+            if (!listEl) return;
+
+            const qNorm = removeVietnameseTones(queryText.trim());
+
+            // Sắp xếp ưu tiên mã phí thuộc Loại giao dịch đang chọn (Thu nhập / Chi phí / Đầu tư) lên đầu
+            const sorted = [...appState.feeCodes].sort((a, b) => {
+                if (a.type === preferredType && b.type !== preferredType) return -1;
+                if (a.type !== preferredType && b.type === preferredType) return 1;
+                return a.code.localeCompare(b.code);
+            });
+
+            // Lọc theo từ khóa gõ tay (hỗ trợ cả có dấu và không dấu)
+            currentFilteredFeeCodes = sorted.filter(fc => {
+                if (!qNorm) return true;
+                const haystack = removeVietnameseTones(`${fc.code} ${fc.heading1} ${fc.heading2} ${fc.desc || ''}`);
+                return haystack.includes(qNorm);
+            });
+
+            feeCodeActiveHighlightIndex = currentFilteredFeeCodes.length > 0 ? 0 : -1;
+
+            const typeBadges = {
+                INCOME: '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Thu nhập</span>',
+                EXPENSE: '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">Chi phí</span>',
+                INVEST: '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700">Đầu tư</span>'
+            };
+
+            if (currentFilteredFeeCodes.length === 0) {
+                const cleanCode = escapeHtml(queryText.trim().toUpperCase());
+                listEl.innerHTML = `
+                    <div class="p-3.5 text-center space-y-2">
+                        <p class="text-xs text-slate-500">Không tìm thấy mã phí nào khớp với <strong>"${escapeHtml(queryText)}"</strong></p>
+                        <button type="button" onclick="prefillQuickAddFeeCodeFromInput('${cleanCode}')" class="w-full py-2 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition cursor-pointer">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> Tạo mới mã phí "${cleanCode || 'MỚI'}" ngay
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            const headerHint = `
+                <div class="px-3 py-1.5 bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between sticky top-0 border-b border-slate-100">
+                    <span>Gợi ý Mã phí (${currentFilteredFeeCodes.length} kết quả)</span>
+                    <span>↑↓ Chọn • Enter</span>
+                </div>
+            `;
+
+            const itemsHtml = currentFilteredFeeCodes.map((fc, idx) => {
+                const isHighlighted = idx === feeCodeActiveHighlightIndex;
+                return `
+                    <div
+                        data-fc-idx="${idx}"
+                        onclick="selectFeeCodeSuggestion('${escapeHtml(fc.code)}')"
+                        class="fee-suggestion-item px-3.5 py-2.5 cursor-pointer transition flex items-start justify-between gap-2 ${isHighlighted ? 'bg-indigo-50/90' : 'hover:bg-indigo-50/60'}"
+                    >
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono font-extrabold text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">${escapeHtml(fc.code)}</span>
+                                <span class="font-bold text-xs text-slate-800 truncate">${escapeHtml(fc.heading2)}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-1 truncate">
+                                <i class="fa-regular fa-folder-open mr-1 text-slate-400"></i>${escapeHtml(fc.heading1)}
+                                ${fc.desc ? ` • <span class="italic text-slate-400">${escapeHtml(fc.desc)}</span>` : ''}
+                            </p>
+                        </div>
+                        <div class="shrink-0">
+                            ${typeBadges[fc.type] || ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            listEl.innerHTML = headerHint + itemsHtml;
+        }
+
+        // --- Hỗ trợ phím mũi tên Lên/Xuống, Enter và Escape khi gõ tìm Mã phí ---
+        function handleFeeCodeKeyDown(e) {
+            const listEl = document.getElementById('feeCodeSuggestionsList');
+            const isHidden = listEl.classList.contains('hidden');
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (isHidden) {
+                    openFeeCodeSuggestions(true);
+                    return;
+                }
+                if (currentFilteredFeeCodes.length > 0) {
+                    feeCodeActiveHighlightIndex = (feeCodeActiveHighlightIndex + 1) % currentFilteredFeeCodes.length;
+                    updateSuggestionHighlightUI();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (isHidden) {
+                    openFeeCodeSuggestions(true);
+                    return;
+                }
+                if (currentFilteredFeeCodes.length > 0) {
+                    feeCodeActiveHighlightIndex = (feeCodeActiveHighlightIndex - 1 + currentFilteredFeeCodes.length) % currentFilteredFeeCodes.length;
+                    updateSuggestionHighlightUI();
+                }
+            } else if (e.key === 'Enter') {
+                if (!isHidden && feeCodeActiveHighlightIndex >= 0 && currentFilteredFeeCodes[feeCodeActiveHighlightIndex]) {
+                    e.preventDefault();
+                    selectFeeCodeSuggestion(currentFilteredFeeCodes[feeCodeActiveHighlightIndex].code);
+                }
+            } else if (e.key === 'Escape') {
+                if (!isHidden) {
+                    e.preventDefault();
+                    closeFeeCodeSuggestions();
+                }
+            }
+        }
+
+        function updateSuggestionHighlightUI() {
+            const listEl = document.getElementById('feeCodeSuggestionsList');
+            if (!listEl) return;
+            const items = listEl.querySelectorAll('.fee-suggestion-item');
+            items.forEach((item, i) => {
+                if (i === feeCodeActiveHighlightIndex) {
+                    item.classList.add('bg-indigo-50/90');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('bg-indigo-50/90');
+                }
+            });
+        }
+
+        // --- Chọn 1 Mã phí từ danh sách gợi ý ---
+        function selectFeeCodeSuggestion(code) {
             const found = appState.feeCodes.find(fc => fc.code === code);
+            const inputEl = document.getElementById('txFeeCodeInput');
             if (found) {
+                inputEl.value = found.code;
                 document.getElementById('txHeading1').value = found.heading1;
                 document.getElementById('txHeading2').value = found.heading2;
+            } else {
+                inputEl.value = code;
             }
+            closeFeeCodeSuggestions();
+        }
+
+        // --- Nếu gõ một mã phí chưa có trong hệ thống và bấm nút Tạo mới ngay trong gợi ý ---
+        function prefillQuickAddFeeCodeFromInput(codeStr) {
+            closeFeeCodeSuggestions();
+            const quickBox = document.getElementById('quickAddFeeCodeBox');
+            quickBox.classList.remove('hidden');
+            document.getElementById('quickFcCode').value = codeStr || '';
+            document.getElementById('quickFcH1').focus();
         }
 
         function recalcTotalAmount() {
@@ -2616,7 +2882,15 @@
         }
 
         function toggleQuickAddFeeCode() {
-            document.getElementById('quickAddFeeCodeBox').classList.toggle('hidden');
+            const box = document.getElementById('quickAddFeeCodeBox');
+            box.classList.toggle('hidden');
+            if (!box.classList.contains('hidden')) {
+                const typedCode = document.getElementById('txFeeCodeInput').value.trim().toUpperCase();
+                const exists = appState.feeCodes.some(fc => fc.code === typedCode);
+                if (typedCode && !exists) {
+                    document.getElementById('quickFcCode').value = typedCode;
+                }
+            }
         }
 
         function saveQuickFeeCodeInModal() {
@@ -2655,13 +2929,25 @@
             const quantity = parseFloat(document.getElementById('txQuantity').value) || 1;
             const unitPrice = parseFloat(document.getElementById('txUnitPrice').value) || 0;
             const amount = Math.round(quantity * unitPrice);
-            const feeCode = document.getElementById('txFeeCodeSelect').value;
+            const feeCode = document.getElementById('txFeeCodeInput').value.trim().toUpperCase();
             const heading1 = document.getElementById('txHeading1').value.trim();
             const heading2 = document.getElementById('txHeading2').value.trim();
 
-            if (!date || !description || amount <= 0) {
-                showToast('Vui lòng kiểm tra lại Ngày, Diễn giải và Số tiền (> 0)!', 'warning');
+            if (!date || !description || amount <= 0 || !feeCode || !heading1 || !heading2) {
+                showToast('Vui lòng kiểm tra lại Ngày, Diễn giải, Mã phí và Số tiền (> 0)!', 'warning');
                 return;
+            }
+
+            // Nếu người dùng gõ tay một Mã phí hoàn toàn mới kèm Heading 1 & Heading 2, tự động lưu luôn vào danh mục Mã phí để lần sau gợi ý
+            const existsInCatalog = appState.feeCodes.some(fc => fc.code.toUpperCase() === feeCode);
+            if (!existsInCatalog) {
+                appState.feeCodes.push({
+                    code: feeCode,
+                    type,
+                    heading1,
+                    heading2,
+                    desc: 'Tự động lưu khi nhập bút toán'
+                });
             }
 
             let expenseKind = null;
@@ -2730,6 +3016,7 @@
             populateModalFeeCodeDropdown(tx.type, tx.feeCode);
             document.getElementById('txHeading1').value = tx.heading1;
             document.getElementById('txHeading2').value = tx.heading2;
+            closeFeeCodeSuggestions();
 
             if (tx.type === 'EXPENSE') {
                 const kind = tx.expenseKind || 'ACTUAL';

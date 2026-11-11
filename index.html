@@ -1090,37 +1090,11 @@
                     </div>
                 </div>
 
-                <!-- Thanh thao tác hàng loạt (Bulk Actions) -->
-                <div id="bulkActionBar" class="hidden flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-rose-50 border border-rose-200 mb-4 transition-all">
-                    <div class="flex items-center gap-3">
-                        <span class="flex items-center gap-2 text-xs font-bold text-rose-800">
-                            <i class="fa-solid fa-circle-check text-rose-600 text-sm"></i>
-                            Đã chọn <strong id="bulkSelectedCount" class="text-base text-rose-700">0</strong> bút toán
-                            <span id="bulkSelectedAmount" class="ml-1 px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[11px] font-extrabold"></span>
-                        </span>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button onclick="selectAllFilteredTx()" id="btnSelectAllFiltered" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-xs">
-                            <i class="fa-solid fa-check-double"></i>
-                            <span id="btnSelectAllFilteredText">Chọn tất cả kết quả lọc</span>
-                        </button>
-                        <button onclick="clearTxSelection()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-xmark"></i> Bỏ chọn tất cả
-                        </button>
-                        <button onclick="bulkDeleteSelectedTx()" class="px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition cursor-pointer flex items-center gap-1.5 shadow-xs">
-                            <i class="fa-solid fa-trash-can"></i> Xóa hàng loạt
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Bảng danh sách toàn bộ giao dịch -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
                             <tr class="bg-slate-100 text-slate-700 border-y border-slate-200">
-                                <th class="py-3 px-2 text-center w-10">
-                                    <input type="checkbox" id="txSelectAll" onchange="toggleSelectAllTx(this)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer accent-indigo-600">
-                                </th>
                                 <th class="py-3 px-3 font-bold">Ngày thu/chi</th>
                                 <th class="py-3 px-3 font-bold">Diễn giải</th>
                                 <th class="py-3 px-3 font-bold">Loại</th>
@@ -2949,8 +2923,6 @@
         }
 
         let currentDashboardMonthRawTxs = [];
-        let txSelectedIds = new Set();
-        let lastFilteredTxIds = [];
 
         function renderMonthTransactionsQuickTable(txs) {
             currentDashboardMonthRawTxs = txs || [];
@@ -3379,15 +3351,6 @@
                 return true;
             }).sort((a, b) => b.date.localeCompare(a.date));
 
-            // Lưu danh sách ID các bút toán đang được hiển thị theo bộ lọc
-            lastFilteredTxIds = filtered.map(t => t.id);
-
-            // Dọn dẹp txSelectedIds nếu bút toán không còn tồn tại trong hệ thống
-            const validIds = new Set(appState.transactions.map(t => t.id));
-            Array.from(txSelectedIds).forEach(id => {
-                if (!validIds.has(id)) txSelectedIds.delete(id);
-            });
-
             // Tính toán tổng số liệu thống kê cho bộ lọc
             let sumIncome = 0;
             let sumExpenseActual = 0;
@@ -3454,20 +3417,14 @@
                 if (dateFrom && dateTo && dateFrom > dateTo) {
                     msg = 'Lỗi lọc ngày: "Từ ngày" không được lớn hơn "Đến ngày". Vui lòng chọn lại khoảng ngày hợp lệ.';
                 }
-                tbody.innerHTML = `<tr><td colspan="11" class="py-8 text-center text-slate-400 font-medium">${msg}</td></tr>`;
-                updateBulkActionBarUI();
+                tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400 font-medium">${msg}</td></tr>`;
                 return;
             }
 
             tbody.innerHTML = filtered.map(tx => {
                 const typeLabel = tx.type === 'INCOME' ? t('badgeIncome') : (tx.type === 'EXPENSE' ? t('badgeExpense') : t('badgeInvest'));
-                const isChecked = txSelectedIds.has(tx.id);
-                const rowBgClass = isChecked ? 'bg-indigo-50/70 hover:bg-indigo-100/70' : 'hover:bg-slate-50';
                 return `
-                    <tr class="${rowBgClass} transition" id="tx-row-${tx.id}">
-                        <td class="py-2.5 px-2 text-center">
-                            <input type="checkbox" value="${tx.id}" ${isChecked ? 'checked' : ''} onchange="toggleSelectTx('${tx.id}', this)" class="tx-item-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer accent-indigo-600">
-                        </td>
+                    <tr class="hover:bg-slate-50 transition">
                         <td class="py-2.5 px-3 font-semibold text-slate-700 whitespace-nowrap">${formatDateVN(tx.date)}</td>
                         <td class="py-2.5 px-3 font-bold text-slate-900">${escapeHtml(tx.description)}</td>
                         <td class="py-2.5 px-3 font-bold">${typeLabel}</td>
@@ -3484,176 +3441,6 @@
                     </tr>
                 `;
             }).join('');
-
-            updateBulkActionBarUI();
-        }
-
-        // =====================================================================
-        // CÁC HÀM XỬ LÝ CHỌN NHIỀU & XÓA HÀNG LOẠT BÚT TOÁN
-        // =====================================================================
-        function toggleSelectTx(id, checkboxEl) {
-            if (checkboxEl.checked) {
-                txSelectedIds.add(id);
-            } else {
-                txSelectedIds.delete(id);
-            }
-            const row = document.getElementById(`tx-row-${id}`);
-            if (row) {
-                if (checkboxEl.checked) {
-                    row.classList.add('bg-indigo-50/70');
-                    row.classList.remove('hover:bg-slate-50');
-                } else {
-                    row.classList.remove('bg-indigo-50/70');
-                    row.classList.add('hover:bg-slate-50');
-                }
-            }
-            updateBulkActionBarUI();
-        }
-
-        function toggleSelectAllTx(masterCheckbox) {
-            const isChecked = masterCheckbox.checked;
-            lastFilteredTxIds.forEach(id => {
-                if (isChecked) {
-                    txSelectedIds.add(id);
-                } else {
-                    txSelectedIds.delete(id);
-                }
-            });
-            document.querySelectorAll('.tx-item-checkbox').forEach(cb => {
-                cb.checked = isChecked;
-                const row = document.getElementById(`tx-row-${cb.value}`);
-                if (row) {
-                    if (isChecked) {
-                        row.classList.add('bg-indigo-50/70');
-                        row.classList.remove('hover:bg-slate-50');
-                    } else {
-                        row.classList.remove('bg-indigo-50/70');
-                        row.classList.add('hover:bg-slate-50');
-                    }
-                }
-            });
-            updateBulkActionBarUI();
-        }
-
-        function selectAllFilteredTx() {
-            if (lastFilteredTxIds.length === 0) return;
-            lastFilteredTxIds.forEach(id => txSelectedIds.add(id));
-            document.querySelectorAll('.tx-item-checkbox').forEach(cb => {
-                cb.checked = true;
-                const row = document.getElementById(`tx-row-${cb.value}`);
-                if (row) {
-                    row.classList.add('bg-indigo-50/70');
-                    row.classList.remove('hover:bg-slate-50');
-                }
-            });
-            updateBulkActionBarUI();
-            showToast(`Đã chọn toàn bộ ${lastFilteredTxIds.length} bút toán trong kết quả lọc!`, 'info');
-        }
-
-        function clearTxSelection() {
-            txSelectedIds.clear();
-            const masterCheckbox = document.getElementById('txSelectAll');
-            if (masterCheckbox) {
-                masterCheckbox.checked = false;
-                masterCheckbox.indeterminate = false;
-            }
-            document.querySelectorAll('.tx-item-checkbox').forEach(cb => {
-                cb.checked = false;
-                const row = document.getElementById(`tx-row-${cb.value}`);
-                if (row) {
-                    row.classList.remove('bg-indigo-50/70');
-                    row.classList.add('hover:bg-slate-50');
-                }
-            });
-            updateBulkActionBarUI();
-        }
-
-        function updateBulkActionBarUI() {
-            const bar = document.getElementById('bulkActionBar');
-            const countEl = document.getElementById('bulkSelectedCount');
-            const amountEl = document.getElementById('bulkSelectedAmount');
-            const masterCheckbox = document.getElementById('txSelectAll');
-            const btnSelectAllFilteredText = document.getElementById('btnSelectAllFilteredText');
-
-            if (!bar) return;
-
-            const selectedCount = txSelectedIds.size;
-
-            if (selectedCount > 0) {
-                bar.classList.remove('hidden');
-                bar.classList.add('flex');
-                if (countEl) countEl.textContent = selectedCount;
-
-                // Tính tổng số tiền của các bút toán đã chọn
-                let totalAmount = 0;
-                let incCount = 0;
-                let expCount = 0;
-                appState.transactions.forEach(t => {
-                    if (txSelectedIds.has(t.id)) {
-                        totalAmount += (t.amount || 0);
-                        if (t.type === 'INCOME') incCount++;
-                        else expCount++;
-                    }
-                });
-
-                if (amountEl) {
-                    amountEl.textContent = `Tổng giá trị: ${formatVND(totalAmount)}`;
-                }
-            } else {
-                bar.classList.add('hidden');
-                bar.classList.remove('flex');
-            }
-
-            // Đồng bộ trạng thái checkbox master ở tiêu đề bảng
-            if (masterCheckbox) {
-                if (lastFilteredTxIds.length === 0) {
-                    masterCheckbox.checked = false;
-                    masterCheckbox.indeterminate = false;
-                } else {
-                    const selectedFilteredCount = lastFilteredTxIds.filter(id => txSelectedIds.has(id)).length;
-                    if (selectedFilteredCount === lastFilteredTxIds.length) {
-                        masterCheckbox.checked = true;
-                        masterCheckbox.indeterminate = false;
-                    } else if (selectedFilteredCount > 0) {
-                        masterCheckbox.checked = false;
-                        masterCheckbox.indeterminate = true;
-                    } else {
-                        masterCheckbox.checked = false;
-                        masterCheckbox.indeterminate = false;
-                    }
-                }
-            }
-
-            if (btnSelectAllFilteredText) {
-                btnSelectAllFilteredText.textContent = `Chọn tất cả ${lastFilteredTxIds.length} kết quả lọc`;
-            }
-        }
-
-        function bulkDeleteSelectedTx() {
-            const count = txSelectedIds.size;
-            if (count === 0) {
-                showToast('Chưa chọn bút toán nào để xóa!', 'warning');
-                return;
-            }
-
-            // Tính tổng tiền các bút toán sẽ xóa
-            let totalVal = 0;
-            appState.transactions.forEach(t => {
-                if (txSelectedIds.has(t.id)) totalVal += (t.amount || 0);
-            });
-
-            showConfirmModal(
-                `Xác nhận xóa hàng loạt (${count} bút toán)`,
-                `Bạn có chắc chắn muốn xóa vĩnh viễn ${count} bút toán đã chọn với tổng giá trị ${formatVND(totalVal)} không? Hành động này sẽ cập nhật lại tức thì toàn bộ số dư tiền mặt và các báo cáo liên quan.`,
-                () => {
-                    const toDeleteSet = new Set(txSelectedIds);
-                    appState.transactions = appState.transactions.filter(t => !toDeleteSet.has(t.id));
-                    txSelectedIds.clear();
-                    saveStateToStorage();
-                    refreshAllViews();
-                    showToast(`Đã xóa thành công ${count} bút toán!`, 'success');
-                }
-            );
         }
 
         function resetTxFilters() {

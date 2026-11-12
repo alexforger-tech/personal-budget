@@ -101,9 +101,15 @@
         }
         body.theme-blue-dark .bg-indigo-50,
         body.theme-blue-dark .bg-indigo-50\/70,
+        body.theme-blue-dark .bg-indigo-50\/60,
         body.theme-blue-dark .bg-indigo-50\/30 {
             background-color: rgba(30, 58, 138, 0.35) !important;
             color: #93c5fd !important;
+            border-color: rgba(59, 130, 246, 0.35) !important;
+        }
+        body.theme-blue-dark .border-indigo-200,
+        body.theme-blue-dark .border-indigo-200\/80,
+        body.theme-blue-dark .border-indigo-300 {
             border-color: rgba(59, 130, 246, 0.35) !important;
         }
         body.theme-blue-dark .bg-rose-50,
@@ -186,7 +192,8 @@
         body.theme-blue-dark .text-indigo-950,
         body.theme-blue-dark .text-indigo-900,
         body.theme-blue-dark .text-indigo-800,
-        body.theme-blue-dark .text-indigo-700 {
+        body.theme-blue-dark .text-indigo-700,
+        body.theme-blue-dark .text-indigo-600 {
             color: #93c5fd !important;
         }
         body.theme-blue-dark .text-rose-900,
@@ -230,6 +237,92 @@
         }
         body.theme-blue-dark ::-webkit-scrollbar-thumb {
             background: #334155;
+        }
+
+        /* --- Khối Hướng Dẫn Import Excel (Tab Sổ giao dịch thu chi) --- */
+        .tx-import-hint {
+            background: linear-gradient(135deg, rgba(238, 242, 255, 0.9) 0%, rgba(224, 231, 255, 0.75) 100%);
+            border: 1px solid rgba(199, 210, 254, 0.95);
+            box-shadow: 0 1px 3px rgba(99, 102, 241, 0.08);
+        }
+        .tx-import-hint .hint-code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1.5px 6px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            letter-spacing: -0.2px;
+            display: inline-block;
+            margin: 0 1px;
+        }
+        .tx-import-hint .hint-highlight {
+            font-style: normal;
+            font-weight: 700;
+            color: #312e81;
+            text-decoration: underline;
+            text-decoration-color: #818cf8;
+            text-underline-offset: 2px;
+        }
+        .tx-import-hint .tx-import-template-btn {
+            background-color: #4f46e5;
+            color: #ffffff;
+            border: 1px solid #4338ca;
+            box-shadow: 0 1px 3px rgba(79, 70, 229, 0.2);
+        }
+        .tx-import-hint .tx-import-template-btn:hover {
+            background-color: #4338ca;
+        }
+
+        /* ĐỘ TƯƠNG PHẢN CAO KHI CHUYỂN SANG DARK MODE (THEME BLUE DARK) */
+        body.theme-blue-dark .tx-import-hint {
+            background: linear-gradient(135deg, rgba(29, 78, 216, 0.28) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+            border: 1.5px solid rgba(96, 165, 250, 0.6) !important;
+            box-shadow: 0 4px 20px -2px rgba(2, 6, 23, 0.75), inset 0 1px 0 rgba(147, 197, 253, 0.25) !important;
+            color: #f8fafc !important;
+        }
+        body.theme-blue-dark .tx-import-hint .text-slate-700 {
+            color: #f1f5f9 !important;
+        }
+        body.theme-blue-dark .tx-import-hint i.fa-circle-info {
+            color: #38bdf8 !important;
+            filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65));
+        }
+        body.theme-blue-dark .tx-import-hint strong {
+            color: #ffffff !important;
+        }
+        body.theme-blue-dark .tx-import-hint strong.text-indigo-950,
+        body.theme-blue-dark .tx-import-hint strong.text-indigo-900 {
+            color: #93c5fd !important;
+        }
+        body.theme-blue-dark .tx-import-hint .hint-code {
+            background-color: #0b1329 !important;
+            color: #38bdf8 !important;
+            border: 1px solid rgba(56, 189, 248, 0.6) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+        }
+        body.theme-blue-dark .tx-import-hint .hint-highlight {
+            color: #fde047 !important;
+            text-decoration-color: #facc15 !important;
+            font-weight: 700 !important;
+        }
+        body.theme-blue-dark .tx-import-hint .tx-import-template-btn {
+            background-color: #2563eb !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(147, 197, 253, 0.5) !important;
+            box-shadow: 0 2px 10px rgba(37, 99, 235, 0.45) !important;
+        }
+        body.theme-blue-dark .tx-import-hint .tx-import-template-btn:hover {
+            background-color: #1d4ed8 !important;
+            border-color: rgba(147, 197, 253, 0.8) !important;
+        }
+
+        /* Tối ưu độ tương phản cho các thẻ strong trong glass-card của dark mode */
+        body.theme-blue-dark .glass-card strong {
+            color: #f8fafc !important;
         }
 
         @media print {
@@ -980,15 +1073,17 @@
                 </div>
 
                 <!-- Hướng dẫn nhanh cấu trúc cột Import Excel -->
-                <div class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-200/80 mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-                    <div class="flex items-start sm:items-center gap-2.5 text-slate-700">
-                        <i class="fa-solid fa-circle-info text-indigo-600 text-sm mt-0.5 sm:mt-0"></i>
-                        <span>
-                            <strong>Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code>Ngay</code> (VD: 15/11/2026), <code>DienGiai</code>, <code>MaPhi</code>, <code>SoLuong</code>, <code>DonGia_VND</code> (hoặc <code>ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong>Mã phí</strong> để điền sẵn <em>Loại</em>, <em>Heading 1</em>, <em>Heading 2</em> và <em>Heading 3</em>!
+                <div id="txImportExcelHintBox" class="tx-import-hint p-3.5 rounded-xl mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex items-start sm:items-center gap-2.5 text-slate-700 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-indigo-600 text-base shrink-0 mt-0.5 sm:mt-0"></i>
+                        <span id="txImportExcelHintContent">
+                            <strong class="font-extrabold text-indigo-950">Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code class="hint-code">Ngay</code> (VD: 15/11/2026), <code class="hint-code">DienGiai</code>, <code class="hint-code">MaPhi</code>, <code class="hint-code">SoLuong</code>, <code class="hint-code">DonGia_VND</code> (hoặc <code class="hint-code">ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong class="font-bold text-indigo-900">Mã phí</strong> để điền sẵn <em class="hint-highlight">Loại</em>, <em class="hint-highlight">Heading 1</em>, <em class="hint-highlight">Heading 2</em> và <em class="hint-highlight">Heading 3</em>!
                         </span>
                     </div>
-                    <button type="button" onclick="downloadTransactionTemplateExcel()" class="text-indigo-700 hover:underline font-extrabold shrink-0 self-end sm:self-center cursor-pointer">
-                        Tải file mẫu (.xlsx) &rarr;
+                    <button type="button" onclick="downloadTransactionTemplateExcel()" class="tx-import-template-btn shrink-0 self-end sm:self-center px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span id="txImportTemplateBtnText">Tải file mẫu (.xlsx)</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </button>
                 </div>
 
@@ -2181,6 +2276,17 @@
             setTxt('btnAddNewTxLabel', t('btnAddNewTx'));
             setTxt('feeCatalogTitle', t('feeTableTitle'));
             setTxt('feeCatalogSubtitle', t('feeTableSubtitle'));
+
+            const hintContent = document.getElementById('txImportExcelHintContent');
+            if (hintContent) {
+                hintContent.innerHTML = isEn
+                    ? '<strong class="font-extrabold text-indigo-950">Quick Import Tip:</strong> Just fill columns <code class="hint-code">Ngay</code> (e.g. 15/11/2026), <code class="hint-code">DienGiai</code>, <code class="hint-code">MaPhi</code>, <code class="hint-code">SoLuong</code>, <code class="hint-code">DonGia_VND</code> (or <code class="hint-code">ThanhTien_VND</code>). The system will automatically look up the <strong class="font-bold text-indigo-900">Fee Code</strong> to fill <em class="hint-highlight">Type</em>, <em class="hint-highlight">Heading 1</em>, <em class="hint-highlight">Heading 2</em> and <em class="hint-highlight">Heading 3</em>!'
+                    : '<strong class="font-extrabold text-indigo-950">Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code class="hint-code">Ngay</code> (VD: 15/11/2026), <code class="hint-code">DienGiai</code>, <code class="hint-code">MaPhi</code>, <code class="hint-code">SoLuong</code>, <code class="hint-code">DonGia_VND</code> (hoặc <code class="hint-code">ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong class="font-bold text-indigo-900">Mã phí</strong> để điền sẵn <em class="hint-highlight">Loại</em>, <em class="hint-highlight">Heading 1</em>, <em class="hint-highlight">Heading 2</em> và <em class="hint-highlight">Heading 3</em>!';
+            }
+            const hintBtnText = document.getElementById('txImportTemplateBtnText');
+            if (hintBtnText) {
+                hintBtnText.textContent = isEn ? 'Download Template (.xlsx)' : 'Tải file mẫu (.xlsx)';
+            }
 
             const fcSearchInput = document.getElementById('filterFeeCodeSearch');
             if (fcSearchInput) {

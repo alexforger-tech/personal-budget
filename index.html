@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
+        window.tailwind = window.tailwind || {};
         tailwind.config = {
             theme: {
                 extend: {
@@ -2076,13 +2077,17 @@
 
         // --- Khởi tạo ứng dụng ---
         window.onload = function () {
-            loadStateFromStorage();
-            applyThemeUI();
-            applyLanguageStaticUI();
-            initYearDropdown();
-            document.getElementById('globalMonthFilter').value = appState.selectedMonth;
-            document.getElementById('globalYearFilter').value = appState.selectedYear;
-            refreshAllViews();
+            try { loadStateFromStorage(); } catch (e) { console.error('Lỗi loadStateFromStorage:', e); }
+            try { applyThemeUI(); } catch (e) { console.error('Lỗi applyThemeUI:', e); }
+            try { applyLanguageStaticUI(); } catch (e) { console.error('Lỗi applyLanguageStaticUI:', e); }
+            try { initYearDropdown(); } catch (e) { console.error('Lỗi initYearDropdown:', e); }
+            try {
+                const mEl = document.getElementById('globalMonthFilter');
+                if (mEl) mEl.value = appState.selectedMonth;
+                const yEl = document.getElementById('globalYearFilter');
+                if (yEl) yEl.value = appState.selectedYear;
+            } catch (e) { console.error('Lỗi set month/year filter:', e); }
+            try { refreshAllViews(); } catch (e) { console.error('Lỗi refreshAllViews:', e); }
 
             // Đóng danh sách gợi ý Mã phí khi click ra ngoài vùng Autocomplete
             document.addEventListener('click', function (e) {
@@ -2263,10 +2268,14 @@
             ];
 
             domPairs.forEach(([sel, key, customFn]) => {
-                const el = document.querySelector(sel);
-                if (!el) return;
-                if (customFn) customFn(el);
-                else if (key) el.textContent = t(key);
+                try {
+                    const el = document.querySelector(sel);
+                    if (!el) return;
+                    if (customFn) customFn(el);
+                    else if (key) el.textContent = t(key);
+                } catch (pairErr) {
+                    console.warn('Lỗi cập nhật UI tĩnh cho selector:', sel, pairErr);
+                }
             });
         }
 
@@ -2280,24 +2289,35 @@
                     appState = getDefaultSeedData();
                     saveStateToStorage();
                 }
+
+                // Đồng bộ fallback heading3 cho dữ liệu cũ nếu chưa có
+                if (Array.isArray(appState.feeCodes)) {
+                    appState.feeCodes = appState.feeCodes.filter(Boolean);
+                    appState.feeCodes.forEach(fc => {
+                        if (fc && (fc.heading3 === undefined || fc.heading3 === null)) fc.heading3 = '';
+                    });
+                } else {
+                    appState.feeCodes = getDefaultSeedData().feeCodes;
+                }
+                if (Array.isArray(appState.transactions)) {
+                    appState.transactions = appState.transactions.filter(Boolean);
+                    appState.transactions.forEach(tx => {
+                        if (tx && (tx.heading3 === undefined || tx.heading3 === null)) {
+                            const matchedFc = Array.isArray(appState.feeCodes) ? appState.feeCodes.find(fc => fc && fc.code === tx.feeCode) : null;
+                            tx.heading3 = (matchedFc && matchedFc.heading3) ? matchedFc.heading3 : '';
+                        }
+                    });
+                } else {
+                    appState.transactions = getDefaultSeedData().transactions;
+                }
+                if (!Array.isArray(appState.manualAssets)) {
+                    appState.manualAssets = [];
+                } else {
+                    appState.manualAssets = appState.manualAssets.filter(Boolean);
+                }
             } catch (e) {
                 console.error('Lỗi đọc localStorage:', e);
                 appState = getDefaultSeedData();
-            }
-
-            // Đồng bộ fallback heading3 cho dữ liệu cũ nếu chưa có
-            if (Array.isArray(appState.feeCodes)) {
-                appState.feeCodes.forEach(fc => {
-                    if (fc.heading3 === undefined || fc.heading3 === null) fc.heading3 = '';
-                });
-            }
-            if (Array.isArray(appState.transactions)) {
-                appState.transactions.forEach(tx => {
-                    if (tx.heading3 === undefined || tx.heading3 === null) {
-                        const matchedFc = Array.isArray(appState.feeCodes) ? appState.feeCodes.find(fc => fc.code === tx.feeCode) : null;
-                        tx.heading3 = (matchedFc && matchedFc.heading3) ? matchedFc.heading3 : '';
-                    }
-                });
             }
         }
 
@@ -2811,7 +2831,10 @@
                 `;
             }).join('');
 
-            const ctx = document.getElementById('chartMonthComparison').getContext('2d');
+            if (!window.Chart) return;
+            const canvas = document.getElementById('chartMonthComparison');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             if (chartComparisonInstance) chartComparisonInstance.destroy();
             chartComparisonInstance = new Chart(ctx, {
                 type: 'bar',
@@ -2857,7 +2880,7 @@
         }
 
         function renderHeadingPieChart(monthTxs) {
-            const mode = document.getElementById('pieBreakdownMode').value;
+            const mode = document.getElementById('pieBreakdownMode')?.value || 'EXPENSE';
             const grouped = {};
 
             monthTxs.forEach(tx => {
@@ -2883,65 +2906,74 @@
             const total = entries.reduce((s, e) => s + e[1], 0);
             const palette = ['#6366f1', '#f43f5e', '#f59e0b', '#10b981', '#8b5cf6', '#06b6d4', '#ec4899', '#64748b'];
 
-            const ctx = document.getElementById('chartHeadingPie').getContext('2d');
-            if (chartHeadingPieInstance) chartHeadingPieInstance.destroy();
+            if (window.Chart) {
+                const canvas = document.getElementById('chartHeadingPie');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (chartHeadingPieInstance) chartHeadingPieInstance.destroy();
 
-            if (entries.length === 0) {
-                chartHeadingPieInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Chưa có phát sinh'],
-                        datasets: [{ data: [1], backgroundColor: ['#e2e8f0'] }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                });
-                document.getElementById('headingBreakdownList').innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Chưa có giao dịch thuộc nhóm này trong tháng đang chọn.</p>`;
-                return;
-            }
-
-            chartHeadingPieInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: entries.map(e => e[0]),
-                    datasets: [{
-                        data: entries.map(e => e[1]),
-                        backgroundColor: entries.map((_, i) => palette[i % palette.length]),
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '62%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: c => `${c.label}: ${formatVND(c.raw)} (${((c.raw / total) * 100).toFixed(1)}%)`
+                    if (entries.length === 0) {
+                        chartHeadingPieInstance = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Chưa có phát sinh'],
+                                datasets: [{ data: [1], backgroundColor: ['#e2e8f0'] }]
+                            },
+                            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                        });
+                    } else {
+                        chartHeadingPieInstance = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: entries.map(e => e[0]),
+                                datasets: [{
+                                    data: entries.map(e => e[1]),
+                                    backgroundColor: entries.map((_, i) => palette[i % palette.length]),
+                                    borderWidth: 2,
+                                    borderColor: '#ffffff'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                cutout: '62%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: c => `${c.label}: ${formatVND(c.raw)} (${((c.raw / total) * 100).toFixed(1)}%)`
+                                        }
+                                    }
+                                }
                             }
-                        }
+                        });
                     }
                 }
-            });
+            }
 
             const listEl = document.getElementById('headingBreakdownList');
-            listEl.innerHTML = entries.map((e, i) => {
-                const pct = total > 0 ? ((e[1] / total) * 100).toFixed(1) : 0;
-                const color = palette[i % palette.length];
-                return `
-                    <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
-                        <div class="flex items-center gap-2 truncate">
-                            <span class="w-3 h-3 rounded-full shrink-0" style="background:${color}"></span>
-                            <span class="font-bold text-slate-700 truncate">${e[0]}</span>
-                        </div>
-                        <div class="text-right shrink-0 ml-2">
-                            <span class="font-extrabold text-slate-900">${formatVND(e[1])}</span>
-                            <span class="text-[11px] text-slate-500 ml-1">(${pct}%)</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            if (listEl) {
+                if (entries.length === 0) {
+                    listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Chưa có giao dịch thuộc nhóm này trong tháng đang chọn.</p>`;
+                } else {
+                    listEl.innerHTML = entries.map((e, i) => {
+                        const pct = total > 0 ? ((e[1] / total) * 100).toFixed(1) : 0;
+                        const color = palette[i % palette.length];
+                        return `
+                            <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center gap-2 truncate">
+                                    <span class="w-3 h-3 rounded-full shrink-0" style="background:${color}"></span>
+                                    <span class="font-bold text-slate-700 truncate">${e[0]}</span>
+                                </div>
+                                <div class="text-right shrink-0 ml-2">
+                                    <span class="font-extrabold text-slate-900">${formatVND(e[1])}</span>
+                                    <span class="text-[11px] text-slate-500 ml-1">(${pct}%)</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
         }
 
         // --- Tổng quan Thu Chi theo Tháng / Quý / Năm ---
@@ -3027,7 +3059,10 @@
                 });
             }
 
-            const ctx = document.getElementById('chartPeriodOverview').getContext('2d');
+            if (!window.Chart) return;
+            const canvas = document.getElementById('chartPeriodOverview');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
             if (chartPeriodOverviewInstance) chartPeriodOverviewInstance.destroy();
             chartPeriodOverviewInstance = new Chart(ctx, {
                 type: 'bar',
@@ -3230,45 +3265,50 @@
             document.getElementById('casaFormulaFinal').textContent = formatVND(summary.casaBalance);
 
             // Biểu đồ phân bổ tài sản
-            const ctx = document.getElementById('chartAssetAllocation').getContext('2d');
-            if (chartAssetAllocationInstance) chartAssetAllocationInstance.destroy();
-            chartAssetAllocationInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: [
-                        'Tiền mặt & TK Không kỳ hạn',
-                        'Tiết kiệm ngân hàng & Quỹ KC (Nhập tay)',
-                        'Đầu tư TT Tài chính (Nhập tay)',
-                        'Quỹ Chi phí trích trước'
-                    ],
-                    datasets: [{
-                        data: [
-                            Math.max(0, summary.casaBalance),
-                            Math.max(0, summary.totalSavingsBalance),
-                            Math.max(0, summary.totalMarketBalance),
-                            Math.max(0, summary.totalAccruedBalance)
-                        ],
-                        backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
-                        borderWidth: 2,
-                        borderColor: '#1e1b4b'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: { color: '#f8fafc', font: { family: 'Plus Jakarta Sans', size: 11 } }
+            if (window.Chart) {
+                const canvas = document.getElementById('chartAssetAllocation');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    if (chartAssetAllocationInstance) chartAssetAllocationInstance.destroy();
+                    chartAssetAllocationInstance = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: [
+                                'Tiền mặt & TK Không kỳ hạn',
+                                'Tiết kiệm ngân hàng & Quỹ KC (Nhập tay)',
+                                'Đầu tư TT Tài chính (Nhập tay)',
+                                'Quỹ Chi phí trích trước'
+                            ],
+                            datasets: [{
+                                data: [
+                                    Math.max(0, summary.casaBalance),
+                                    Math.max(0, summary.totalSavingsBalance),
+                                    Math.max(0, summary.totalMarketBalance),
+                                    Math.max(0, summary.totalAccruedBalance)
+                                ],
+                                backgroundColor: ['#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
+                                borderWidth: 2,
+                                borderColor: '#1e1b4b'
+                            }]
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: c => `${c.label}: ${formatVND(c.raw)}`
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                    labels: { color: '#f8fafc', font: { family: 'Plus Jakarta Sans', size: 11 } }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: c => `${c.label}: ${formatVND(c.raw)}`
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
                 }
-            });
+            }
 
             // Bảng 2: Các khoản tiết kiệm gửi ngân hàng (Tự nhập tay 100%)
             const savingsRows = [...summary.manualSavings].sort((a, b) => b.date.localeCompare(a.date));
@@ -4856,18 +4896,6 @@
                             importedCount++;
                         }
                     });
-
-                    saveStateToStorage();
-                    refreshAllViews();
-                    event.target.value = '';
-                    showToast(`Đã import thành công ${importedCount} Mã phí từ file Excel!`, 'success');
-                } catch (err) {
-                    console.error(err);
-                    showToast('Không thể đọc file Excel. Vui lòng kiểm tra đúng định dạng mẫu!', 'error');
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
 
                     saveStateToStorage();
                     refreshAllViews();

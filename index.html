@@ -576,6 +576,7 @@
                             <select id="pieBreakdownMode" onchange="renderCashflowDashboard()" class="text-xs font-bold bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none">
                                 <option value="EXPENSE">Cơ cấu Chi phí (Heading 1)</option>
                                 <option value="EXPENSE_H2">Cơ cấu Chi phí (Heading 2)</option>
+                                <option value="EXPENSE_H3">Cơ cấu Chi phí (Heading 3)</option>
                                 <option value="INVEST">Cơ cấu Đầu tư</option>
                                 <option value="INCOME">Cơ cấu Thu nhập</option>
                             </select>
@@ -982,7 +983,7 @@
                     <div class="flex items-start sm:items-center gap-2.5 text-slate-700">
                         <i class="fa-solid fa-circle-info text-indigo-600 text-sm mt-0.5 sm:mt-0"></i>
                         <span>
-                            <strong>Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code>Ngay</code> (VD: 15/11/2026), <code>DienGiai</code>, <code>MaPhi</code>, <code>SoLuong</code>, <code>DonGia_VND</code> (hoặc <code>ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong>Mã phí</strong> để điền sẵn <em>Loại</em>, <em>Heading 1</em> và <em>Heading 2</em>!
+                            <strong>Mẹo Import nhanh:</strong> Chỉ cần điền các cột <code>Ngay</code> (VD: 15/11/2026), <code>DienGiai</code>, <code>MaPhi</code>, <code>SoLuong</code>, <code>DonGia_VND</code> (hoặc <code>ThanhTien_VND</code>). Hệ thống sẽ tự động tra cứu <strong>Mã phí</strong> để điền sẵn <em>Loại</em>, <em>Heading 1</em>, <em>Heading 2</em> và <em>Heading 3</em>!
                         </span>
                     </div>
                     <button type="button" onclick="downloadTransactionTemplateExcel()" class="text-indigo-700 hover:underline font-extrabold shrink-0 self-end sm:self-center cursor-pointer">
@@ -1128,6 +1129,7 @@
                                 <th class="py-3 px-3 font-bold">Mã phí</th>
                                 <th class="py-3 px-3 font-bold">Heading 1</th>
                                 <th class="py-3 px-3 font-bold">Heading 2</th>
+                                <th class="py-3 px-3 font-bold">Heading 3</th>
                                 <th class="py-3 px-3 font-bold text-center">Số lượng</th>
                                 <th class="py-3 px-3 font-bold text-right">Tổng tiền (VNĐ)</th>
                                 <th class="py-3 px-3 font-bold text-center">Thao tác</th>
@@ -1142,7 +1144,7 @@
         </section>
 
         <!-- =============================================================== -->
-        <!-- TAB 4: QUẢN LÝ & IMPORT MAPPING MÃ PHÍ (HEADING 1 & HEADING 2)  -->
+        <!-- TAB 4: QUẢN LÝ & IMPORT MAPPING MÃ PHÍ (HEADING 1, HEADING 2 & HEADING 3)  -->
         <!-- =============================================================== -->
         <section id="tab-fee-codes" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1176,6 +1178,10 @@
                                 <input type="text" id="fcHeading2" required placeholder="VD: Ăn uống hàng ngày, Mua sắm thiết bị..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
                             <div>
+                                <label class="block font-bold text-slate-700 mb-1">Heading 3 mã phí (Phân loại cấp 3) <span class="text-rose-500">*</span></label>
+                                <input type="text" id="fcHeading3" required placeholder="VD: Ăn sáng, Cà phê, Xăng xe máy..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div>
                                 <label class="block font-bold text-slate-700 mb-1">Mô tả gợi nhớ (Tùy chọn)</label>
                                 <input type="text" id="fcDesc" placeholder="Ghi chú cách dùng mã phí..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </div>
@@ -1192,7 +1198,7 @@
                             <span>Import Mapping Mã Phí Từ Excel</span>
                         </h3>
                         <p class="text-xs text-slate-600 leading-relaxed mb-3">
-                            Tải file Excel (`.xlsx`, `.xls`, `.csv`) chứa các cột: <strong>MaPhi</strong>, <strong>Loai</strong>, <strong>Heading1</strong>, <strong>Heading2</strong>, <strong>MoTa</strong> để cập nhật hàng loạt.
+                            Tải file Excel (`.xlsx`, `.xls`, `.csv`) chứa các cột: <strong>MaPhi</strong>, <strong>Loai</strong>, <strong>Heading1</strong>, <strong>Heading2</strong>, <strong>Heading3</strong>, <strong>MoTa</strong> để cập nhật hàng loạt.
                         </p>
                         <div class="space-y-2.5">
                             <button type="button" onclick="downloadFeeCodeTemplateExcel()" class="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-50 text-indigo-700 border border-indigo-200 text-xs font-bold flex items-center justify-center gap-2 transition cursor-pointer">
@@ -1212,7 +1218,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                         <div>
                             <h3 id="feeCatalogTitle" class="text-base font-extrabold text-slate-800">Bảng Mapping Danh Mục Mã Phí Hiện Tại</h3>
-                            <p id="feeCatalogSubtitle" class="text-xs text-slate-500">Khi chọn Mã phí lúc nhập liệu, hệ thống tự động điền Heading 1 & Heading 2 tương ứng</p>
+                            <p id="feeCatalogSubtitle" class="text-xs text-slate-500">Khi chọn Mã phí lúc nhập liệu, hệ thống tự động điền Heading 1, Heading 2 & Heading 3 tương ứng</p>
                         </div>
                         <span id="feeCodeCountBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-indigo-50 text-indigo-700">0 mã phí</span>
                     </div>
@@ -1226,7 +1232,7 @@
                                 </label>
                                 <div class="relative">
                                     <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                                    <input type="text" id="filterFeeCodeSearch" oninput="renderFeeCodesTable()" placeholder="Gõ mã phí, heading 1, heading 2, ghi chú..." class="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <input type="text" id="filterFeeCodeSearch" oninput="renderFeeCodesTable()" placeholder="Gõ mã phí, heading 1, 2, 3, ghi chú..." class="w-full pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                 </div>
                             </div>
 
@@ -1292,6 +1298,7 @@
                                     <th class="py-2.5 px-3 font-bold">Loại mặc định</th>
                                     <th class="py-2.5 px-3 font-bold">Heading 1 mã phí</th>
                                     <th class="py-2.5 px-3 font-bold">Heading 2 mã phí</th>
+                                    <th class="py-2.5 px-3 font-bold">Heading 3 mã phí</th>
                                     <th class="py-2.5 px-3 font-bold">Ghi chú</th>
                                     <th class="py-2.5 px-3 font-bold text-center">Thao tác</th>
                                 </tr>
@@ -1422,11 +1429,11 @@
                     </div>
                 </div>
 
-                <!-- Hàng 4: Mã Phí (Có gõ tay tìm kiếm gợi ý thông minh) & Mapping Heading 1, Heading 2 -->
+                <!-- Hàng 4: Mã Phí (Có gõ tay tìm kiếm gợi ý thông minh) & Mapping Heading 1, Heading 2, Heading 3 -->
                 <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
                         <label class="block text-xs font-bold text-slate-700">
-                            5. Mã phí & Phân nhóm Heading 1 / Heading 2 <span class="text-rose-500">*</span>
+                            5. Mã phí & Phân nhóm Heading 1 / Heading 2 / Heading 3 <span class="text-rose-500">*</span>
                             <span class="font-normal text-indigo-600 ml-1">(Gõ mã phí hoặc tên nhóm để gợi ý nhanh)</span>
                         </label>
                         <button type="button" onclick="toggleQuickAddFeeCode()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer">
@@ -1437,17 +1444,18 @@
                     <!-- Khung tạo nhanh mã phí ngay trong Modal nếu cần -->
                     <div id="quickAddFeeCodeBox" class="hidden p-3 rounded-xl bg-indigo-50 border border-indigo-200 space-y-2">
                         <p class="text-[11px] font-bold text-indigo-800">Thêm nhanh Mã phí mới vào hệ thống:</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
                             <input type="text" id="quickFcCode" placeholder="Mã phí (VD: MP-99)" class="px-2.5 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs font-bold uppercase">
                             <input type="text" id="quickFcH1" placeholder="Heading 1" class="px-2.5 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs">
                             <input type="text" id="quickFcH2" placeholder="Heading 2" class="px-2.5 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs">
+                            <input type="text" id="quickFcH3" placeholder="Heading 3" class="px-2.5 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs">
                         </div>
                         <div class="flex justify-end">
                             <button type="button" onclick="saveQuickFeeCodeInModal()" class="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold cursor-pointer">Lưu & Chọn mã này</button>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         <!-- Ô Gõ Tay & Gợi Ý Mã Phí (Autocomplete Combobox) -->
                         <div class="relative" id="feeCodeAutocompleteWrapper">
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Gõ hoặc Chọn Mã phí</label>
@@ -1486,6 +1494,10 @@
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-500 mb-1">Heading 2 mã phí</label>
                             <input type="text" id="txHeading2" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Heading 3 mã phí</label>
+                            <input type="text" id="txHeading3" required placeholder="Tự động điền theo mã phí" class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                 </div>
@@ -1651,6 +1663,7 @@
                 pieSub: 'Tỷ trọng các khoản chi & đầu tư trong tháng',
                 pieOptExpH1: 'Cơ cấu Chi phí (Heading 1)',
                 pieOptExpH2: 'Cơ cấu Chi phí (Heading 2)',
+                pieOptExpH3: 'Cơ cấu Chi phí (Heading 3)',
                 pieOptInvest: 'Cơ cấu Đầu tư',
                 pieOptIncome: 'Cơ cấu Thu nhập',
                 noPieData: 'Chưa có giao dịch thuộc nhóm này trong tháng đang chọn.',
@@ -1722,7 +1735,7 @@
                 feeMappingFormTitle: 'Tạo / Cập Nhật Mã Phí Trực Tiếp',
                 feeImportTitle: 'Import Mapping Mã Phí Từ Excel',
                 feeTableTitle: 'Bảng Mapping Danh Mục Mã Phí Hiện Tại',
-                feeTableSubtitle: 'Khi chọn Mã phí lúc nhập liệu, hệ thống tự động điền Heading 1 & Heading 2 tương ứng',
+                feeTableSubtitle: 'Khi chọn Mã phí lúc nhập liệu, hệ thống tự động điền Heading 1, Heading 2 & Heading 3 tương ứng',
                 feeCodeFilterSearchLabel: 'Tìm kiếm Mã phí / Heading / Ghi chú',
                 feeCodeFilterTypeLabel: 'Loại mặc định',
                 feeCodeFilterHeading1Label: 'Heading 1',
@@ -1785,6 +1798,7 @@
                 pieSub: 'Breakdown of expenses & investments in selected month',
                 pieOptExpH1: 'Expense Breakdown (Heading 1)',
                 pieOptExpH2: 'Expense Breakdown (Heading 2)',
+                pieOptExpH3: 'Expense Breakdown (Heading 3)',
                 pieOptInvest: 'Investment Breakdown',
                 pieOptIncome: 'Income Breakdown',
                 noPieData: 'No transactions in this category for the selected month.',
@@ -1856,7 +1870,7 @@
                 feeMappingFormTitle: 'Create / Update Fee Code Directly',
                 feeImportTitle: 'Import Fee Code Mapping from Excel',
                 feeTableTitle: 'Current Fee Code Mapping Catalog',
-                feeTableSubtitle: 'When selecting Fee Code during entry, system autofills Heading 1 & Heading 2',
+                feeTableSubtitle: 'When selecting Fee Code during entry, system autofills Heading 1, 2 & 3',
                 feeCodeFilterSearchLabel: 'Search Fee Code / Heading / Notes',
                 feeCodeFilterTypeLabel: 'Default Type',
                 feeCodeFilterHeading1Label: 'Heading 1',
@@ -1891,19 +1905,19 @@
         // --- Dữ liệu mẫu chuẩn nghiệp vụ Việt Nam ---
         function getDefaultSeedData() {
             const defaultFeeCodes = [
-                { code: 'TN-LUONG', type: 'INCOME', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp', desc: 'Lương cứng và phụ cấp hàng tháng' },
-                { code: 'TN-THUONG', type: 'INCOME', heading1: 'Thu nhập chính', heading2: 'Thưởng hiệu quả / KPI', desc: 'Thưởng dự án, thưởng quý' },
-                { code: 'TN-FREELANCE', type: 'INCOME', heading1: 'Thu nhập phụ', heading2: 'Tư vấn & Freelance', desc: 'Thu nhập ngoài giờ' },
-                { code: 'CP-AN', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', desc: 'Thực phẩm, ăn sáng, ăn trưa, cà phê' },
-                { code: 'CP-NHA', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', desc: 'Hóa đơn cố định hàng tháng' },
-                { code: 'CP-XANG', type: 'EXPENSE', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab', desc: 'Di chuyển hàng ngày' },
-                { code: 'CP-YTE', type: 'EXPENSE', heading1: 'Sức khỏe & Bảo hiểm', heading2: 'Khám bệnh, Thuốc, Gym', desc: 'Chăm sóc sức khỏe' },
-                { code: 'CP-LAPTOP', type: 'EXPENSE', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ', desc: 'Thường dùng cho chi phí trích trước mua Laptop/PC' },
-                { code: 'CP-DULICH', type: 'EXPENSE', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng', desc: 'Trích trước hoặc thực chi đi du lịch' },
-                { code: 'CP-HOC', type: 'EXPENSE', heading1: 'Phát triển bản thân', heading2: 'Khóa học & Sách vở', desc: 'Đào tạo, chứng chỉ chuyên môn' },
-                { code: 'DT-TKBANK', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Gửi tiết kiệm ngân hàng', desc: 'Rút tiền mặt gửi tiết kiệm có kỳ hạn' },
-                { code: 'DT-CHUNGKHOAN', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán', desc: 'Nạp tiền vào tài khoản chứng khoán/ETF' },
-                { code: 'DT-QUYKC', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Quỹ dự phòng khẩn cấp', desc: 'Trích lập quỹ khẩn cấp 6 tháng sinh hoạt' }
+                { code: 'TN-LUONG', type: 'INCOME', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp', heading3: 'Lương cứng hàng tháng', desc: 'Lương cứng và phụ cấp hàng tháng' },
+                { code: 'TN-THUONG', type: 'INCOME', heading1: 'Thu nhập chính', heading2: 'Thưởng hiệu quả / KPI', heading3: 'Thưởng KPI Quý / Dự án', desc: 'Thưởng dự án, thưởng quý' },
+                { code: 'TN-FREELANCE', type: 'INCOME', heading1: 'Thu nhập phụ', heading2: 'Tư vấn & Freelance', heading3: 'Thù lao Dashboard / Thiết kế', desc: 'Thu nhập ngoài giờ' },
+                { code: 'CP-AN', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', heading3: 'Cơm trưa & Siêu thị Co.opmart', desc: 'Thực phẩm, ăn sáng, ăn trưa, cà phê' },
+                { code: 'CP-NHA', type: 'EXPENSE', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', heading3: 'Tiền thuê căn hộ & Dịch vụ', desc: 'Hóa đơn cố định hàng tháng' },
+                { code: 'CP-XANG', type: 'EXPENSE', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab', heading3: 'Xăng xe máy & Gửi xe tháng', desc: 'Di chuyển hàng ngày' },
+                { code: 'CP-YTE', type: 'EXPENSE', heading1: 'Sức khỏe & Bảo hiểm', heading2: 'Khám bệnh, Thuốc, Gym', heading3: 'Thuốc men & Khám định kỳ', desc: 'Chăm sóc sức khỏe' },
+                { code: 'CP-LAPTOP', type: 'EXPENSE', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ', heading3: 'Macbook Pro M-series', desc: 'Thường dùng cho chi phí trích trước mua Laptop/PC' },
+                { code: 'CP-DULICH', type: 'EXPENSE', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng', heading3: 'Quỹ du lịch Đà Lạt', desc: 'Trích trước hoặc thực chi đi du lịch' },
+                { code: 'CP-HOC', type: 'EXPENSE', heading1: 'Phát triển bản thân', heading2: 'Khóa học & Sách vở', heading3: 'Khóa học trực tuyến & Sách', desc: 'Đào tạo, chứng chỉ chuyên môn' },
+                { code: 'DT-TKBANK', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Gửi tiết kiệm ngân hàng', heading3: 'Tiết kiệm online Techcombank 6T', desc: 'Rút tiền mặt gửi tiết kiệm có kỳ hạn' },
+                { code: 'DT-CHUNGKHOAN', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán', heading3: 'Tích sản ETF & Cổ phiếu FPT', desc: 'Nạp tiền vào tài khoản chứng khoán/ETF' },
+                { code: 'DT-QUYKC', type: 'INVEST', heading1: 'Đầu tư & Tích lũy', heading2: 'Quỹ dự phòng khẩn cấp', heading3: 'Dự phòng 6 tháng sinh hoạt', desc: 'Trích lập quỹ khẩn cấp 6 tháng sinh hoạt' }
             ];
 
             const defaultTransactions = [
@@ -1912,25 +1926,25 @@
                     id: 'TX-0901', date: '2026-09-05', description: 'Nhận lương tháng 09/2026',
                     type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 32000000, amount: 32000000,
-                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
+                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp', heading3: 'Lương cứng hàng tháng'
                 },
                 {
                     id: 'TX-0902', date: '2026-09-10', description: 'Tiền thuê nhà, điện nước, Internet tháng 09',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6500000, amount: 6500000,
-                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
+                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', heading3: 'Tiền thuê căn hộ & Dịch vụ'
                 },
                 {
                     id: 'TX-0903', date: '2026-09-18', description: 'Ăn uống & siêu thị cả tháng 09',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 5200000, amount: 5200000,
-                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
+                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', heading3: 'Cơm trưa & Siêu thị Co.opmart'
                 },
                 {
                     id: 'TX-0904', date: '2026-09-25', description: 'Nạp tiền vào TK Chứng khoán SSI mua ETF',
                     type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 8000000, amount: 8000000,
-                    feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán'
+                    feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán', heading3: 'Tích sản ETF & Cổ phiếu FPT'
                 },
 
                 // Dữ liệu Tháng 10/2026 (Tháng trước để đối chiếu so sánh)
@@ -1938,37 +1952,37 @@
                     id: 'TX-1001', date: '2026-10-05', description: 'Nhận lương chính tháng 10/2026',
                     type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 32000000, amount: 32000000,
-                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
+                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp', heading3: 'Lương cứng hàng tháng'
                 },
                 {
                     id: 'TX-1002', date: '2026-10-12', description: 'Thù lao dự án thiết kế Dashboard Freelance',
                     type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 6000000, amount: 6000000,
-                    feeCode: 'TN-FREELANCE', heading1: 'Thu nhập phụ', heading2: 'Tư vấn & Freelance'
+                    feeCode: 'TN-FREELANCE', heading1: 'Thu nhập phụ', heading2: 'Tư vấn & Freelance', heading3: 'Thù lao Dashboard / Thiết kế'
                 },
                 {
                     id: 'TX-1003', date: '2026-10-08', description: 'Thanh toán tiền nhà, điện nước tháng 10',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6800000, amount: 6800000,
-                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
+                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', heading3: 'Tiền thuê căn hộ & Dịch vụ'
                 },
                 {
                     id: 'TX-1004', date: '2026-10-15', description: 'Chi phí ăn uống, đi chợ tháng 10',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 5800000, amount: 5800000,
-                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
+                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', heading3: 'Cơm trưa & Siêu thị Co.opmart'
                 },
                 {
                     id: 'TX-1005', date: '2026-10-20', description: 'Trích trước tiền mua Laptop làm việc (Đợt 1)',
                     type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 1, unitPrice: 5000000, amount: 5000000,
-                    feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ'
+                    feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ', heading3: 'Macbook Pro M-series'
                 },
                 {
                     id: 'TX-1006', date: '2026-10-25', description: 'Gửi tiết kiệm online Techcombank kỳ hạn 6 tháng',
                     type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 10000000, amount: 10000000,
-                    feeCode: 'DT-TKBANK', heading1: 'Đầu tư & Tích lũy', heading2: 'Gửi tiết kiệm ngân hàng'
+                    feeCode: 'DT-TKBANK', heading1: 'Đầu tư & Tích lũy', heading2: 'Gửi tiết kiệm ngân hàng', heading3: 'Tiết kiệm online Techcombank 6T'
                 },
 
                 // Dữ liệu Tháng 11/2026 (Tháng hiện tại)
@@ -1976,55 +1990,55 @@
                     id: 'TX-1101', date: '2026-11-05', description: 'Nhận lương tháng 11/2026',
                     type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 35000000, amount: 35000000,
-                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp'
+                    feeCode: 'TN-LUONG', heading1: 'Thu nhập chính', heading2: 'Tiền lương & Phụ cấp', heading3: 'Lương cứng hàng tháng'
                 },
                 {
                     id: 'TX-1102', date: '2026-11-06', description: 'Thưởng hoàn thành vượt KPI Quý',
                     type: 'INCOME', expenseKind: null, investDirection: null,
                     quantity: 1, unitPrice: 8000000, amount: 8000000,
-                    feeCode: 'TN-THUONG', heading1: 'Thu nhập chính', heading2: 'Thưởng hiệu quả / KPI'
+                    feeCode: 'TN-THUONG', heading1: 'Thu nhập chính', heading2: 'Thưởng hiệu quả / KPI', heading3: 'Thưởng KPI Quý / Dự án'
                 },
                 {
                     id: 'TX-1103', date: '2026-11-06', description: 'Tiền thuê nhà, phí quản lý & Internet tháng 11',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 6700000, amount: 6700000,
-                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net'
+                    feeCode: 'CP-NHA', heading1: 'Chi phí sinh hoạt', heading2: 'Thuê nhà, Điện, Nước, Net', heading3: 'Tiền thuê căn hộ & Dịch vụ'
                 },
                 {
                     id: 'TX-1104', date: '2026-11-07', description: 'Đi siêu thị Co.opmart & ăn uống tuần đầu',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 3400000, amount: 3400000,
-                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ'
+                    feeCode: 'CP-AN', heading1: 'Chi phí sinh hoạt', heading2: 'Ăn uống & Đi chợ', heading3: 'Cơm trưa & Siêu thị Co.opmart'
                 },
                 {
                     id: 'TX-1105', date: '2026-11-07', description: 'Đổ xăng & bảo dưỡng xe định kỳ',
                     type: 'EXPENSE', expenseKind: 'ACTUAL', investDirection: null,
                     quantity: 1, unitPrice: 850000, amount: 850000,
-                    feeCode: 'CP-XANG', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab'
+                    feeCode: 'CP-XANG', heading1: 'Chi phí đi lại', heading2: 'Xăng xe, Gửi xe, Grab', heading3: 'Xăng xe máy & Gửi xe tháng'
                 },
                 {
                     id: 'TX-1106', date: '2026-11-08', description: 'Trích trước tiền mua Laptop Macbook Pro (Đợt 2)',
                     type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 1, unitPrice: 7000000, amount: 7000000,
-                    feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ'
+                    feeCode: 'CP-LAPTOP', heading1: 'Mua sắm thiết bị lớn', heading2: 'Máy tính & Công nghệ', heading3: 'Macbook Pro M-series'
                 },
                 {
                     id: 'TX-1107', date: '2026-11-08', description: 'Trích trước quỹ du lịch Đà Lạt cuối năm',
                     type: 'EXPENSE', expenseKind: 'ACCRUED', investDirection: null,
                     quantity: 2, unitPrice: 2000000, amount: 4000000,
-                    feeCode: 'CP-DULICH', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng'
+                    feeCode: 'CP-DULICH', heading1: 'Giải trí & Tinh thần', heading2: 'Du lịch & Nghỉ dưỡng', heading3: 'Quỹ du lịch Đà Lạt'
                 },
                 {
                     id: 'TX-1108', date: '2026-11-08', description: 'Chuyển tiền vào TK Chứng khoán VPS tích sản cổ phiếu',
                     type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 10000000, amount: 10000000,
-                    feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán'
+                    feeCode: 'DT-CHUNGKHOAN', heading1: 'Đầu tư & Tích lũy', heading2: 'Tài khoản chứng khoán', heading3: 'Tích sản ETF & Cổ phiếu FPT'
                 },
                 {
                     id: 'TX-1109', date: '2026-11-08', description: 'Bỏ thêm vào Quỹ dự phòng khẩn cấp',
                     type: 'INVEST', expenseKind: null, investDirection: 'OUT',
                     quantity: 1, unitPrice: 5000000, amount: 5000000,
-                    feeCode: 'DT-QUYKC', heading1: 'Đầu tư & Tích lũy', heading2: 'Quỹ dự phòng khẩn cấp'
+                    feeCode: 'DT-QUYKC', heading1: 'Đầu tư & Tích lũy', heading2: 'Quỹ dự phòng khẩn cấp', heading3: 'Dự phòng 6 tháng sinh hoạt'
                 }
             ];
 
@@ -2165,7 +2179,7 @@
 
             const fcSearchInput = document.getElementById('filterFeeCodeSearch');
             if (fcSearchInput) {
-                fcSearchInput.placeholder = isEn ? 'Type code, heading 1, heading 2, notes...' : 'Gõ mã phí, heading 1, heading 2, ghi chú...';
+                fcSearchInput.placeholder = isEn ? 'Type code, heading 1, 2, 3, notes...' : 'Gõ mã phí, heading 1, 2, 3, ghi chú...';
             }
 
             const monthSelect = document.getElementById('globalMonthFilter');
@@ -2185,10 +2199,16 @@
             const pieSelect = document.getElementById('pieBreakdownMode');
             if (pieSelect) {
                 const curVal = pieSelect.value;
-                pieSelect.options[0].textContent = t('pieOptExpH1');
-                pieSelect.options[1].textContent = t('pieOptExpH2');
-                pieSelect.options[2].textContent = t('pieOptInvest');
-                pieSelect.options[3].textContent = t('pieOptIncome');
+                const optMap = {
+                    EXPENSE: t('pieOptExpH1'),
+                    EXPENSE_H2: t('pieOptExpH2'),
+                    EXPENSE_H3: t('pieOptExpH3'),
+                    INVEST: t('pieOptInvest'),
+                    INCOME: t('pieOptIncome')
+                };
+                Array.from(pieSelect.options).forEach(opt => {
+                    if (optMap[opt.value]) opt.textContent = optMap[opt.value];
+                });
                 pieSelect.value = curVal;
             }
 
@@ -2263,6 +2283,21 @@
             } catch (e) {
                 console.error('Lỗi đọc localStorage:', e);
                 appState = getDefaultSeedData();
+            }
+
+            // Đồng bộ fallback heading3 cho dữ liệu cũ nếu chưa có
+            if (Array.isArray(appState.feeCodes)) {
+                appState.feeCodes.forEach(fc => {
+                    if (fc.heading3 === undefined || fc.heading3 === null) fc.heading3 = '';
+                });
+            }
+            if (Array.isArray(appState.transactions)) {
+                appState.transactions.forEach(tx => {
+                    if (tx.heading3 === undefined || tx.heading3 === null) {
+                        const matchedFc = Array.isArray(appState.feeCodes) ? appState.feeCodes.find(fc => fc.code === tx.feeCode) : null;
+                        tx.heading3 = (matchedFc && matchedFc.heading3) ? matchedFc.heading3 : '';
+                    }
+                });
             }
         }
 
@@ -2352,6 +2387,21 @@
                                 transactions: candidateData.transactions,
                                 manualAssets: Array.isArray(candidateData.manualAssets) ? candidateData.manualAssets : []
                             };
+
+                            // Đồng bộ fallback heading3
+                            if (Array.isArray(appState.feeCodes)) {
+                                appState.feeCodes.forEach(fc => {
+                                    if (fc.heading3 === undefined || fc.heading3 === null) fc.heading3 = '';
+                                });
+                            }
+                            if (Array.isArray(appState.transactions)) {
+                                appState.transactions.forEach(tx => {
+                                    if (tx.heading3 === undefined || tx.heading3 === null) {
+                                        const matchedFc = Array.isArray(appState.feeCodes) ? appState.feeCodes.find(fc => fc.code === tx.feeCode) : null;
+                                        tx.heading3 = (matchedFc && matchedFc.heading3) ? matchedFc.heading3 : '';
+                                    }
+                                });
+                            }
 
                             saveStateToStorage();
                             applyThemeUI();
@@ -2817,6 +2867,9 @@
                 } else if (mode === 'EXPENSE_H2' && tx.type === 'EXPENSE') {
                     const key = tx.heading2 || 'Chưa phân loại';
                     grouped[key] = (grouped[key] || 0) + Number(tx.amount);
+                } else if (mode === 'EXPENSE_H3' && tx.type === 'EXPENSE') {
+                    const key = tx.heading3 || 'Chưa phân loại';
+                    grouped[key] = (grouped[key] || 0) + Number(tx.amount);
                 } else if (mode === 'INVEST' && tx.type === 'INVEST') {
                     const key = tx.heading2 || tx.heading1 || 'Đầu tư';
                     grouped[key] = (grouped[key] || 0) + Number(tx.amount);
@@ -3078,7 +3131,7 @@
                 if (dateFilter && tx.date !== dateFilter) return false;
                 if (search) {
                     const dateVN = formatDateVN(tx.date);
-                    const hay = `${tx.description} ${tx.feeCode} ${tx.heading1} ${tx.heading2} ${tx.date} ${dateVN}`.toLowerCase();
+                    const hay = `${tx.description} ${tx.feeCode} ${tx.heading1} ${tx.heading2} ${tx.heading3 || ''} ${tx.date} ${dateVN}`.toLowerCase();
                     const normHay = removeVietnameseTones(hay);
                     if (!hay.includes(search) && !normHay.includes(normSearch)) return false;
                 }
@@ -3139,6 +3192,7 @@
                             <span class="font-bold text-slate-800">${escapeHtml(tx.heading1)}</span>
                             <span class="text-slate-400 mx-1">/</span>
                             <span>${escapeHtml(tx.heading2)}</span>
+                            ${tx.heading3 ? `<span class="text-slate-400 mx-1">/</span><span class="text-slate-500 italic">${escapeHtml(tx.heading3)}</span>` : ''}
                         </td>
                         <td class="py-2.5 px-3 text-center font-semibold">${formatNumberStandard(tx.quantity || 1)}</td>
                         <td class="py-2.5 px-3 text-right font-extrabold ${getAmountColorClass(tx)} whitespace-nowrap">${formatVND(tx.amount)}</td>
@@ -3442,7 +3496,7 @@
                 // Lọc theo từ khóa tìm kiếm (diễn giải, mã phí, heading, và ngày dd/mm/yyyy hoặc yyyy-mm-dd)
                 if (search) {
                     const dateVN = formatDateVN(tx.date);
-                    const hay = `${tx.description} ${tx.feeCode} ${tx.heading1} ${tx.heading2} ${tx.date} ${dateVN}`.toLowerCase();
+                    const hay = `${tx.description} ${tx.feeCode} ${tx.heading1} ${tx.heading2} ${tx.heading3 || ''} ${tx.date} ${dateVN}`.toLowerCase();
                     const normHay = removeVietnameseTones(hay);
                     if (!hay.includes(search) && !normHay.includes(normSearch)) return false;
                 }
@@ -3549,7 +3603,7 @@
                 if (dateFrom && dateTo && dateFrom > dateTo) {
                     msg = 'Lỗi lọc ngày: "Từ ngày" không được lớn hơn "Đến ngày". Vui lòng chọn lại khoảng ngày hợp lệ.';
                 }
-                tbody.innerHTML = `<tr><td colspan="11" class="py-8 text-center text-slate-400 font-medium">${msg}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="12" class="py-8 text-center text-slate-400 font-medium">${msg}</td></tr>`;
                 updateBulkActionBarUI();
                 return;
             }
@@ -3570,6 +3624,7 @@
                         <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded bg-slate-100 font-mono font-bold text-slate-800">${escapeHtml(tx.feeCode)}</span></td>
                         <td class="py-2.5 px-3 font-semibold text-slate-700">${escapeHtml(tx.heading1)}</td>
                         <td class="py-2.5 px-3 text-slate-600">${escapeHtml(tx.heading2)}</td>
+                        <td class="py-2.5 px-3 text-slate-600">${escapeHtml(tx.heading3 || '')}</td>
                         <td class="py-2.5 px-3 text-center font-bold">${formatNumberStandard(tx.quantity || 1)}</td>
                         <td class="py-2.5 px-3 text-right font-extrabold ${getAmountColorClass(tx)} whitespace-nowrap">${formatVND(tx.amount)}</td>
                         <td class="py-2.5 px-3 text-center whitespace-nowrap">
@@ -3902,12 +3957,14 @@
                 inputEl.value = chosen.code;
                 document.getElementById('txHeading1').value = chosen.heading1;
                 document.getElementById('txHeading2').value = chosen.heading2;
+                document.getElementById('txHeading3').value = chosen.heading3 || '';
             } else if (selectedCode) {
                 inputEl.value = selectedCode;
             } else {
                 inputEl.value = '';
                 document.getElementById('txHeading1').value = '';
                 document.getElementById('txHeading2').value = '';
+                document.getElementById('txHeading3').value = '';
             }
         }
 
@@ -3944,6 +4001,7 @@
             inputEl.value = '';
             document.getElementById('txHeading1').value = '';
             document.getElementById('txHeading2').value = '';
+            document.getElementById('txHeading3').value = '';
             renderFeeCodeSuggestions('');
             document.getElementById('feeCodeSuggestionsList').classList.remove('hidden');
             inputEl.focus();
@@ -3957,6 +4015,7 @@
             if (exact) {
                 document.getElementById('txHeading1').value = exact.heading1;
                 document.getElementById('txHeading2').value = exact.heading2;
+                document.getElementById('txHeading3').value = exact.heading3 || '';
             }
 
             renderFeeCodeSuggestions(rawQuery);
@@ -3978,7 +4037,7 @@
 
             currentFilteredFeeCodes = sorted.filter(fc => {
                 if (!qNorm) return true;
-                const haystack = removeVietnameseTones(`${fc.code} ${fc.heading1} ${fc.heading2} ${fc.desc || ''}`);
+                const haystack = removeVietnameseTones(`${fc.code} ${fc.heading1} ${fc.heading2} ${fc.heading3 || ''} ${fc.desc || ''}`);
                 return haystack.includes(qNorm);
             });
 
@@ -4021,7 +4080,7 @@
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-2">
                                 <span class="font-mono font-extrabold text-xs text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">${escapeHtml(fc.code)}</span>
-                                <span class="font-bold text-xs text-slate-800 truncate">${escapeHtml(fc.heading2)}</span>
+                                <span class="font-bold text-xs text-slate-800 truncate">${escapeHtml(fc.heading2)}${fc.heading3 ? ' &bull; ' + escapeHtml(fc.heading3) : ''}</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mt-1 truncate">
                                 <i class="fa-regular fa-folder-open mr-1 text-slate-400"></i>${escapeHtml(fc.heading1)}
@@ -4096,6 +4155,7 @@
                 inputEl.value = found.code;
                 document.getElementById('txHeading1').value = found.heading1;
                 document.getElementById('txHeading2').value = found.heading2;
+                document.getElementById('txHeading3').value = found.heading3 || '';
             } else {
                 inputEl.value = code;
             }
@@ -4132,6 +4192,7 @@
             const code = document.getElementById('quickFcCode').value.trim().toUpperCase();
             const h1 = document.getElementById('quickFcH1').value.trim();
             const h2 = document.getElementById('quickFcH2').value.trim();
+            const h3 = document.getElementById('quickFcH3').value.trim();
             const type = document.getElementById('txType').value;
 
             if (!code || !h1 || !h2) {
@@ -4141,9 +4202,9 @@
 
             const existingIdx = appState.feeCodes.findIndex(f => f.code === code);
             if (existingIdx >= 0) {
-                appState.feeCodes[existingIdx] = { code, type, heading1: h1, heading2: h2, desc: 'Tạo nhanh' };
+                appState.feeCodes[existingIdx] = { code, type, heading1: h1, heading2: h2, heading3: h3, desc: 'Tạo nhanh' };
             } else {
-                appState.feeCodes.push({ code, type, heading1: h1, heading2: h2, desc: 'Tạo nhanh' });
+                appState.feeCodes.push({ code, type, heading1: h1, heading2: h2, heading3: h3, desc: 'Tạo nhanh' });
             }
 
             saveStateToStorage();
@@ -4152,6 +4213,7 @@
             document.getElementById('quickFcCode').value = '';
             document.getElementById('quickFcH1').value = '';
             document.getElementById('quickFcH2').value = '';
+            document.getElementById('quickFcH3').value = '';
             showToast(`Đã tạo và chọn mã phí ${code}!`, 'success');
         }
 
@@ -4167,6 +4229,7 @@
             const feeCode = document.getElementById('txFeeCodeInput').value.trim().toUpperCase();
             const heading1 = document.getElementById('txHeading1').value.trim();
             const heading2 = document.getElementById('txHeading2').value.trim();
+            const heading3 = document.getElementById('txHeading3').value.trim();
 
             if (!date || !description || amount <= 0 || !feeCode || !heading1 || !heading2) {
                 showToast('Vui lòng kiểm tra lại Ngày, Diễn giải, Mã phí và Số tiền (> 0)!', 'warning');
@@ -4180,6 +4243,7 @@
                     type,
                     heading1,
                     heading2,
+                    heading3,
                     desc: 'Tự động lưu khi nhập bút toán'
                 });
             }
@@ -4206,7 +4270,8 @@
                 amount,
                 feeCode,
                 heading1,
-                heading2
+                heading2,
+                heading3
             };
 
             if (editId) {
@@ -4247,6 +4312,7 @@
             populateModalFeeCodeDropdown(tx.type, tx.feeCode);
             document.getElementById('txHeading1').value = tx.heading1;
             document.getElementById('txHeading2').value = tx.heading2;
+            document.getElementById('txHeading3').value = tx.heading3 || '';
             closeFeeCodeSuggestions();
 
             if (tx.type === 'EXPENSE') {
@@ -4463,7 +4529,7 @@
             const filtered = appState.feeCodes.filter(fc => {
                 // Lọc theo từ khóa tìm kiếm
                 if (search) {
-                    const hay = `${fc.code} ${fc.heading1} ${fc.heading2} ${fc.desc || ''}`.toLowerCase();
+                    const hay = `${fc.code} ${fc.heading1} ${fc.heading2} ${fc.heading3 || ''} ${fc.desc || ''}`.toLowerCase();
                     const normHay = removeVietnameseTones(hay);
                     if (!hay.includes(search) && !normHay.includes(normSearch)) return false;
                 }
@@ -4498,7 +4564,7 @@
                 const noDataMsg = appState.language === 'en'
                     ? 'No fee codes match the filter.'
                     : 'Không tìm thấy mã phí nào phù hợp với bộ lọc.';
-                tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400 font-medium">${noDataMsg}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-400 font-medium">${noDataMsg}</td></tr>`;
                 updateFeeCodeBulkActionBarUI();
                 return;
             }
@@ -4516,6 +4582,7 @@
                         <td class="py-2.5 px-3">${typeBadge[fc.type] || fc.type}</td>
                         <td class="py-2.5 px-3 font-bold text-slate-800">${escapeHtml(fc.heading1)}</td>
                         <td class="py-2.5 px-3 font-semibold text-slate-700">${escapeHtml(fc.heading2)}</td>
+                        <td class="py-2.5 px-3 font-medium text-slate-600">${escapeHtml(fc.heading3 || '')}</td>
                         <td class="py-2.5 px-3 text-slate-500">${escapeHtml(fc.desc || '')}</td>
                         <td class="py-2.5 px-3 text-center whitespace-nowrap">
                             <button onclick="fillFeeCodeForm(decodeURIComponent('${safeCodeEncoded}'))" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer" title="Sửa"><i class="fa-solid fa-pen"></i></button>
@@ -4691,16 +4758,17 @@
             const type = document.getElementById('fcType').value;
             const heading1 = document.getElementById('fcHeading1').value.trim();
             const heading2 = document.getElementById('fcHeading2').value.trim();
+            const heading3 = document.getElementById('fcHeading3').value.trim();
             const desc = document.getElementById('fcDesc').value.trim();
 
-            if (!code || !heading1 || !heading2) return;
+            if (!code || !heading1 || !heading2 || !heading3) return;
 
             const existingIdx = appState.feeCodes.findIndex(f => f.code === code);
             if (existingIdx >= 0) {
-                appState.feeCodes[existingIdx] = { code, type, heading1, heading2, desc };
+                appState.feeCodes[existingIdx] = { code, type, heading1, heading2, heading3, desc };
                 showToast(`Đã cập nhật Mã phí ${code}!`, 'success');
             } else {
-                appState.feeCodes.push({ code, type, heading1, heading2, desc });
+                appState.feeCodes.push({ code, type, heading1, heading2, heading3, desc });
                 showToast(`Đã thêm mới Mã phí ${code}!`, 'success');
             }
 
@@ -4716,6 +4784,7 @@
             document.getElementById('fcType').value = fc.type;
             document.getElementById('fcHeading1').value = fc.heading1;
             document.getElementById('fcHeading2').value = fc.heading2;
+            document.getElementById('fcHeading3').value = fc.heading3 || '';
             document.getElementById('fcDesc').value = fc.desc || '';
             document.getElementById('fcCode')?.focus();
         }
@@ -4740,6 +4809,7 @@
                 'Loai': fc.type === 'INCOME' ? 'Thu nhập' : (fc.type === 'INVEST' ? 'Đầu tư' : 'Chi phí'),
                 'Heading1': fc.heading1,
                 'Heading2': fc.heading2,
+                'Heading3': fc.heading3 || '',
                 'MoTa': fc.desc || ''
             }));
 
@@ -4769,22 +4839,35 @@
                         const rawType = String(r['Loai'] || r['Loại'] || r['Type'] || 'Chi phí').trim().toLowerCase();
                         const h1 = String(r['Heading1'] || r['Heading 1'] || r['Heading 1 mã phí'] || '').trim();
                         const h2 = String(r['Heading2'] || r['Heading 2'] || r['Heading 2 mã phí'] || '').trim();
+                        const h3 = String(r['Heading3'] || r['Heading 3'] || r['Heading 3 mã phí'] || r['Heading3_MaPhi'] || '').trim();
                         const desc = String(r['MoTa'] || r['Mô tả'] || '').trim();
 
                         if (code && h1 && h2) {
                             let type = 'EXPENSE';
-                            if (rawType.includes('thu') || rawType.includes('income')) type = 'INCOME';
+                            if (rawType.includes('thu') || rawType.includes('income') || rawType.includes('revenue')) type = 'INCOME';
                             else if (rawType.includes('đầu tư') || rawType.includes('dau tu') || rawType.includes('invest')) type = 'INVEST';
 
                             const idx = appState.feeCodes.findIndex(f => f.code === code);
                             if (idx >= 0) {
-                                appState.feeCodes[idx] = { code, type, heading1: h1, heading2: h2, desc };
+                                appState.feeCodes[idx] = { code, type, heading1: h1, heading2: h2, heading3: h3, desc };
                             } else {
-                                appState.feeCodes.push({ code, type, heading1: h1, heading2: h2, desc });
+                                appState.feeCodes.push({ code, type, heading1: h1, heading2: h2, heading3: h3, desc });
                             }
                             importedCount++;
                         }
                     });
+
+                    saveStateToStorage();
+                    refreshAllViews();
+                    event.target.value = '';
+                    showToast(`Đã import thành công ${importedCount} Mã phí từ file Excel!`, 'success');
+                } catch (err) {
+                    console.error(err);
+                    showToast('Không thể đọc file Excel. Vui lòng kiểm tra đúng định dạng mẫu!', 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
 
                     saveStateToStorage();
                     refreshAllViews();
@@ -4814,7 +4897,8 @@
                         'ThanhTien_VND': 35000000,
                         'MaPhi': 'TN-LUONG',
                         'Heading1_MaPhi': 'Thu nhập chính',
-                        'Heading2_MaPhi': 'Tiền lương & Phụ cấp'
+                        'Heading2_MaPhi': 'Tiền lương & Phụ cấp',
+                        'Heading3_MaPhi': 'Lương cứng hàng tháng'
                     },
                     {
                         'Ngay': '10/11/2026',
@@ -4826,7 +4910,8 @@
                         'ThanhTien_VND': 2500000,
                         'MaPhi': 'CP-NHA',
                         'Heading1_MaPhi': 'Chi phí sinh hoạt',
-                        'Heading2_MaPhi': 'Thuê nhà, Điện, Nước, Net'
+                        'Heading2_MaPhi': 'Thuê nhà, Điện, Nước, Net',
+                        'Heading3_MaPhi': 'Tiền thuê căn hộ & Dịch vụ'
                     },
                     {
                         'Ngay': '15/11/2026',
@@ -4838,7 +4923,8 @@
                         'ThanhTien_VND': 5000000,
                         'MaPhi': 'CP-LAPTOP',
                         'Heading1_MaPhi': 'Mua sắm thiết bị lớn',
-                        'Heading2_MaPhi': 'Máy tính & Công nghệ'
+                        'Heading2_MaPhi': 'Máy tính & Công nghệ',
+                        'Heading3_MaPhi': 'Macbook Pro M-series'
                     },
                     {
                         'Ngay': '20/11/2026',
@@ -4850,7 +4936,8 @@
                         'ThanhTien_VND': 10000000,
                         'MaPhi': 'DT-CHUNGKHOAN',
                         'Heading1_MaPhi': 'Đầu tư & Tích lũy',
-                        'Heading2_MaPhi': 'Tài khoản chứng khoán'
+                        'Heading2_MaPhi': 'Tài khoản chứng khoán',
+                        'Heading3_MaPhi': 'Tích sản ETF & Cổ phiếu FPT'
                     },
                     {
                         'Ngay': '25/11/2026',
@@ -4862,7 +4949,8 @@
                         'ThanhTien_VND': 1500000,
                         'MaPhi': 'DT-CHUNGKHOAN',
                         'Heading1_MaPhi': 'Đầu tư & Tích lũy',
-                        'Heading2_MaPhi': 'Tài khoản chứng khoán'
+                        'Heading2_MaPhi': 'Tài khoản chứng khoán',
+                        'Heading3_MaPhi': 'Tích sản ETF & Cổ phiếu FPT'
                     }
                 ];
 
@@ -4876,6 +4964,7 @@
                     'LoaiMacDinh': fc.type === 'INCOME' ? 'Thu nhập' : (fc.type === 'INVEST' ? 'Đầu tư' : 'Chi phí'),
                     'Heading1_MaPhi': fc.heading1,
                     'Heading2_MaPhi': fc.heading2,
+                    'Heading3_MaPhi': fc.heading3 || '',
                     'MoTa': fc.desc || ''
                 }));
                 const wsFc = XLSX.utils.json_to_sheet(fcRefRows);
@@ -5050,10 +5139,12 @@
 
                         let heading1 = String(getRowField(r, ['Heading1_MaPhi', 'Heading1', 'Heading 1', 'Heading 1 mã phí']) || '').trim();
                         let heading2 = String(getRowField(r, ['Heading2_MaPhi', 'Heading2', 'Heading 2', 'Heading 2 mã phí']) || '').trim();
+                        let heading3 = String(getRowField(r, ['Heading3_MaPhi', 'Heading3', 'Heading 3', 'Heading 3 mã phí']) || '').trim();
 
                         if (matchedFeeObj) {
                             if (!heading1) heading1 = matchedFeeObj.heading1;
                             if (!heading2) heading2 = matchedFeeObj.heading2;
+                            if (!heading3) heading3 = matchedFeeObj.heading3 || '';
                         } else {
                             if (!feeCode) {
                                 feeCode = type === 'INCOME' ? 'TN-KHAC' : (type === 'INVEST' ? 'DT-KHAC' : 'CP-KHAC');
@@ -5064,6 +5155,9 @@
                             if (!heading2) {
                                 heading2 = 'Phát sinh chung';
                             }
+                            if (!heading3) {
+                                heading3 = '';
+                            }
 
                             // Tự động lưu mã phí mới vào danh mục nếu chưa tồn tại
                             const alreadyExists = appState.feeCodes.some(fc => fc.code.toUpperCase() === feeCode);
@@ -5073,6 +5167,7 @@
                                     type,
                                     heading1,
                                     heading2,
+                                    heading3,
                                     desc: 'Tự động thêm khi Import Excel bút toán'
                                 });
                                 newFeeCodesAdded++;
@@ -5092,7 +5187,8 @@
                             amount,
                             feeCode,
                             heading1,
-                            heading2
+                            heading2,
+                            heading3
                         });
                     });
 
@@ -5173,7 +5269,8 @@
                     'ThanhTien_VND': tx.amount,
                     'MaPhi': tx.feeCode,
                     'Heading1_MaPhi': tx.heading1,
-                    'Heading2_MaPhi': tx.heading2
+                    'Heading2_MaPhi': tx.heading2,
+                    'Heading3_MaPhi': tx.heading3 || ''
                 }));
                 const wsTx = XLSX.utils.json_to_sheet(txRows);
                 XLSX.utils.book_append_sheet(wb, wsTx, 'So_Giao_Dich_Thu_Chi');
@@ -5194,6 +5291,7 @@
                     'MaPhi': tx.feeCode,
                     'Heading1': tx.heading1,
                     'Heading2': tx.heading2,
+                    'Heading3': tx.heading3 || '',
                     'SoLuong': tx.quantity || 1,
                     'SoTienDangGiu_VND': tx.amount,
                     'TrangThai': 'Chưa thực chi'
@@ -5206,6 +5304,7 @@
                     'Loai': fc.type,
                     'Heading1': fc.heading1,
                     'Heading2': fc.heading2,
+                    'Heading3': fc.heading3 || '',
                     'MoTa': fc.desc || ''
                 }));
                 const wsFc = XLSX.utils.json_to_sheet(fcRows);

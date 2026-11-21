@@ -1508,20 +1508,30 @@
                     <input type="text" id="txDescription" required placeholder="VD: Nhận lương tháng 11, Trích trước mua Macbook Pro, Chuyển tiền đầu tư chứng khoán..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
-                <!-- Hàng 3: Số lượng, Đơn giá / Số tiền & Tổng Thành Tiền -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">4. Số Lượng <span class="text-rose-500">*</span></label>
-                        <input type="text" inputmode="decimal" id="txQuantity" value="1" placeholder="VD: 1 hoặc 1.5" oninput="handleDecimalInputFormat(this); recalcTotalAmount()" required class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <!-- Hàng 3: Số tiền giao dịch (Nhập trực tiếp số tiền cuối cùng) -->
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold text-slate-700">
+                            <span id="txAmountLabel">4. Số tiền giao dịch (VNĐ)</span> <span class="text-rose-500">*</span>
+                        </label>
+                        <span id="txAmountPreview" class="text-xs font-extrabold text-indigo-600">0 ₫</span>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Đơn giá / Số tiền (VNĐ) <span class="text-rose-500">*</span></label>
-                        <input type="text" inputmode="decimal" id="txUnitPrice" placeholder="VD: 500,000" oninput="handleDecimalInputFormat(this); recalcTotalAmount()" required class="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            inputmode="decimal"
+                            id="txAmount"
+                            required
+                            placeholder="VD: 1,500,000"
+                            oninput="handleDecimalInputFormat(this); handleTxAmountInput(this)"
+                            class="w-full pl-3.5 pr-14 py-2.5 rounded-xl bg-white border border-slate-300 text-sm sm:text-base font-extrabold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition shadow-2xs"
+                        >
+                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">VNĐ</span>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-indigo-700 mb-1">Tổng Thành Tiền (VNĐ)</label>
-                        <input type="text" id="txTotalDisplay" readonly value="0 ₫" class="w-full px-3 py-2 rounded-xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm font-extrabold text-indigo-700">
-                    </div>
+                    <!-- Hidden inputs để tương thích an toàn -->
+                    <input type="hidden" id="txQuantity" value="1">
+                    <input type="hidden" id="txUnitPrice" value="0">
+                    <input type="hidden" id="txTotalDisplay" value="0 ₫">
                 </div>
 
                 <!-- Hàng 4: Mã Phí (Có gõ tay tìm kiếm gợi ý thông minh) & Mapping Heading 1, Heading 2, Heading 3 -->
@@ -1956,6 +1966,7 @@
                 btnBulkDeleteFeeCodes: 'Xóa các mã phí đã chọn',
                 modalAddTxTitle: 'Tạo Bút Toán Thu / Chi / Đầu Tư Mới',
                 modalEditTxTitle: 'Chỉnh Sửa Bút Toán',
+                modalAmountLabel: '4. Số tiền giao dịch (VNĐ)',
                 themeLightText: 'Sáng (Light)',
                 themeDarkText: 'Blue Dark',
                 convertModalTitle: 'Chuyển Khoản Trích Trước Sang Thực Chi',
@@ -2108,6 +2119,7 @@
                 btnBulkDeleteFeeCodes: 'Delete Selected Fee Codes',
                 modalAddTxTitle: 'Create Income / Expense / Investment Entry',
                 modalEditTxTitle: 'Edit Transaction Entry',
+                modalAmountLabel: '4. Transaction Amount (VND)',
                 themeLightText: 'Light Mode',
                 themeDarkText: 'Blue Dark',
                 convertModalTitle: 'Convert Accrued Expense to Actual Expense',
@@ -2421,8 +2433,14 @@
             setTxt('btnDownloadTxTemplateText', t('btnDownloadTxTemplate'));
             setTxt('btnImportTxExcelText', t('btnImportTxExcel'));
             setTxt('btnAddNewTxLabel', t('btnAddNewTx'));
+            setTxt('txAmountLabel', t('modalAmountLabel'));
             setTxt('feeCatalogTitle', t('feeTableTitle'));
             setTxt('feeCatalogSubtitle', t('feeTableSubtitle'));
+
+            const txAmountInput = document.getElementById('txAmount');
+            if (txAmountInput) {
+                txAmountInput.placeholder = isEn ? 'e.g., 1,500,000' : 'VD: 1,500,000';
+            }
 
             setTxt('convertModalTitle', t('convertModalTitle'));
             setTxt('convertModalSub', t('convertModalSub'));
@@ -4418,9 +4436,14 @@
             document.getElementById('txDateText').value = formatDateVN(iso);
 
             document.getElementById('txDescription').value = '';
-            document.getElementById('txQuantity').value = 1;
-            document.getElementById('txUnitPrice').value = '';
-            document.getElementById('txTotalDisplay').value = '0 ₫';
+            const amountInput = document.getElementById('txAmount');
+            if (amountInput) amountInput.value = '';
+            const previewEl = document.getElementById('txAmountPreview');
+            if (previewEl) previewEl.textContent = '0 ₫';
+
+            if (document.getElementById('txQuantity')) document.getElementById('txQuantity').value = 1;
+            if (document.getElementById('txUnitPrice')) document.getElementById('txUnitPrice').value = '';
+            if (document.getElementById('txTotalDisplay')) document.getElementById('txTotalDisplay').value = '0 ₫';
 
             selectTxType('EXPENSE');
             document.querySelector('input[name="expenseKind"][value="ACTUAL"]').checked = true;
@@ -4729,10 +4752,20 @@
             document.getElementById('quickFcH1').focus();
         }
 
+        function handleTxAmountInput(inputEl) {
+            if (!inputEl) inputEl = document.getElementById('txAmount');
+            if (!inputEl) return;
+            const val = parseFormattedNumber(inputEl.value);
+            const previewEl = document.getElementById('txAmountPreview');
+            if (previewEl) {
+                previewEl.textContent = formatVND(val);
+            }
+            if (document.getElementById('txUnitPrice')) document.getElementById('txUnitPrice').value = inputEl.value;
+            if (document.getElementById('txTotalDisplay')) document.getElementById('txTotalDisplay').value = formatVND(val);
+        }
+
         function recalcTotalAmount() {
-            const qty = parseFormattedNumber(document.getElementById('txQuantity').value);
-            const price = parseFormattedNumber(document.getElementById('txUnitPrice').value);
-            document.getElementById('txTotalDisplay').value = formatVND(qty * price);
+            handleTxAmountInput();
         }
 
         function toggleQuickAddFeeCode() {
@@ -4782,9 +4815,10 @@
             const date = document.getElementById('txDatePicker').value;
             const type = document.getElementById('txType').value;
             const description = document.getElementById('txDescription').value.trim();
-            const quantity = parseFormattedNumber(document.getElementById('txQuantity').value) || 1;
-            const unitPrice = parseFormattedNumber(document.getElementById('txUnitPrice').value) || 0;
-            const amount = Number((quantity * unitPrice).toFixed(2));
+            const amountInput = document.getElementById('txAmount');
+            const amount = amountInput ? parseFormattedNumber(amountInput.value) : (parseFormattedNumber(document.getElementById('txUnitPrice')?.value) || 0);
+            const quantity = 1;
+            const unitPrice = amount;
             const feeCode = document.getElementById('txFeeCodeInput').value.trim().toUpperCase();
             const heading1 = document.getElementById('txHeading1').value.trim();
             const heading2 = document.getElementById('txHeading2').value.trim();
@@ -4863,9 +4897,16 @@
             document.getElementById('txDatePicker').value = tx.date;
             document.getElementById('txDateText').value = formatDateVN(tx.date);
             document.getElementById('txDescription').value = tx.description;
-            document.getElementById('txQuantity').value = formatNumberStandard(tx.quantity || 1, 4);
-            document.getElementById('txUnitPrice').value = formatNumberStandard(tx.unitPrice || tx.amount, 2);
-            document.getElementById('txTotalDisplay').value = formatVND(tx.amount);
+            
+            const formattedAmount = formatVND(tx.amount || 0).replace(' ₫', '').trim();
+            const amountInput = document.getElementById('txAmount');
+            if (amountInput) amountInput.value = formattedAmount;
+            const previewEl = document.getElementById('txAmountPreview');
+            if (previewEl) previewEl.textContent = formatVND(tx.amount || 0);
+
+            if (document.getElementById('txQuantity')) document.getElementById('txQuantity').value = 1;
+            if (document.getElementById('txUnitPrice')) document.getElementById('txUnitPrice').value = formattedAmount;
+            if (document.getElementById('txTotalDisplay')) document.getElementById('txTotalDisplay').value = formatVND(tx.amount || 0);
 
             selectTxType(tx.type);
             populateModalFeeCodeDropdown(tx.type, tx.feeCode);

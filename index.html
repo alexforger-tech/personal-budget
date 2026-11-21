@@ -1486,21 +1486,20 @@
                     </div>
                 </div>
 
-                <!-- KHỐI ĐẶC BIỆT 2: Nếu chọn "Đầu tư" -> Chỉ chọn chiều dòng tiền (Không tự link sang Tài sản) -->
-                <div id="investSubTypeBox" class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-3 hidden">
-                    <div class="flex items-start gap-2 text-xs text-indigo-900">
-                        <i class="fa-solid fa-circle-info text-indigo-600 mt-0.5"></i>
-                        <p class="leading-relaxed">
-                            <strong>Lưu ý nghiệp vụ Đầu tư:</strong> Bút toán Đầu tư sẽ trực tiếp <strong>trừ (hoặc cộng) số dư Tiền mặt hiện có (CASA)</strong> để phản ánh dòng tiền. Giá trị các danh mục Tiết kiệm & Đầu tư tại tab Tài sản cá nhân sẽ do bạn tự nhập tay độc lập.
-                        </p>
+                <!-- KHỐI ĐẶC BIỆT 2: Nếu chọn "Đầu tư" -> Luôn là dòng tiền ra (Trừ Tiền mặt CASA mang đi Đầu tư) -->
+                <div id="investSubTypeBox" class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2 hidden">
+                    <div class="flex items-start gap-2.5 text-xs text-indigo-900 leading-relaxed">
+                        <i class="fa-solid fa-circle-info text-indigo-600 text-sm shrink-0 mt-0.5"></i>
+                        <div id="investSubTypeText">
+                            <p class="font-bold text-indigo-950 mb-1">
+                                <i class="fa-solid fa-arrow-trend-up mr-1 text-indigo-600"></i>Dòng tiền Đầu tư & Tích lũy (Tiền ra - Cash Outflow)
+                            </p>
+                            <p class="text-slate-600 leading-relaxed">
+                                Bút toán Đầu tư luôn tự động <strong>trừ số dư Tiền mặt hiện có (CASA)</strong> để phản ánh việc chuyển tiền mang đi đầu tư. Khi có <strong>lãi đầu tư, cổ tức hoặc thu hồi vốn</strong>, vui lòng chọn loại <strong>Thu nhập</strong> với mã phí tương ứng.
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-indigo-950 mb-1">Chiều dòng tiền Đầu tư</label>
-                        <select id="txInvestDirection" class="w-full px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-indigo-900">
-                            <option value="OUT">Tiền ra (Trừ số dư Tiền mặt hiện có để mang đi Đầu tư / Tích lũy)</option>
-                            <option value="IN">Tiền vào (Thu hồi vốn gốc / Lãi đầu tư cộng về lại Tiền mặt)</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="txInvestDirection" value="OUT">
                 </div>
 
                 <!-- Hàng 2: Diễn giải (Gõ tự do) -->
@@ -2286,6 +2285,13 @@
             const hintBtnText = document.getElementById('txImportTemplateBtnText');
             if (hintBtnText) {
                 hintBtnText.textContent = isEn ? 'Download Template (.xlsx)' : 'Tải file mẫu (.xlsx)';
+            }
+
+            const investNoteEl = document.getElementById('investSubTypeText');
+            if (investNoteEl) {
+                investNoteEl.innerHTML = isEn
+                    ? '<p class="font-bold text-indigo-950 mb-1"><i class="fa-solid fa-arrow-trend-up mr-1 text-indigo-600"></i>Investment & Accumulation (Cash Outflow)</p><p class="text-slate-600 leading-relaxed">Investment transactions are always recorded as <strong>cash outflow (deducted from CASA)</strong> to reflect capital deployed. If you have <strong>investment profit, dividends, or capital returns</strong>, please choose the <strong>Income</strong> type with the appropriate fee code.</p>'
+                    : '<p class="font-bold text-indigo-950 mb-1"><i class="fa-solid fa-arrow-trend-up mr-1 text-indigo-600"></i>Dòng tiền Đầu tư & Tích lũy (Tiền ra - Cash Outflow)</p><p class="text-slate-600 leading-relaxed">Bút toán Đầu tư luôn tự động <strong>trừ số dư Tiền mặt hiện có (CASA)</strong> để phản ánh việc chuyển tiền mang đi đầu tư. Khi có <strong>lãi đầu tư, cổ tức hoặc thu hồi vốn</strong>, vui lòng chọn loại <strong>Thu nhập</strong> với mã phí tương ứng.</p>';
             }
 
             const fcSearchInput = document.getElementById('filterFeeCodeSearch');
@@ -3982,7 +3988,7 @@
                 return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">${t('badgeExpActual')}</span>`;
             }
             if (tx.type === 'INVEST') {
-                const dir = tx.investDirection === 'IN' ? t('dirIn') : t('dirOut');
+                const dir = tx.investDirection === 'IN' ? t('dirIn') : t('badgeInvest');
                 return `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800"><i class="fa-solid fa-seedling mr-1"></i>${dir}</span>`;
             }
             return '';
@@ -4077,6 +4083,10 @@
 
             document.getElementById('expenseSubTypeBox').classList.toggle('hidden', type !== 'EXPENSE');
             document.getElementById('investSubTypeBox').classList.toggle('hidden', type !== 'INVEST');
+            if (type === 'INVEST') {
+                const invDirEl = document.getElementById('txInvestDirection');
+                if (invDirEl) invDirEl.value = 'OUT';
+            }
 
             populateModalFeeCodeDropdown(type);
         }
@@ -4400,7 +4410,7 @@
             if (type === 'EXPENSE') {
                 expenseKind = document.querySelector('input[name="expenseKind"]:checked')?.value || 'ACTUAL';
             } else if (type === 'INVEST') {
-                investDirection = document.getElementById('txInvestDirection').value;
+                investDirection = 'OUT';
             }
 
             const txObj = {
@@ -4466,7 +4476,8 @@
                 const radio = document.querySelector(`input[name="expenseKind"][value="${kind}"]`);
                 if (radio) radio.checked = true;
             } else if (tx.type === 'INVEST') {
-                document.getElementById('txInvestDirection').value = tx.investDirection || 'OUT';
+                const invEl = document.getElementById('txInvestDirection');
+                if (invEl) invEl.value = 'OUT';
             }
 
             const modal = document.getElementById('transactionModal');
@@ -5064,7 +5075,7 @@
                         'Ngay': '20/11/2026',
                         'DienGiai': 'Chuyển tiền tích sản chứng chỉ quỹ ETF',
                         'Loai': 'Đầu tư',
-                        'PhanLoaiChiTiet': 'Đầu tư (Tiền ra)',
+                        'PhanLoaiChiTiet': 'Đầu tư',
                         'SoLuong': 1,
                         'DonGia_VND': 10000000,
                         'ThanhTien_VND': 10000000,
@@ -5076,15 +5087,15 @@
                     {
                         'Ngay': '25/11/2026',
                         'DienGiai': 'Cổ tức / Lãi đầu tư thu hồi về tài khoản tiền mặt',
-                        'Loai': 'Đầu tư',
-                        'PhanLoaiChiTiet': 'Đầu tư (Tiền vào)',
+                        'Loai': 'Thu nhập',
+                        'PhanLoaiChiTiet': 'Thu nhập',
                         'SoLuong': 1,
                         'DonGia_VND': 1500000,
                         'ThanhTien_VND': 1500000,
-                        'MaPhi': 'DT-CHUNGKHOAN',
-                        'Heading1_MaPhi': 'Đầu tư & Tích lũy',
-                        'Heading2_MaPhi': 'Tài khoản chứng khoán',
-                        'Heading3_MaPhi': 'Tích sản ETF & Cổ phiếu FPT'
+                        'MaPhi': 'TN-FREELANCE',
+                        'Heading1_MaPhi': 'Thu nhập phụ',
+                        'Heading2_MaPhi': 'Thu nhập từ đầu tư',
+                        'Heading3_MaPhi': 'Cổ tức & Lợi nhuận đầu tư'
                     }
                 ];
 
@@ -5397,7 +5408,7 @@
                     'Loai': tx.type === 'INCOME' ? 'Thu nhập' : (tx.type === 'EXPENSE' ? 'Chi phí' : 'Đầu tư'),
                     'PhanLoaiChiTiet': tx.type === 'EXPENSE'
                         ? (tx.expenseKind === 'ACCRUED' ? 'Trích trước' : 'Thực chi')
-                        : (tx.type === 'INVEST' ? (tx.investDirection === 'IN' ? 'Đầu tư (Tiền vào)' : 'Đầu tư (Tiền ra)') : 'Thu nhập'),
+                        : (tx.type === 'INVEST' ? (tx.investDirection === 'IN' ? 'Đầu tư (Tiền vào)' : 'Đầu tư') : 'Thu nhập'),
                     'SoLuong': tx.quantity || 1,
                     'DonGia_VND': tx.unitPrice || tx.amount,
                     'ThanhTien_VND': tx.amount,

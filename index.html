@@ -1676,6 +1676,120 @@
         </div>
     </div>
 
+    <!-- =============================================================== -->
+    <!-- MODAL 4: CHUYỂN KHOẢN TRÍCH TRƯỚC SANG THỰC CHI (TOÀN BỘ / MỘT PHẦN) -->
+    <!-- =============================================================== -->
+    <div id="convertAccruedModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </span>
+                    <div>
+                        <h3 id="convertModalTitle" class="text-base font-extrabold text-slate-900">Chuyển Khoản Trích Trước Sang Thực Chi</h3>
+                        <p id="convertModalSub" class="text-[11px] text-slate-500">Tùy chỉnh số tiền thực tế đã chi tiêu từ quỹ trích trước</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeConvertAccruedModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleConfirmConvertAccrued(event)" class="mt-4 space-y-3.5 text-xs">
+                <input type="hidden" id="convertTxId" value="">
+
+                <!-- Thông tin khoản trích trước nguồn -->
+                <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-amber-950 truncate mr-2" id="convertAccruedDescDisplay">Khoản mục: ...</span>
+                        <span id="convertAccruedFeeCodeBadge" class="px-2 py-0.5 rounded bg-white font-mono font-bold text-amber-900 border border-amber-200 text-[11px] shrink-0">...</span>
+                    </div>
+                    <div class="flex items-center justify-between text-xs pt-0.5">
+                        <span id="convertTotalLabel" class="text-slate-600">Tổng số tiền đang trích trước:</span>
+                        <span class="font-extrabold text-amber-700 text-sm" id="convertAccruedTotalDisplay">0 ₫</span>
+                    </div>
+                </div>
+
+                <!-- Lựa chọn hình thức chuyển (Toàn bộ vs Một phần) -->
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1.5"><span id="convertOptionLabel">Hình thức chuyển sang Thực chi</span> <span class="text-rose-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50 transition" id="convertModeAllLabel">
+                            <input type="radio" name="convertMode" value="ALL" checked onchange="handleConvertModeChange('ALL')" class="accent-indigo-600">
+                            <div>
+                                <p id="convertModeAllTitle" class="font-bold text-slate-800">Tất toán toàn bộ (100%)</p>
+                                <p id="convertModeAllDesc" class="text-[10px] text-slate-500">Chuyển hết số tiền đang giữ</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-50 transition" id="convertModePartialLabel">
+                            <input type="radio" name="convertMode" value="PARTIAL" onchange="handleConvertModeChange('PARTIAL')" class="accent-indigo-600">
+                            <div>
+                                <p id="convertModePartialTitle" class="font-bold text-slate-800">Thực chi một phần</p>
+                                <p id="convertModePartialDesc" class="text-[10px] text-slate-500">Tự nhập số tiền đã chi</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Số tiền thực chi tùy chỉnh -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="font-bold text-slate-700"><span id="convertAmountFieldLabel">Số tiền chuyển sang Thực chi (VNĐ)</span> <span class="text-rose-500">*</span></label>
+                        <span id="convertAmountPercentDisplay" class="text-[11px] font-extrabold text-indigo-600">100%</span>
+                    </div>
+                    <input type="text" inputmode="decimal" id="convertAmountInput" required oninput="handleConvertAmountInput(this)" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-extrabold text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                    <!-- Các nút chọn nhanh phần trăm -->
+                    <div class="flex items-center gap-1.5 mt-1.5">
+                        <span id="convertQuickLabel" class="text-[10px] text-slate-400 font-medium mr-0.5">Chọn nhanh:</span>
+                        <button type="button" onclick="setConvertQuickPercent(25)" class="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold cursor-pointer transition">25%</button>
+                        <button type="button" onclick="setConvertQuickPercent(50)" class="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold cursor-pointer transition">50%</button>
+                        <button type="button" onclick="setConvertQuickPercent(75)" class="px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold cursor-pointer transition">75%</button>
+                        <button type="button" onclick="setConvertQuickPercent(100)" class="px-2 py-0.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[11px] font-bold cursor-pointer transition">100%</button>
+                    </div>
+                </div>
+
+                <!-- Xem trước kết quả số dư sau khi chuyển -->
+                <div class="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px]">
+                    <div>
+                        <span id="convertPreviewSpentLabel" class="text-slate-500 block">Số tiền sẽ thực chi:</span>
+                        <strong id="previewConvertedAmount" class="text-rose-600 font-extrabold text-xs">0 ₫</strong>
+                    </div>
+                    <div>
+                        <span id="convertPreviewRemainLabel" class="text-slate-500 block">Còn lại trong quỹ trích trước:</span>
+                        <strong id="previewRemainingAmount" class="text-amber-700 font-extrabold text-xs">0 ₫</strong>
+                    </div>
+                </div>
+
+                <!-- Ngày chi thực tế & Diễn giải -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1"><span id="convertDateLabel">Ngày thực chi thực tế</span> <span class="text-rose-500">*</span></label>
+                        <input type="date" id="convertActualDate" required class="w-full px-3 py-2 rounded-xl border border-slate-300 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1"><span id="convertDescLabel">Diễn giải cho khoản thực chi</span> <span class="text-rose-500">*</span></label>
+                        <input type="text" id="convertActualDesc" required placeholder="VD: Mua Laptop đợt 1..." class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Cảnh báo nếu số tiền không hợp lệ -->
+                <div id="convertAmountError" class="hidden p-2 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-bold">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i><span id="convertErrorMsg">Số tiền thực chi không được vượt quá số tiền đang trích trước!</span>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="closeConvertAccruedModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold cursor-pointer transition">Hủy</button>
+                    <button type="submit" id="btnSubmitConvertAccrued" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold cursor-pointer shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-check"></i>
+                        <span id="btnConfirmConvertText">Xác nhận chuyển</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-8 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
@@ -1843,7 +1957,24 @@
                 modalAddTxTitle: 'Tạo Bút Toán Thu / Chi / Đầu Tư Mới',
                 modalEditTxTitle: 'Chỉnh Sửa Bút Toán',
                 themeLightText: 'Sáng (Light)',
-                themeDarkText: 'Blue Dark'
+                themeDarkText: 'Blue Dark',
+                convertModalTitle: 'Chuyển Khoản Trích Trước Sang Thực Chi',
+                convertModalSub: 'Tùy chỉnh số tiền thực tế đã chi tiêu từ quỹ trích trước',
+                convertTotalLabel: 'Tổng số tiền đang trích trước:',
+                convertOptionLabel: 'Hình thức chuyển sang Thực chi',
+                convertModeAllTitle: 'Tất toán toàn bộ (100%)',
+                convertModeAllDesc: 'Chuyển hết số tiền đang giữ',
+                convertModePartialTitle: 'Thực chi một phần',
+                convertModePartialDesc: 'Tự nhập số tiền đã chi',
+                convertAmountFieldLabel: 'Số tiền chuyển sang Thực chi (VNĐ)',
+                convertQuickLabel: 'Chọn nhanh:',
+                convertPreviewSpentLabel: 'Số tiền sẽ thực chi:',
+                convertPreviewRemainLabel: 'Còn lại trong quỹ trích trước:',
+                convertDateLabel: 'Ngày thực chi thực tế',
+                convertDescLabel: 'Diễn giải cho khoản thực chi',
+                convertErrorZero: 'Số tiền chuyển phải lớn hơn 0!',
+                convertErrorExceed: 'Số tiền thực chi không được vượt quá số tiền đang trích trước!',
+                btnConfirmConvertText: 'Xác nhận chuyển'
             },
             en: {
                 appSubtitle: 'Personal Cashflow, Accrued Expenses & Net Worth ERP',
@@ -1978,7 +2109,24 @@
                 modalAddTxTitle: 'Create Income / Expense / Investment Entry',
                 modalEditTxTitle: 'Edit Transaction Entry',
                 themeLightText: 'Light Mode',
-                themeDarkText: 'Blue Dark'
+                themeDarkText: 'Blue Dark',
+                convertModalTitle: 'Convert Accrued Expense to Actual Expense',
+                convertModalSub: 'Customize the actual amount spent from accrued reserve',
+                convertTotalLabel: 'Total Accrued Balance:',
+                convertOptionLabel: 'Conversion Method',
+                convertModeAllTitle: 'Full Settlement (100%)',
+                convertModeAllDesc: 'Convert the entire reserved balance',
+                convertModePartialTitle: 'Partial Settlement',
+                convertModePartialDesc: 'Enter customized amount spent',
+                convertAmountFieldLabel: 'Amount to convert to Actual (VND)',
+                convertQuickLabel: 'Quick Select:',
+                convertPreviewSpentLabel: 'Amount to be actualized:',
+                convertPreviewRemainLabel: 'Remaining in accrued reserve:',
+                convertDateLabel: 'Actual Expense Date',
+                convertDescLabel: 'Description for actual expense',
+                convertErrorZero: 'Conversion amount must be greater than 0!',
+                convertErrorExceed: 'Actual amount cannot exceed the accrued balance!',
+                btnConfirmConvertText: 'Confirm Conversion'
             }
         };
 
@@ -2275,6 +2423,27 @@
             setTxt('btnAddNewTxLabel', t('btnAddNewTx'));
             setTxt('feeCatalogTitle', t('feeTableTitle'));
             setTxt('feeCatalogSubtitle', t('feeTableSubtitle'));
+
+            setTxt('convertModalTitle', t('convertModalTitle'));
+            setTxt('convertModalSub', t('convertModalSub'));
+            setTxt('convertTotalLabel', t('convertTotalLabel'));
+            setTxt('convertOptionLabel', t('convertOptionLabel'));
+            setTxt('convertModeAllTitle', t('convertModeAllTitle'));
+            setTxt('convertModeAllDesc', t('convertModeAllDesc'));
+            setTxt('convertModePartialTitle', t('convertModePartialTitle'));
+            setTxt('convertModePartialDesc', t('convertModePartialDesc'));
+            setTxt('convertAmountFieldLabel', t('convertAmountFieldLabel'));
+            setTxt('convertQuickLabel', t('convertQuickLabel'));
+            setTxt('convertPreviewSpentLabel', t('convertPreviewSpentLabel'));
+            setTxt('convertPreviewRemainLabel', t('convertPreviewRemainLabel'));
+            setTxt('convertDateLabel', t('convertDateLabel'));
+            setTxt('convertDescLabel', t('convertDescLabel'));
+            setTxt('btnConfirmConvertText', t('btnConfirmConvertText'));
+
+            const convertDescInput = document.getElementById('convertActualDesc');
+            if (convertDescInput) {
+                convertDescInput.placeholder = isEn ? 'e.g., Laptop purchase phase 1...' : 'VD: Mua Laptop đợt 1...';
+            }
 
             const hintContent = document.getElementById('txImportExcelHintContent');
             if (hintContent) {
@@ -3344,6 +3513,9 @@
                         <td class="py-2.5 px-3 text-center font-semibold">${formatNumberStandard(tx.quantity || 1)}</td>
                         <td class="py-2.5 px-3 text-right font-extrabold ${getAmountColorClass(tx)} whitespace-nowrap">${formatVND(tx.amount)}</td>
                         <td class="py-2.5 px-3 text-center whitespace-nowrap no-print">
+                            ${tx.type === 'EXPENSE' && tx.expenseKind === 'ACCRUED' ? `
+                                <button onclick="convertAccruedToActual('${tx.id}')" title="Chuyển sang thực chi" class="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg cursor-pointer mr-0.5"><i class="fa-solid fa-money-bill-transfer"></i></button>
+                            ` : ''}
                             <button onclick="editTransaction('${tx.id}')" title="Sửa" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deleteTransaction('${tx.id}')" title="Xóa" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                         </td>
@@ -3508,17 +3680,245 @@
         function convertAccruedToActual(txId) {
             const tx = appState.transactions.find(t => t.id === txId);
             if (!tx) return;
-            showConfirmModal(
-                'Tất toán khoản Chi phí trích trước',
-                `Bạn xác nhận đã thực sự chi tiêu khoản "${tx.description}" (${formatVND(tx.amount)})? Khoản này sẽ chuyển từ "Chi phí trích trước" sang "Chi phí thực chi".`,
-                () => {
-                    tx.expenseKind = 'ACTUAL';
-                    tx.description = tx.description + ' (Đã thực chi)';
-                    saveStateToStorage();
-                    refreshAllViews();
-                    showToast('Đã chuyển khoản trích trước sang Chi phí thực chi thành công!', 'success');
+
+            document.getElementById('convertTxId').value = tx.id;
+            const descEl = document.getElementById('convertAccruedDescDisplay');
+            if (descEl) descEl.textContent = `${t('thDesc') || 'Khoản mục'}: ${tx.description}`;
+            const badgeEl = document.getElementById('convertAccruedFeeCodeBadge');
+            if (badgeEl) badgeEl.textContent = tx.feeCode || 'N/A';
+            const totalEl = document.getElementById('convertAccruedTotalDisplay');
+            if (totalEl) totalEl.textContent = formatVND(tx.amount);
+
+            // Đặt mặc định chọn "Tất toán toàn bộ"
+            const allRadio = document.querySelector('input[name="convertMode"][value="ALL"]');
+            if (allRadio) allRadio.checked = true;
+
+            const amountInput = document.getElementById('convertAmountInput');
+            if (amountInput) {
+                amountInput.value = formatVND(tx.amount).replace(' ₫', '').trim();
+            }
+
+            // Ngày chi thực tế mặc định là ngày hôm nay theo giờ địa phương
+            const now = new Date();
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const todayIso = `${yyyy}-${mm}-${dd}`;
+            const dateInput = document.getElementById('convertActualDate');
+            if (dateInput) {
+                dateInput.value = todayIso;
+            }
+
+            // Diễn giải mặc định
+            const isEn = appState.language === 'en';
+            const descInput = document.getElementById('convertActualDesc');
+            if (descInput) {
+                descInput.value = isEn ? `${tx.description} (Actualized)` : `${tx.description} (Đã thực chi)`;
+            }
+
+            updateConvertPreview(tx.amount);
+
+            const modal = document.getElementById('convertAccruedModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeConvertAccruedModal() {
+            const modal = document.getElementById('convertAccruedModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            document.getElementById('convertTxId').value = '';
+        }
+
+        function handleConvertModeChange(mode) {
+            const txId = document.getElementById('convertTxId').value;
+            const tx = appState.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            const isEn = appState.language === 'en';
+            const amountInput = document.getElementById('convertAmountInput');
+            const descInput = document.getElementById('convertActualDesc');
+
+            if (mode === 'ALL') {
+                if (amountInput) amountInput.value = formatVND(tx.amount).replace(' ₫', '').trim();
+                if (descInput) descInput.value = isEn ? `${tx.description} (Actualized)` : `${tx.description} (Đã thực chi)`;
+                updateConvertPreview(tx.amount);
+            } else {
+                if (descInput && !descInput.value.includes(isEn ? 'Phase' : 'đợt')) {
+                    descInput.value = isEn ? `${tx.description} (Actualized phase 1)` : `${tx.description} (Thực chi đợt 1)`;
                 }
-            );
+                const currentVal = parseFormattedNumber(amountInput ? amountInput.value : '');
+                updateConvertPreview(currentVal);
+                if (amountInput) {
+                    amountInput.focus();
+                    amountInput.select();
+                }
+            }
+        }
+
+        function handleConvertAmountInput(inputEl) {
+            handleDecimalInputFormat(inputEl);
+            const txId = document.getElementById('convertTxId').value;
+            const tx = appState.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            const val = parseFormattedNumber(inputEl.value);
+            const allRadio = document.querySelector('input[name="convertMode"][value="ALL"]');
+            const partialRadio = document.querySelector('input[name="convertMode"][value="PARTIAL"]');
+
+            if (val === tx.amount) {
+                if (allRadio) allRadio.checked = true;
+            } else {
+                if (partialRadio) partialRadio.checked = true;
+            }
+
+            updateConvertPreview(val);
+        }
+
+        function setConvertQuickPercent(pct) {
+            const txId = document.getElementById('convertTxId').value;
+            const tx = appState.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            const targetVal = Math.round((tx.amount * pct) / 100);
+            const amountInput = document.getElementById('convertAmountInput');
+            if (amountInput) {
+                amountInput.value = formatVND(targetVal).replace(' ₫', '').trim();
+            }
+
+            const allRadio = document.querySelector('input[name="convertMode"][value="ALL"]');
+            const partialRadio = document.querySelector('input[name="convertMode"][value="PARTIAL"]');
+            if (pct === 100) {
+                if (allRadio) allRadio.checked = true;
+            } else {
+                if (partialRadio) partialRadio.checked = true;
+            }
+
+            updateConvertPreview(targetVal);
+        }
+
+        function updateConvertPreview(val) {
+            const txId = document.getElementById('convertTxId').value;
+            const tx = appState.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            if (val === undefined) {
+                const amountInput = document.getElementById('convertAmountInput');
+                val = parseFormattedNumber(amountInput ? amountInput.value : '');
+            }
+
+            const total = tx.amount;
+            const errorBox = document.getElementById('convertAmountError');
+            const errorMsg = document.getElementById('convertErrorMsg');
+            const submitBtn = document.getElementById('btnSubmitConvertAccrued');
+            const previewSpent = document.getElementById('previewConvertedAmount');
+            const previewRemain = document.getElementById('previewRemainingAmount');
+            const percentDisplay = document.getElementById('convertAmountPercentDisplay');
+
+            if (isNaN(val) || val <= 0) {
+                if (errorBox) errorBox.classList.remove('hidden');
+                if (errorMsg) errorMsg.textContent = t('convertErrorZero') || 'Số tiền chuyển phải lớn hơn 0!';
+                if (submitBtn) submitBtn.disabled = true;
+                if (previewSpent) previewSpent.textContent = '0 ₫';
+                if (previewRemain) previewRemain.textContent = formatVND(total);
+                if (percentDisplay) percentDisplay.textContent = '0%';
+                return;
+            }
+
+            if (val > total) {
+                if (errorBox) errorBox.classList.remove('hidden');
+                if (errorMsg) errorMsg.textContent = t('convertErrorExceed') || 'Số tiền thực chi không được vượt quá số tiền đang trích trước!';
+                if (submitBtn) submitBtn.disabled = true;
+                if (previewSpent) previewSpent.textContent = formatVND(val);
+                if (previewRemain) previewRemain.textContent = '0 ₫';
+                const pct = Math.round((val / total) * 100);
+                if (percentDisplay) percentDisplay.textContent = `${pct}%`;
+                return;
+            }
+
+            // Số tiền hợp lệ
+            if (errorBox) errorBox.classList.add('hidden');
+            if (submitBtn) submitBtn.disabled = false;
+
+            const remaining = total - val;
+            if (previewSpent) previewSpent.textContent = formatVND(val);
+            if (previewRemain) previewRemain.textContent = formatVND(remaining);
+
+            const pct = Math.round((val / total) * 100);
+            if (percentDisplay) percentDisplay.textContent = `${pct}%`;
+        }
+
+        function handleConfirmConvertAccrued(e) {
+            e.preventDefault();
+            const txId = document.getElementById('convertTxId').value;
+            const tx = appState.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            const convertVal = parseFormattedNumber(document.getElementById('convertAmountInput').value);
+            const actualDate = document.getElementById('convertActualDate').value;
+            const actualDesc = document.getElementById('convertActualDesc').value.trim();
+
+            if (!actualDate || !actualDesc) {
+                showToast(appState.language === 'en' ? 'Please specify date and description!' : 'Vui lòng chọn Ngày và nhập Diễn giải cho khoản thực chi!', 'warning');
+                return;
+            }
+
+            if (isNaN(convertVal) || convertVal <= 0 || convertVal > tx.amount) {
+                showToast(appState.language === 'en' ? 'Invalid conversion amount!' : 'Số tiền chuyển không hợp lệ!', 'warning');
+                return;
+            }
+
+            const isEn = appState.language === 'en';
+
+            if (convertVal === tx.amount) {
+                // Tất toán toàn bộ (100%): chuyển trực tiếp bản ghi trích trước này thành thực chi
+                tx.expenseKind = 'ACTUAL';
+                tx.date = actualDate;
+                tx.description = actualDesc;
+                saveStateToStorage();
+                closeConvertAccruedModal();
+                refreshAllViews();
+                showToast(isEn ? `Successfully settled full ${formatVND(convertVal)} to Actual Expense!` : `Đã tất toán toàn bộ ${formatVND(convertVal)} sang Chi phí thực chi!`, 'success');
+            } else {
+                // Thực chi một phần:
+                // 1. Trừ số tiền khỏi bút toán trích trước gốc
+                const remaining = Number((tx.amount - convertVal).toFixed(2));
+                tx.amount = remaining;
+                tx.unitPrice = remaining; // Giữ unitPrice đồng bộ nếu quantity = 1
+
+                // 2. Tạo bút toán thực chi mới với số tiền đã chi
+                const newActualTx = {
+                    id: 'TX-' + Date.now(),
+                    date: actualDate,
+                    description: actualDesc,
+                    type: 'EXPENSE',
+                    expenseKind: 'ACTUAL',
+                    investDirection: null,
+                    investTarget: null,
+                    quantity: 1,
+                    unitPrice: convertVal,
+                    amount: convertVal,
+                    feeCode: tx.feeCode || '',
+                    heading1: tx.heading1 || '',
+                    heading2: tx.heading2 || '',
+                    heading3: tx.heading3 || ''
+                };
+                appState.transactions.push(newActualTx);
+
+                saveStateToStorage();
+                closeConvertAccruedModal();
+                refreshAllViews();
+                showToast(
+                    isEn
+                        ? `Partially converted ${formatVND(convertVal)} to Actual Expense! Remaining ${formatVND(remaining)} kept in Accrued reserve.`
+                        : `Đã chuyển thực chi một phần ${formatVND(convertVal)} thành công! Số dư còn lại ${formatVND(remaining)} vẫn trong quỹ trích trước.`,
+                    'success'
+                );
+            }
         }
 
         // =====================================================================
@@ -3780,6 +4180,9 @@
                         <td class="py-2.5 px-3 text-center font-bold">${formatNumberStandard(tx.quantity || 1)}</td>
                         <td class="py-2.5 px-3 text-right font-extrabold ${getAmountColorClass(tx)} whitespace-nowrap">${formatVND(tx.amount)}</td>
                         <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                            ${tx.type === 'EXPENSE' && tx.expenseKind === 'ACCRUED' ? `
+                                <button onclick="convertAccruedToActual('${tx.id}')" title="Chuyển sang thực chi" class="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg cursor-pointer mr-0.5"><i class="fa-solid fa-money-bill-transfer"></i></button>
+                            ` : ''}
                             <button onclick="editTransaction('${tx.id}')" title="Sửa" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer"><i class="fa-solid fa-pen"></i></button>
                             <button onclick="deleteTransaction('${tx.id}')" title="Xóa" class="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                         </td>
